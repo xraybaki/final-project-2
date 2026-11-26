@@ -270,14 +270,13 @@ function formatDistance(km) {
 }
 
 /**
- * Danger level description for a 0-100 risk score
+ * Risk band for a 0-100 segment-risk value (same bands as the legend and the Guide tab)
  */
 function getDangerLevel(score) {
-    if (score < 20) return { label: 'Very Low', color: '#00ff00' };
-    if (score < 40) return { label: 'Low', color: '#7fff00' };
-    if (score < 60) return { label: 'Moderate', color: '#ffaa00' };
-    if (score < 80) return { label: 'High', color: '#ff6600' };
-    return { label: 'Critical', color: '#ff0000' };
+    if (score < 30) return { key: 'low', label: 'Low', color: '#00ff00' };
+    if (score < 60) return { key: 'med', label: 'Medium', color: '#ffff00' };
+    if (score < 80) return { key: 'high', label: 'High', color: '#ff6b35' };
+    return { key: 'crit', label: 'Critical', color: '#ff0000' };
 }
 
 if (typeof module !== 'undefined' && module.exports) {

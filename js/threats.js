@@ -332,10 +332,15 @@
         T.reportMode = on;
         document.body.classList.toggle('mode-report', on);
         const btn = document.getElementById('report-threat-btn');
-        if (btn) btn.classList.toggle('is-active', on);
+        if (btn) {
+            btn.classList.toggle('is-active', on);
+            const sp = btn.querySelector('span');
+            if (sp) sp.textContent = on ? 'Placing… (Esc to stop)' : 'Click map to place';
+        }
         if (on) {
             if (typeof routingMode !== 'undefined' && routingMode) toggleRoutingMode(true);  // keep the active route
-            toast('Click the map to place the threat. It snaps to the nearest road.', { type: 'info' });
+            if (window.Shell) Shell.switchTab('threats');
+            toast('Click the map to place the threat. It snaps to the nearest road. Esc to stop.', { type: 'info' });
         }
     };
 
@@ -440,7 +445,7 @@
                 status.innerHTML = `<span class="danger-text">${escapeHtml(r.message || r.error || 'Could not parse')}</span>`;
                 if (r.candidates) status.innerHTML += '<ul class="cand-list">' + r.candidates.map(c =>
                     `<li>${escapeHtml(c.name)} <span class="muted">(${c.kind}, ${c.lat.toFixed(4)}, ${c.lon.toFixed(4)})</span></li>`).join('') + '</ul>';
-                toast('SITREP could not be located - see the Threats panel', { type: 'danger' });
+                toast('SITREP could not be located - see the Threats tab', { type: 'danger' });
             }
         } catch (err) {
             console.error(err);
@@ -536,6 +541,30 @@
             console.error(e);
             toast('Intel service unavailable', { type: 'danger' });
         }
+    };
+
+    // ------------------------------------------------------------------ active threat list (Threats tab)
+    T.renderList = function () {
+        const host = document.getElementById('threat-list');
+        const act = T.active();
+        const badge = document.getElementById('threat-count');
+        if (badge) { badge.textContent = act.length; badge.hidden = act.length === 0; }
+        if (!host) return;
+        host.innerHTML = '';
+        if (!act.length) { host.appendChild(el('p', { class: 'muted' }, 'No active threats.')); return; }
+        act.slice().sort((a, b) => b.impact - a.impact).forEach(t => {
+            const info = T.typeInfo(t.type);
+            host.appendChild(el('div', { class: `threat-row ${t.impact >= T.hardBlock ? 'is-closed' : ''}` },
+                el('span', {}, info.emoji),
+                el('div', {},
+                    el('div', { class: 'tr-title' }, `${info.label} · ${impactText(t.impact)} · ${t.radius_m} m`),
+                    el('div', { class: 'tr-sub', title: t.location_label }, `${t.location_label} · ${t.source.replace('_', ' ')}`)),
+                el('div', { class: 'tr-actions' },
+                    el('button', { class: 'btn btn-ghost btn-icon', title: 'Locate', 'aria-label': 'Locate', onclick: () => T.locate(t.id),
+                                   html: '<svg class="icon"><use href="#i-locate"/></svg>' }),
+                    el('button', { class: 'btn btn-ghost btn-icon', title: 'Clear', 'aria-label': 'Clear', onclick: () => T.remove(t.id),
+                                   html: '<svg class="icon"><use href="#i-trash"/></svg>' }))));
+        });
     };
 
     // Esc cancels pin / report / preview

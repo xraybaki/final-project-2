@@ -136,6 +136,26 @@
     not as roads, so "near Nawa Kadal" resolves to a point instead of asking for a pin.
 44. Threat ids look like `THR-YYYYMMDD-HHMMSS-nnn` (client-generated until M11 adds the server store).
 
+## M10: UI shell and design system
+45. **Layout:** a left sidebar (64 px icon rail + 380 px panel) sits *beside* the map, not over
+    it, so the map is 0% covered by default. The panel collapses to the rail. Below 1100 px
+    the sidebar becomes an overlay drawer. The info panel became a slim header chip
+    (click to expand); the legend is a collapsible chip.
+46. **No new dependencies:** inline SVG sprite (Lucide-style paths) instead of an icon font;
+    system font stack with Inter if installed (no web-font download); tabular numerals
+    for all numbers.
+47. **Design tokens** in `:root` (`--bg … --closed`, route colours, 8 px spacing, 6/10/12 px
+    radii). `index.html` has no `style=` attributes. `app.js` HTML strings use classes. The
+    one remaining JS style write is the convoy arrow rotation, set per frame.
+48. **Smoothness:** 180 ms transitions, disabled under `prefers-reduced-motion`. Routes "draw on"
+    with stroke-dashoffset. Toasts replace `alert()` and inline status blocks. The loading
+    overlay shows real download progress from `Content-Length`. `routing_edges.geojson` is now
+    fetched once (it was fetched twice before). The preview drive uses `requestAnimationFrame`
+    with time-based interpolation (position = elapsed × speed), independent of frame rate.
+49. **Keyboard:** 1–6 switch tabs (ignored while typing); Esc cancels any click mode.
+50. Risk bands in `getDangerLevel` now match the legend and Guide exactly
+    (Low < 30 ≤ Medium < 60 ≤ High < 80 ≤ Critical).
+
 ---
 
 ## Summary

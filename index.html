@@ -4,97 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convoy Route Planner - AI Safest Route</title>
-    
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="map"></div>
-    
-    <!-- Control Panel -->
-    <div class="control-panel">
-        <h3>🛡️ Convoy Ops</h3>
+    <!-- Inline SVG icon sprite (Lucide-style 24px stroke icons, no icon font) -->
+    <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></symbol>
+        <symbol id="i-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+        <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62L18.3 9.38a1 1 0 0 0-.78-.38H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+        <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+        <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+        <symbol id="i-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4"/><path d="M6 12H2"/><path d="M12 6V2"/><path d="M12 22v-4"/></symbol>
+        <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+        <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+        <symbol id="i-satellite" viewBox="0 0 24 24"><path d="M4 10a7.31 7.31 0 0 0 10 10Z"/><path d="m9 15 3-3"/><path d="M17 13a6 6 0 0 0-6-6"/><path d="M21 13A10 10 0 0 0 11 3"/></symbol>
+        <symbol id="i-text" viewBox="0 0 24 24"><path d="M17 6.1H3"/><path d="M21 12.1H3"/><path d="M15.1 18H3"/></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+        <symbol id="i-locate" viewBox="0 0 24 24"><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><circle cx="12" cy="12" r="7"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol>
+    </svg>
 
-        <button id="show-network-btn" onclick="toggleNetworkDisplay()">🔍 Show Street Network</button>
+    <div id="app" class="app">
+        <!-- ============ Sidebar: icon rail + tab panels ============ -->
+        <aside id="sidebar" class="sidebar" aria-label="Control panel">
+            <nav class="rail" role="tablist" aria-label="Sections">
+                <div class="rail-logo" title="AI Safest Route Planner"><svg class="icon"><use href="#i-shield"/></svg></div>
+                <button class="rail-tab is-active" role="tab" data-tab="plan" title="Plan (1)"><svg class="icon"><use href="#i-route"/></svg><span>Plan</span></button>
+                <button class="rail-tab" role="tab" data-tab="live" title="Live (2)"><svg class="icon"><use href="#i-radio"/></svg><span>Live</span></button>
+                <button class="rail-tab" role="tab" data-tab="threats" title="Threats (3)"><svg class="icon"><use href="#i-alert"/></svg><span>Threats</span><b id="threat-count" class="rail-badge" hidden>0</b></button>
+                <button class="rail-tab" role="tab" data-tab="convoys" title="Convoys (4)"><svg class="icon"><use href="#i-truck"/></svg><span>Convoys</span></button>
+                <button class="rail-tab" role="tab" data-tab="log" title="Log (5)"><svg class="icon"><use href="#i-list"/></svg><span>Log</span></button>
+                <button class="rail-tab" role="tab" data-tab="guide" title="Guide (6)"><svg class="icon"><use href="#i-book"/></svg><span>Guide</span></button>
+                <button id="collapse-btn" class="rail-collapse" title="Collapse panel" aria-label="Collapse panel"><svg class="icon"><use href="#i-chevron-left"/></svg></button>
+            </nav>
 
-        <div style="margin-top: 10px;">
-            <button id="routing-toggle-btn" onclick="toggleRoutingMode()">🗺️ Plan Convoy Route</button>
-        </div>
+            <div class="panels">
+                <!-- PLAN -->
+                <section id="tab-plan" class="tab-panel is-active" role="tabpanel">
+                    <header class="panel-head"><h2>Plan convoy route</h2><p class="muted">Fastest · Balanced · Safest, scored by the ML risk model</p></header>
+                    <div class="card">
+                        <div class="btn-row">
+                            <button id="routing-toggle-btn" class="btn btn-primary" onclick="toggleRoutingMode()"><svg class="icon"><use href="#i-crosshair"/></svg><span>Pick start &amp; destination</span></button>
+                            <button class="btn btn-ghost" onclick="resetRouting()" title="Clear route"><svg class="icon"><use href="#i-reset"/></svg></button>
+                        </div>
+                        <p id="routing-instructions" class="hint" hidden>Click the map: first click = start <b>A</b>, second click = destination <b>B</b>. Esc cancels.</p>
+                        <div class="profile-chips">
+                            <span class="chip chip-fast">Fastest (λ 0)</span>
+                            <span class="chip chip-bal">Balanced (λ <b id="chip-bal-lambda">0.6</b>)</span>
+                            <span class="chip chip-safe">Safest (λ 0.95)</span>
+                        </div>
+                    </div>
+                    <div id="route-result" class="card route-card" hidden></div>
+                    <div class="card">
+                        <div class="card-title">Map layers</div>
+                        <label class="switch"><input type="checkbox" id="toggle-network" checked onchange="toggleNetworkDisplay()"><span>ML risk network (29k segments)</span></label>
+                    </div>
+                </section>
 
-        <div id="routing-instructions" style="display:none; margin-top: 10px; padding: 10px; background: rgba(0,255,136,0.1); border-radius: 8px; font-size: 12px;">
-            <strong>📍 Click on the map:</strong><br>
-            1️⃣ First click = Start (A)<br>
-            2️⃣ Second click = Destination (B)
-        </div>
+                <!-- LIVE (M13) -->
+                <section id="tab-live" class="tab-panel" role="tabpanel">
+                    <header class="panel-head"><h2>Live tracking</h2><p class="muted">Convoy position, live rerouting</p></header>
+                    <div id="live-root"><div class="card empty">Plan a route first, then start the convoy here.</div></div>
+                </section>
 
-        <!-- Threats -->
-        <section class="panel-section">
-            <button id="report-threat-btn" class="btn btn-danger-outline btn-block" onclick="Threats.setReportMode(!Threats.reportMode)">Report threat on map</button>
-            <div class="threat-form">
-                <label class="field"><span>Threat type</span>
-                    <select id="threat-type" class="input" onchange="Threats.applyTypeDefaults()"></select></label>
-                <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">(≥90 = road closed)</span></span>
-                    <input type="range" id="threat-impact" class="range" min="10" max="100" step="1" value="92" oninput="Threats.updateSliderLabels()"></label>
-                <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b></span>
-                    <input type="range" id="threat-radius" class="range" min="25" max="500" step="25" value="100" oninput="Threats.updateSliderLabels()"></label>
-                <button class="btn btn-ghost btn-sm btn-block" onclick="Threats.clearAll()">Clear all threats</button>
+                <!-- THREATS -->
+                <section id="tab-threats" class="tab-panel" role="tabpanel">
+                    <header class="panel-head"><h2>Threats</h2><p class="muted">Point + radius. SYNTHETIC - for demonstration only</p></header>
+                    <div class="card">
+                        <div class="card-title">Place threat on map</div>
+                        <label class="field"><span>Threat type</span>
+                            <select id="threat-type" class="input" onchange="Threats.applyTypeDefaults()"></select></label>
+                        <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">≥90 = road closed</span></span>
+                            <input type="range" id="threat-impact" class="range" min="10" max="100" step="1" value="92" oninput="Threats.updateSliderLabels()"></label>
+                        <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b></span>
+                            <input type="range" id="threat-radius" class="range" min="25" max="500" step="25" value="100" oninput="Threats.updateSliderLabels()"></label>
+                        <div class="btn-row">
+                            <button id="report-threat-btn" class="btn btn-danger-outline grow" onclick="Threats.setReportMode(!Threats.reportMode)"><svg class="icon"><use href="#i-pin"/></svg><span>Click map to place</span></button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">SITREP → threat</div>
+                        <textarea id="sitrep-input" class="input" rows="3" placeholder="e.g. IED at junction of Nalahmar Road and Maharaj Ganj Road"></textarea>
+                        <div class="btn-row">
+                            <button class="btn btn-info-outline grow" onclick="Threats.parseSitrep()"><svg class="icon"><use href="#i-text"/></svg><span>Parse SITREP</span></button>
+                            <button class="btn btn-info-outline grow" onclick="Threats.fetchIntel()"><svg class="icon"><use href="#i-satellite"/></svg><span>Intel reports</span></button>
+                        </div>
+                        <div id="sitrep-status" class="sitrep-status"></div>
+                        <div id="sitrep-preview"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title row-between"><span>Active threats</span>
+                            <button class="btn btn-ghost btn-sm" onclick="Threats.clearAll()"><svg class="icon"><use href="#i-trash"/></svg><span>Clear all</span></button></div>
+                        <div id="threat-list" class="threat-list"><p class="muted">No active threats.</p></div>
+                    </div>
+                </section>
+
+                <!-- CONVOYS (M14) -->
+                <section id="tab-convoys" class="tab-panel" role="tabpanel">
+                    <header class="panel-head"><h2>Convoys</h2><p class="muted">Multi-convoy deconfliction and timing</p></header>
+                    <div id="convoys-root"><div class="card empty">Multi-convoy planning.</div></div>
+                </section>
+
+                <!-- LOG (M11) -->
+                <section id="tab-log" class="tab-panel" role="tabpanel">
+                    <header class="panel-head"><h2>SITREP log</h2><p class="muted">Every threat from every source</p></header>
+                    <div id="log-root"><div class="card empty">Threat records appear here.</div></div>
+                </section>
+
+                <!-- GUIDE (M12) -->
+                <section id="tab-guide" class="tab-panel" role="tabpanel">
+                    <header class="panel-head"><h2>Risk guide</h2><p class="muted">What every number means</p></header>
+                    <div id="guide-root"></div>
+                </section>
             </div>
-        </section>
+        </aside>
 
-        <section class="panel-section">
-            <button id="fetch-intel-btn" class="btn btn-info-outline btn-block" onclick="Threats.fetchIntel()">Fetch intel reports</button>
-        </section>
+        <!-- ============ Map area ============ -->
+        <main class="map-wrap">
+            <div id="map"></div>
 
-        <section class="panel-section">
-            <label class="section-label" for="sitrep-input">SITREP → threat</label>
-            <textarea id="sitrep-input" class="input" rows="3" placeholder="e.g. IED at junction of Nalahmar Road and Maharaj Ganj Road"></textarea>
-            <button class="btn btn-info-outline btn-sm btn-block" onclick="Threats.parseSitrep()">Parse SITREP</button>
-            <div id="sitrep-status" class="sitrep-status"></div>
-            <div id="sitrep-preview"></div>
-        </section>
+            <button id="drawer-btn" class="drawer-btn" aria-label="Open panel"><svg class="icon"><use href="#i-menu"/></svg></button>
 
-        <!-- Legend -->
-        <div id="legend" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; font-size: 11px;">
-            <strong style="display: block; margin-bottom: 8px; color: #00ff88;">Segment risk (ML):</strong>
-            <div class="legend-row"><div class="legend-swatch" style="background:#00ff00;"></div><span>Low (0-30)</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#ffff00;"></div><span>Medium (30-60)</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#ff6b35;"></div><span>High (60-80)</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#ff0000;"></div><span>Critical (80+)</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#ff00ff;"></div><span>Road closed (threat ≥ 90)</span></div>
-            <strong style="display: block; margin: 8px 0 6px; color: #00ff88;">Routes:</strong>
-            <div class="legend-row"><div class="legend-swatch" style="background:#3b9dff;"></div><span>Fastest</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#ffb000;"></div><span>Balanced</span></div>
-            <div class="legend-row"><div class="legend-swatch" style="background:#00e676;"></div><span>Safest</span></div>
+            <div id="header-chip" class="header-chip" tabindex="0" aria-expanded="false">
+                <div class="hc-row">
+                    <span id="region-name" class="hc-region">Srinagar, Jammu &amp; Kashmir</span>
+                    <span id="hc-model" class="hc-model">XGBoost</span>
+                    <span class="badge badge-synthetic">SYNTHETIC</span>
+                </div>
+                <div class="hc-details">
+                    <div id="bounds-info" class="hc-bounds"></div>
+                    <div id="stats"></div>
+                </div>
+            </div>
+
+            <div id="legend-chip" class="legend-chip" tabindex="0" aria-expanded="false">
+                <div class="lg-head"><svg class="icon"><use href="#i-layers"/></svg><span>Legend</span></div>
+                <div class="lg-body">
+                    <div class="lg-title">Segment risk (ML)</div>
+                    <div class="lg-row"><i class="sw sw-low"></i>Low 0–30</div>
+                    <div class="lg-row"><i class="sw sw-med"></i>Medium 30–60</div>
+                    <div class="lg-row"><i class="sw sw-high"></i>High 60–80</div>
+                    <div class="lg-row"><i class="sw sw-crit"></i>Critical 80–100</div>
+                    <div class="lg-row"><i class="sw sw-closed"></i>Closed (threat ≥ 90)</div>
+                    <div class="lg-title">Routes</div>
+                    <div class="lg-row"><i class="sw sw-fast"></i>Fastest</div>
+                    <div class="lg-row"><i class="sw sw-bal"></i>Balanced</div>
+                    <div class="lg-row"><i class="sw sw-safe"></i>Safest</div>
+                </div>
+            </div>
+
+            <div class="synthetic-footer">All incident &amp; threat data is SYNTHETIC — for demonstration only. Road network © OpenStreetMap contributors.</div>
+        </main>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading" class="loading">
+        <div class="loading-card">
+            <svg class="icon icon-lg spin"><use href="#i-shield"/></svg>
+            <div class="loading-title">Loading road network</div>
+            <div class="progress"><div id="loading-bar" class="progress-bar"></div></div>
+            <div id="loading-text" class="loading-text muted">Starting…</div>
         </div>
     </div>
 
-    <!-- Route Result Panel -->
-    <div id="route-result" class="route-result-panel" style="display:none;"></div>
-
-    <!-- Info Panel -->
-    <div class="info-panel">
-        <h2>AI Safest Route Planner</h2>
-        <p>Mobile Convoys · <span id="region-name">Srinagar, Jammu &amp; Kashmir</span></p>
-        <div class="bounds-info"><small id="bounds-info"></small></div>
-        <div id="stats"></div>
-    </div>
-
-    <!-- Footer -->
-    <div class="synthetic-footer">⚠️ All incident &amp; threat data is SYNTHETIC — for demonstration only. Road network © OpenStreetMap contributors.</div>
-
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- Pathfinding + threat geometry (pure, Node-testable) -->
+    <!-- pure logic (also used by Node tests) -->
     <script src="pathfinding.js"></script>
     <script src="js/threat-geo.js"></script>
+    <!-- UI modules -->
     <script src="js/ui.js"></script>
     <script src="js/threats.js"></script>
-    
-    <!-- App JS -->
     <script src="app.js"></script>
 </body>
 </html>

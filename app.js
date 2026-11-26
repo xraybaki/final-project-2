@@ -1,6 +1,10 @@
-// Configuration
-// Map centre / bounds / convoy parameters are overwritten from routing_graph.json "meta"
-// (written by `python -m pipeline.run_all`), so switching region needs no JS change.
+/**
+ * Convoy Route Planner - map, routing and UI shell glue.
+ *
+ * Map centre / bounds / convoy parameters come from routing_graph.json "meta"
+ * (written by `python -m pipeline.run_all`), so switching region needs no JS change.
+ * Threat logic lives in js/threats.js, geometry in js/threat-geo.js, A* in pathfinding.js.
+ */
 const CONFIG = {
     map: {
         center: [34.0837, 74.7973], // Srinagar (default; replaced by graph meta)
@@ -37,37 +41,34 @@ const CONFIG = {
     },
     convoy: {
         speedKmph: 30,          // replaced by meta.convoy_speed_kmph
-        hardBlockImpact: 90,    // impact >= this -> road closed (Infinity cost); from threat_types.json
+        hardBlockImpact: 90,    // from threat_types.json
         highRiskWeight: 60
     }
 };
 
-// Global variables
+// ------------------------------------------------------------------ global state
 let map;
-let edgesLayer;  // Routing edges (risk map)
-let graphMeta = null;     // meta block from routing_graph.json
+let edgesLayer;               // ML risk network (canvas)
+let edgesData = null;         // routing_edges.geojson (loaded once)
+let graphMeta = null;         // meta block from routing_graph.json
 
-// Routing state
-let routingGraph = null;  // Graph data loaded from routing_graph.json
-let nodesLookup = {};     // "id" -> node (built ONCE when the graph loads)
-let nodesList = [];       // array of nodes for nearest-node search
-let edgeFeatures = [];    // eid -> GeoJSON feature (geometry for drawing + threat checks)
-let startNode = null;     // Selected start point
-let endNode = null;       // Selected end point
-let routeLayers = [];     // Store route polylines
-let markerLayers = [];    // Store start/end markers
-let routingMode = false;  // Whether routing UI is active
-let networkDisplayed = false;  // Whether edges are shown
-let coverageArea = null;  // Coverage circle
-let directLine = null;    // Direct line between A and B
-let lastRoutes = null;    // Last computed {fastest, balanced, safest}
-let customLambda = ROUTE_LAMBDAS.balanced;
+let routingGraph = null;      // routing_graph.json
+let nodesLookup = {};         // "id" -> node (built ONCE when the graph loads)
+let nodesList = [];           // nodes array for nearest-node search
+let edgeFeatures = [];        // eid -> GeoJSON feature
+let startNode = null;
+let endNode = null;
+let routeLayers = [];
+let markerLayers = [];
+let routingMode = false;
+let networkDisplayed = false;
+let coverageArea = null;
+let lastRoutes = null;        // last computed {fastest, balanced, safest}
+let customLambda = ROUTE_LAMBDAS.balanced;   // ONE default (0.6), shared with pathfinding.js
+let currentRoute = null;
 
-// Vehicle animation state
-let vehicleMarker = null;  // Animated vehicle marker
-let riskPopup = null;      // Popup showing current risk
-let animationInterval = null;  // Animation timer
-let currentRoute = null;   // Currently displayed route for animation
+// preview animation (requestAnimationFrame, time-based)
+let anim = null;
 
 function routingOptions() {
     return {
@@ -80,7 +81,92 @@ function routingOptions() {
     };
 }
 
-// Initialize the map
+// ------------------------------------------------------------------ UI shell (tabs, chips, keys)
+const Shell = {
+    tabs: ['plan', 'live', 'threats', 'convoys', 'log', 'guide'],
+    current: 'plan',
+    switchTab(name) {
+        if (!this.tabs.includes(name)) return;
+        this.current = name;
+        document.querySelectorAll('.rail-tab').forEach(b => {
+            const on = b.dataset.tab === name;
+            b.classList.toggle('is-active', on);
+            b.setAttribute('aria-selected', on);
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('is-active', p.id === `tab-${name}`));
+        const sb = document.getElementById('sidebar');
+        if (sb.classList.contains('is-collapsed')) this.setCollapsed(false);
+        document.dispatchEvent(new CustomEvent('tabchange', { detail: name }));
+    },
+    setCollapsed(on) {
+        document.getElementById('sidebar').classList.toggle('is-collapsed', on);
+        setTimeout(() => map && map.invalidateSize(), 220);
+    },
+    init() {
+        document.querySelectorAll('.rail-tab').forEach(b => b.addEventListener('click', () => this.switchTab(b.dataset.tab)));
+        document.getElementById('collapse-btn').addEventListener('click', () =>
+            this.setCollapsed(!document.getElementById('sidebar').classList.contains('is-collapsed')));
+        document.getElementById('drawer-btn').addEventListener('click', () =>
+            document.getElementById('sidebar').classList.toggle('is-open'));
+        const chip = (id) => {
+            const elx = document.getElementById(id);
+            const toggle = () => { const o = !elx.classList.contains('is-open'); elx.classList.toggle('is-open', o); elx.setAttribute('aria-expanded', o); };
+            elx.addEventListener('click', toggle);
+            elx.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+        };
+        chip('header-chip');
+        chip('legend-chip');
+        document.addEventListener('keydown', (e) => {
+            const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName);
+            if (e.key === 'Escape') {
+                if (routingMode) toggleRoutingMode(true);
+                document.getElementById('sidebar').classList.remove('is-open');
+                return;
+            }
+            if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
+            const n = Number(e.key);
+            if (n >= 1 && n <= 6) this.switchTab(this.tabs[n - 1]);
+        });
+    }
+};
+window.Shell = Shell;
+
+// ------------------------------------------------------------------ loading
+const Loading = {
+    set(frac, text) {
+        document.getElementById('loading-bar').style.width = `${Math.round(100 * Math.min(1, frac))}%`;
+        if (text) document.getElementById('loading-text').textContent = text;
+    },
+    done() {
+        const l = document.getElementById('loading');
+        l.classList.add('is-done');
+        setTimeout(() => l.remove(), 400);
+    }
+};
+
+/** fetch + JSON with download progress (uses Content-Length when available). */
+async function fetchJSONProgress(url, onProgress) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+    const total = Number(res.headers.get('Content-Length')) || 0;
+    if (!res.body || !total) return res.json();
+    const reader = res.body.getReader();
+    const chunks = [];
+    let got = 0;
+    for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        got += value.length;
+        onProgress(got / total, got);
+    }
+    const buf = new Uint8Array(got);
+    let off = 0;
+    for (const c of chunks) { buf.set(c, off); off += c.length; }
+    return JSON.parse(new TextDecoder('utf-8').decode(buf));
+}
+
+// ------------------------------------------------------------------ map
 function initMap() {
     map = L.map('map', {
         center: CONFIG.map.center,
@@ -89,30 +175,23 @@ function initMap() {
         maxZoom: CONFIG.map.maxZoom,
         zoomControl: true
     });
-
-    // Basemaps with a switcher (first one is the default)
     const bases = {};
     Object.entries(CONFIG.tiles).forEach(([name, t]) => {
         bases[name] = L.tileLayer(t.url, { attribution: t.attribution, maxNativeZoom: t.maxZoom, maxZoom: 19 });
     });
     Object.values(bases)[0].addTo(map);
-    L.control.layers(bases, null, { position: 'bottomleft' }).addTo(map);
-
-    // Add click handler for routing / threat reporting
+    L.control.layers(bases, null, { position: 'bottomright' }).addTo(map);
     map.on('click', onMapClick);
-
-    console.log('Map initialized');
 }
 
-// Get color for edge based on risk weight (0-100) - matches the legend
+// Colour for a segment risk weight (0-100) - matches the legend
 function getEdgeColor(weight) {
-    if (weight < 30) return '#00ff00';      // Low
-    if (weight < 60) return '#ffff00';      // Medium
-    if (weight < 80) return '#ff6b35';      // High
-    return '#ff0000';                       // Critical
+    if (weight < 30) return '#00ff00';
+    if (weight < 60) return '#ffff00';
+    if (weight < 80) return '#ff6b35';
+    return '#ff0000';
 }
 
-// Update statistics panel from graph meta
 function updateStats() {
     const statsDiv = document.getElementById('stats');
     if (!statsDiv || !routingGraph) return;
@@ -120,21 +199,19 @@ function updateStats() {
     const edges = routingGraph.edges || [];
     const high = edges.filter(e => e.weight >= CONFIG.convoy.highRiskWeight).length;
     const choke = edges.filter(e => e.chokepoint).length;
-    const auc = m.model_roc_auc ? m.model_roc_auc.toFixed(2) : 'n/a';
-    const sauc = m.model_roc_auc_spatial_cv ? m.model_roc_auc_spatial_cv.toFixed(2) : 'n/a';
-    const bauc = m.baseline_roc_auc_spatial_cv ? m.baseline_roc_auc_spatial_cv.toFixed(2) : 'n/a';
+    const f2 = (v) => (v ? v.toFixed(2) : 'n/a');
     statsDiv.innerHTML = `
-        <p><strong>Road segments:</strong> ${edges.length.toLocaleString()}</p>
-        <p><strong>High-risk (≥${CONFIG.convoy.highRiskWeight}):</strong> ${(100 * high / Math.max(1, edges.length)).toFixed(1)}%</p>
-        <p><strong>Chokepoints:</strong> ${choke.toLocaleString()}</p>
-        <p><strong>Risk model:</strong> ${m.model || 'n/a'}</p>
-        <p style="font-size:11px; color:#aaa;">ROC-AUC ${auc} (random split) · ${sauc} spatial-block CV vs baseline ${bauc}</p>
-        <p><strong>Convoy speed:</strong> ${CONFIG.convoy.speedKmph} km/h</p>
-        <p style="margin-top: 8px; font-size: 11px; color: #ffaa00;">⚠️ Threat data is SYNTHETIC - for demonstration only</p>
-    `;
+        <p><span class="stat-k">Road segments</span> ${edges.length.toLocaleString()}</p>
+        <p><span class="stat-k">High-risk (≥${CONFIG.convoy.highRiskWeight})</span> ${(100 * high / Math.max(1, edges.length)).toFixed(1)}%</p>
+        <p><span class="stat-k">Chokepoints</span> ${choke.toLocaleString()}</p>
+        <p><span class="stat-k">Risk model</span> ${escapeHtml(m.model || 'n/a')}</p>
+        <p><span class="stat-k">ROC-AUC</span> ${f2(m.model_roc_auc)} random split · ${f2(m.model_roc_auc_spatial_cv)} spatial CV (baseline ${f2(m.baseline_roc_auc_spatial_cv)})</p>
+        <p><span class="stat-k">Convoy speed</span> ${CONFIG.convoy.speedKmph} km/h</p>
+        <p class="warn-text">Threat data is SYNTHETIC - for demonstration only</p>`;
+    const hm = document.getElementById('hc-model');
+    if (hm) hm.textContent = `${m.model || ''} · AUC ${f2(m.model_roc_auc_spatial_cv)} (spatial CV)`;
 }
 
-// Apply region / convoy settings from routing_graph.json meta
 function applyGraphMeta(meta) {
     graphMeta = meta || {};
     const r = graphMeta.region || {};
@@ -151,188 +228,151 @@ function applyGraphMeta(meta) {
     if (bi && r.bounds) {
         const ns = v => `${Math.abs(v).toFixed(3)}°${v >= 0 ? 'N' : 'S'}`;
         const ew = v => `${Math.abs(v).toFixed(3)}°${v >= 0 ? 'E' : 'W'}`;
-        bi.innerHTML = `📍 Area: ${ns(r.bounds[0][0])} to ${ns(r.bounds[1][0])}<br>${ew(r.bounds[0][1])} to ${ew(r.bounds[1][1])}`;
+        bi.textContent = `Area ${ns(r.bounds[0][0])}–${ns(r.bounds[1][0])}, ${ew(r.bounds[0][1])}–${ew(r.bounds[1][1])}`;
     }
     addCoverageArea();
 }
 
-// Initialize app
 async function init() {
+    Shell.init();
     initMap();
+    Loading.set(0.02, 'Loading threat types…');
     await Threats.loadTypes();
     await loadRoutingGraph();
-    // Show the ML risk map by default - it is the core of the demo
-    if (routingGraph && !networkDisplayed) toggleNetworkDisplay();
+    if (routingGraph) {
+        toggleNetworkDisplay(true);   // the ML risk map is the core of the demo
+        document.dispatchEvent(new CustomEvent('graphready'));
+    }
+    Loading.done();
 }
 
-// Add coverage area circle to show where routing works
 function addCoverageArea() {
     const r = (graphMeta && graphMeta.region) || {};
     if (coverageArea) map.removeLayer(coverageArea);
-    coverageArea = L.circle(r.center || CONFIG.map.center, {
-        radius: r.radius_m || 12000,
-        color: '#00ff88',
-        fillColor: '#00ff88',
-        fillOpacity: 0.03,
-        weight: 2,
-        opacity: 0.3,
-        dashArray: '10, 10',
-        interactive: false  // DON'T intercept clicks!
-    }).addTo(map);
+    const b = r.bounds;
+    coverageArea = b
+        ? L.rectangle(b, { color: '#22d39b', weight: 1.5, opacity: 0.35, fill: false, dashArray: '8 8', interactive: false })
+        : L.circle(r.center || CONFIG.map.center, { radius: r.radius_m || 12000, color: '#22d39b', weight: 1.5, opacity: 0.35, fill: false, dashArray: '8 8', interactive: false });
+    coverageArea.addTo(map);
 }
 
-// Toggle network display (edges and nodes)
-window.toggleNetworkDisplay = function() {
-    const btn = document.getElementById('show-network-btn');
-    
-    if (!networkDisplayed) {
-        console.log('📊 Loading street network...');
-        btn.textContent = '⏳ Loading...';
-        btn.disabled = true;
-        
-        loadEdges().then(() => {
-            networkDisplayed = true;
-            btn.textContent = '🙈 Hide Street Network';
-            btn.disabled = false;
-            console.log('✅ Street network displayed');
-        }).catch(err => {
-            console.error('❌ Error loading network:', err);
-            btn.textContent = '🔍 Show Street Network';
-            btn.disabled = false;
-        });
-    } else {
-        console.log('🙈 Hiding street network...');
-        if (edgesLayer) {
-            map.removeLayer(edgesLayer);
-            edgesLayer = null;
-        }
+// ------------------------------------------------------------------ risk network layer
+window.toggleNetworkDisplay = function (forceOn) {
+    const cb = document.getElementById('toggle-network');
+    const on = forceOn === true ? true : (cb ? cb.checked : !networkDisplayed);
+    if (cb) cb.checked = on;
+    if (on && !networkDisplayed) {
+        if (!edgesLayer) buildEdgesLayer();
+        edgesLayer.addTo(map);
+        edgesLayer.bringToBack();
+        networkDisplayed = true;
+    } else if (!on && networkDisplayed) {
+        map.removeLayer(edgesLayer);
         networkDisplayed = false;
-        btn.textContent = '🔍 Show Street Network';
     }
 };
 
-// Edge popup content (risk map)
 function edgePopupContent(props) {
     const w = props.weight;
     const eff = Threats.effectOf(props.eid);
-    const impact = eff ? eff.maxImpact : 0;
+    const band = getDangerLevel(w);
     const f = props.features || {};
+    const frac = eff && !eff.hard ? Math.round(100 * Math.min(1, eff.parts.reduce((a, p) => a + p.fIn, 0))) : 0;
     return `
         <div class="popup-title">${escapeHtml(props.street_name)}</div>
-        <div class="popup-stat">Risk weight: <span style="color: ${getEdgeColor(w)}; font-weight: bold;">${w.toFixed(1)}/100</span></div>
-        <div class="popup-stat">ML incident prob. (6 mo): <span>${(100 * props.risk_prob).toFixed(1)}%</span></div>
-        <div class="popup-stat">Road: <span>${escapeHtml(props.highway_type)}${props.bridge ? ' · bridge' : ''}${props.tunnel ? ' · tunnel' : ''}</span></div>
-        <div class="popup-stat">Length: <span>${props.length_m.toFixed(0)} m · ${(props.travel_time_s / 60).toFixed(1)} min @ ${CONFIG.convoy.speedKmph} km/h</span></div>
-        ${f.curviness ? `<div class="popup-stat">Curviness: <span>${f.curviness.toFixed(2)}</span></div>` : ''}
-        ${props.chokepoint ? '<div class="popup-stat" style="color:#ff9900;">⚠️ Chokepoint (top 5% betweenness)</div>' : ''}
-        ${impact ? `<div class="popup-stat" style="color:#ff4444;">🚨 ${eff.hard ? 'CLOSED by' : 'Partly inside'} live threat zone (impact ${impact}${eff.hard ? '' : `, ${Math.round(100 * Math.min(1, eff.parts.reduce((a, p) => a + p.fIn, 0)))}% of length`})</div>` : ''}
-    `;
+        <div class="popup-stat">Segment risk <span class="risk-${band.key}">${w.toFixed(1)} / 100 · ${band.label}</span></div>
+        <div class="popup-stat">ML incident prob. (6 mo) <span>${(100 * props.risk_prob).toFixed(1)}%</span></div>
+        <div class="popup-stat">Road <span>${escapeHtml(props.highway_type)}${props.bridge ? ' · bridge' : ''}${props.tunnel ? ' · tunnel' : ''}</span></div>
+        <div class="popup-stat">Length <span>${props.length_m.toFixed(0)} m · ${(props.travel_time_s / 60).toFixed(1)} min @ ${CONFIG.convoy.speedKmph} km/h</span></div>
+        ${f.curviness ? `<div class="popup-stat">Curviness <span>${f.curviness.toFixed(2)}</span></div>` : ''}
+        ${props.chokepoint ? '<div class="popup-flag is-warn">Chokepoint (top 5% network betweenness)</div>' : ''}
+        ${eff ? `<div class="popup-flag is-danger">${eff.hard ? 'CLOSED by a live threat (hard block)' : `Live threat covers ${frac}% of this segment (impact ${eff.maxImpact})`}</div>` : ''}
+        <div class="popup-flag muted">${typeof Guide !== 'undefined' ? Guide.link('risk', 'What does segment risk mean?') : ''}</div>`;
 }
 
-// Load all routing edges coloured by ML risk weight
-function loadEdges() {
-    return fetch(CONFIG.geojson.edges)
-        .then(response => response.json())
-        .then(data => {
-            edgesLayer = L.geoJSON(data, {
-                renderer: L.canvas({ padding: 0.5 }),
-                style: (feature) => ({
-                    color: getEdgeColor(feature.properties.weight),
-                    weight: feature.properties.chokepoint ? 3.5 : 2.5,
-                    opacity: 0.75
-                }),
-                onEachFeature: (feature, layer) => {
-                    layer.on('click', (e) => {
-                        // in routing / reporting mode the click belongs to the map handler
-                        if (routingMode || Threats.reportMode || Threats.pin) return;
-                        L.popup().setLatLng(e.latlng).setContent(edgePopupContent(feature.properties)).openOn(map);
-                    });
-                }
-            }).addTo(map);
-            edgesLayer.bringToBack();
-        });
+function buildEdgesLayer() {
+    edgesLayer = L.geoJSON(edgesData, {
+        renderer: L.canvas({ padding: 0.5 }),
+        style: (feature) => ({
+            color: getEdgeColor(feature.properties.weight),
+            weight: feature.properties.chokepoint ? 3 : 2,
+            opacity: 0.72
+        }),
+        onEachFeature: (feature, layer) => {
+            layer.on('click', (e) => {
+                if (routingMode || Threats.reportMode || Threats.pin) return;   // click belongs to the map handler
+                L.popup({ maxWidth: 320 }).setLatLng(e.latlng).setContent(edgePopupContent(feature.properties)).openOn(map);
+            });
+        }
+    });
 }
 
-// Toggle layer visibility
-window.toggleLayer = function(layerType) {
-    if (layerType === 'edges' && edgesLayer) {
-        if (map.hasLayer(edgesLayer)) map.removeLayer(edgesLayer);
-        else map.addLayer(edgesLayer);
-    }
+window.toggleLayer = function (layerType) {
+    if (layerType === 'edges') toggleNetworkDisplay(!networkDisplayed);
 };
 
-// ===========================
-// ROUTING FUNCTIONS
-// ===========================
-
-// Load routing graph (once) and build lookups
+// ------------------------------------------------------------------ routing
 async function loadRoutingGraph() {
     try {
-        const response = await fetch(CONFIG.geojson.routingGraph);
-        routingGraph = await response.json();
+        routingGraph = await fetchJSONProgress(CONFIG.geojson.routingGraph,
+            (f, b) => Loading.set(0.05 + 0.5 * f, `Routing graph ${(b / 1e6).toFixed(1)} MB`));
         applyGraphMeta(routingGraph.meta);
-
-        // Node lookup is built ONCE here (string keys match adjacency_list)
         nodesLookup = {};
         routingGraph.nodes.forEach(n => { nodesLookup[String(n.id)] = n; });
         nodesList = routingGraph.nodes;
 
-        // Edge geometries for drawing routes along the real road shape and for threat checks
-        const edgesResponse = await fetch(CONFIG.geojson.edges);
-        const edgesData = await edgesResponse.json();
+        edgesData = await fetchJSONProgress(CONFIG.geojson.edges,
+            (f, b) => Loading.set(0.55 + 0.4 * f, `Road geometry ${(b / 1e6).toFixed(1)} MB`));
         edgeFeatures = [];
         edgesData.features.forEach(f => { edgeFeatures[f.properties.eid] = f; });
 
+        Loading.set(0.97, 'Indexing roads and landmarks…');
         await Threats.onGraphLoaded();
         updateStats();
-        console.log(`✅ Routing graph loaded: ${routingGraph.nodes.length} nodes, ${edgeFeatures.length} edges`);
     } catch (error) {
-        console.error('❌ Error loading routing graph:', error);
-        const statsDiv = document.getElementById('stats');
-        if (statsDiv) statsDiv.innerHTML = '<p style="color:#ff4444;">Could not load routing_graph.json - run <code>python -m pipeline.run_all</code></p>';
+        console.error('Error loading routing graph:', error);
+        UI.toast('Could not load routing_graph.json - run: python -m pipeline.run_all', { type: 'danger', timeout: 0 });
     }
 }
 
-// Handle map clicks for routing / threat reporting
 function onMapClick(e) {
-    if (Threats.handleMapClick(e)) return;   // report mode / pin mode
+    if (Threats.handleMapClick(e)) return;           // report / pin mode
+    if (typeof Live !== 'undefined' && Live.handleMapClick && Live.handleMapClick(e)) return;
+    if (typeof Convoys !== 'undefined' && Convoys.handleMapClick && Convoys.handleMapClick(e)) return;
     if (!routingMode || !routingGraph) return;
     setRoutePoint(e.latlng.lat, e.latlng.lng);
 }
 
-// Place start (A) or end (B) at the nearest graph node
+function routeMarker(lat, lon, label) {
+    return L.marker([lat, lon], {
+        icon: L.divIcon({
+            className: 'route-marker-wrap',
+            html: `<div class="route-marker ${label === 'A' ? 'is-a' : 'is-b'}">${label}</div>`,
+            iconSize: [34, 34], iconAnchor: [17, 17]
+        }),
+        zIndexOffset: 1500
+    });
+}
+
 function setRoutePoint(lat, lon) {
     const nearest = findNearestNode(lat, lon, nodesList);
     if (!nearest) {
         UI.toast('No road found near this location.', { type: 'warn' });
         return;
     }
-    const mk = (label, bg, fg) => L.marker([nearest.lat, nearest.lon], {
-        icon: L.divIcon({
-            className: 'custom-marker',
-            html: `<div style="background: ${bg}; width: 35px; height: 35px; border-radius: 50%; border: 4px solid white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: ${fg}; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">${label}</div>`,
-            iconSize: [35, 35],
-            iconAnchor: [17, 17]
-        }),
-        zIndexOffset: 1500
-    }).addTo(map);
-
     if (!startNode) {
         startNode = nearest;
-        const marker = mk('A', '#00ff88', 'black');
-        marker.bindPopup('<b>🟢 Start Point (A)</b><br>Click another location for destination').openPopup();
-        markerLayers.push(marker);
+        markerLayers.push(routeMarker(nearest.lat, nearest.lon, 'A').addTo(map));
+        UI.toast('Start set. Now click the destination (B).', { type: 'info', timeout: 2500 });
     } else if (!endNode) {
         endNode = nearest;
-        const marker = mk('B', '#ff4444', 'white');
-        markerLayers.push(marker);
-        map.closePopup();
+        markerLayers.push(routeMarker(nearest.lat, nearest.lon, 'B').addTo(map));
+        toggleRoutingMode(true);
         calculateConvoyRoutes(false);
     }
 }
 window.setRoutePoint = setRoutePoint;
 
-// Edge geometry oriented from node `fromId` to node `toId`
 function orientedEdgeLatLngs(edge, fromId) {
     const f = edgeFeatures[edge.eid];
     const from = nodesLookup[fromId];
@@ -356,7 +396,6 @@ function routeLatLngs(route) {
     return out;
 }
 
-// Calculate and display Fastest / Balanced / Safest convoy routes
 function calculateConvoyRoutes(isReroute = false) {
     if (!startNode || !endNode || !routingGraph) return;
     const opts = routingOptions();
@@ -366,7 +405,7 @@ function calculateConvoyRoutes(isReroute = false) {
 
     if (!routes) {
         if (isReroute) {
-            showRerouteBanner('<span style="color:#ff00ff;">⛔ No passable route - all paths are blocked by road closures.</span>');
+            showRerouteBanner('<span class="closed">No passable route</span> - all paths are blocked by road closures.');
             return;
         }
         UI.toast('No path found between these points (blocked or disconnected). Try different locations.', { type: 'danger' });
@@ -374,7 +413,7 @@ function calculateConvoyRoutes(isReroute = false) {
         return;
     }
 
-    // Re-route summary: previous safest route re-evaluated under the NEW threat picture vs new safest route
+    // Re-route summary: previous safest route re-evaluated under the NEW threat picture vs the new one
     let rerouteMsg = null;
     if (isReroute && lastRoutes) {
         const prev = lastRoutes.safest;
@@ -382,150 +421,180 @@ function calculateConvoyRoutes(isReroute = false) {
         const now = routes.safest.metrics;
         const samePath = prev.path.join(',') === routes.safest.path.join(',');
         const dKm = now.distanceKm - prevNow.distanceKm;
+        const sgn = (v) => (v >= 0 ? '+' : '−') + Math.abs(v);
         if (samePath) {
-            rerouteMsg = `ℹ️ Safest route unchanged · route risk now ${(100 * now.incidentProb).toFixed(2)}%`;
+            rerouteMsg = `Safest route unchanged · route incident prob. now ${(100 * now.incidentProb).toFixed(2)}%`;
         } else if (prevNow.blockedSegments > 0) {
-            rerouteMsg = `🔀 <b>Re-routed</b>: previous route <span style="color:#ff00ff;">BLOCKED</span> · ${dKm >= 0 ? '+' : ''}${dKm.toFixed(2)} km, ${(now.etaMin - prevNow.etaMin >= 0 ? '+' : '')}${(now.etaMin - prevNow.etaMin).toFixed(1)} min`;
+            rerouteMsg = `<b>Re-routed</b>: previous route <span class="closed">BLOCKED</span> · ${sgn(+dKm.toFixed(2))} km, ${sgn(+(now.etaMin - prevNow.etaMin).toFixed(1))} min`;
         } else {
             const riskDrop = prevNow.incidentProb > 0 ? 100 * (prevNow.incidentProb - now.incidentProb) / prevNow.incidentProb : 0;
-            rerouteMsg = `🔀 <b>Re-routed</b>: ${dKm >= 0 ? '+' : ''}${dKm.toFixed(2)} km, risk ${riskDrop >= 0 ? '−' : '+'}${Math.abs(riskDrop).toFixed(0)}% (${(100 * prevNow.incidentProb).toFixed(2)}% → ${(100 * now.incidentProb).toFixed(2)}%)`;
+            rerouteMsg = `<b>Re-routed</b>: ${sgn(+dKm.toFixed(2))} km, risk ${riskDrop >= 0 ? '−' : '+'}${Math.abs(riskDrop).toFixed(0)}% (${(100 * prevNow.incidentProb).toFixed(2)}% → ${(100 * now.incidentProb).toFixed(2)}%)`;
         }
     }
 
     lastRoutes = routes;
     displayConvoyRoutes(routes, !isReroute);
     showRouteComparison(routes, ms, rerouteMsg);
+    document.dispatchEvent(new CustomEvent('routeschange', { detail: { routes, isReroute } }));
 }
 const calculateSafestRoute = () => calculateConvoyRoutes(false);  // backwards-compatible name
 
-// Draw the three routes (safest on top)
 function displayConvoyRoutes(routes, fit = true) {
     routeLayers.forEach(layer => map.removeLayer(layer));
     routeLayers = [];
-    ['fastest', 'balanced', 'safest'].forEach((k, i) => displayRoute(routes[k], i));
+    ['fastest', 'balanced', 'safest'].forEach((k, i) => displayRoute(routes[k], i, fit));
     currentRoute = routes.safest;
     if (fit) {
         const all = routeLayers.flatMap(l => l.getLatLngs());
-        map.fitBounds(L.latLngBounds(all), { paddingTopLeft: [300, 60], paddingBottomRight: [580, 60] });
+        map.fitBounds(L.latLngBounds(all), { padding: [60, 60] });
     }
 }
 
-// Display a route on the map
-function displayRoute(route, index) {
+/** Animate an SVG polyline drawing itself (stroke-dashoffset). */
+function drawOn(polyline) {
+    const path = polyline._path;
+    if (!path || !path.getTotalLength || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = `${len} ${len}`;
+    path.style.strokeDashoffset = len;
+    path.getBoundingClientRect();
+    path.classList.add('route-draw');
+    path.style.strokeDashoffset = 0;
+    setTimeout(() => { path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; path.classList.remove('route-draw'); }, 750);
+}
+window.drawOn = drawOn;
+
+function displayRoute(route, index, animate = true) {
     const m = route.metrics;
     const polyline = L.polyline(routeLatLngs(route), {
         color: route.color,
         weight: [9, 7, 5][index],
-        opacity: 0.85,
-        smoothFactor: 1
+        opacity: 0.88,
+        smoothFactor: 1,
+        className: `route-line route-${route.key}`
     }).addTo(map);
-
+    if (animate) drawOn(polyline);
     polyline.bindPopup(`
-        <div style="min-width: 220px;">
-            <div style="font-weight: bold; font-size: 14px; margin-bottom: 5px; color:${route.color};">${route.name} route</div>
-            <div style="font-size: 11px; color: #ccc;">${route.description}</div>
-            <hr style="margin: 8px 0; border-color: #444;">
-            <div style="font-size: 12px; line-height:1.6;">
-                📏 ${formatDistance(m.distanceKm)} · ⏱️ ${m.etaMin.toFixed(0)} min<br>
-                🎲 Route incident prob.: <b>${(100 * m.incidentProb).toFixed(2)}%</b><br>
-                🔥 High-risk exposure: <b>${m.exposureMin.toFixed(1)} min</b><br>
-                🚧 Chokepoints: <b>${m.chokepoints}</b>
-            </div>
-        </div>
-    `);
+        <div class="route-popup">
+            <div class="rp-title rp-${route.key}">${route.name} route</div>
+            <div class="rp-desc">${route.description}</div>
+            <hr>
+            <div class="popup-stat">Distance · ETA <span>${formatDistance(m.distanceKm)} · ${m.etaMin.toFixed(0)} min</span></div>
+            <div class="popup-stat">Route incident prob. <span>${(100 * m.incidentProb).toFixed(2)}%</span></div>
+            <div class="popup-stat">High-risk exposure <span>${m.exposureMin.toFixed(1)} min</span></div>
+            <div class="popup-stat">Chokepoints <span>${m.chokepoints}</span></div>
+        </div>`);
     routeLayers.push(polyline);
 }
 
 function showRerouteBanner(html) {
-    const el = document.getElementById('reroute-banner');
-    if (!el) return;
-    el.innerHTML = html;
-    el.style.display = 'block';
+    const elx = document.getElementById('reroute-banner');
+    if (!elx) return;
+    elx.innerHTML = html;
+    elx.hidden = false;
 }
 
-// Show route comparison panel: metrics side by side
+// Metric definitions shown as tooltips (M12 adds the full Guide)
+const METRIC_TIPS = {
+    distance: 'Total road distance of the route.',
+    eta: 'Drive time at the convoy speed.',
+    prob: 'Chance of at least one incident on this trip: P = 1 − Π(1 − pᵢ) over segments (per-traversal probabilities; synthetic data).',
+    mean: 'Length-weighted average segment risk along the route (scale 0–100).',
+    max: 'Worst segment risk on the route (scale 0–100).',
+    high: 'Number of segments with risk ≥ 60.',
+    exposure: 'Minutes the convoy spends on segments with risk ≥ 60 at convoy speed.',
+    choke: 'Segments in the top 5% of network betweenness: bridges and single links whose loss cuts the network.',
+    zone: 'Segments touching an active threat radius.'
+};
+
 function showRouteComparison(routes, ms, rerouteMsg) {
     const panel = document.getElementById('route-result');
     if (!panel) return;
     const keys = ['fastest', 'balanced', 'safest'];
     const ms_ = keys.map(k => routes[k].metrics);
-    const best = (vals, lower = true) => {
-        const v = lower ? Math.min(...vals) : Math.max(...vals);
-        return vals.map(x => Math.abs(x - v) < 1e-9);
+    const tip = (k) => (typeof Guide !== 'undefined' ? Guide.tip(k) : '');
+    const row = (label, k, vals, fmt) => {
+        const v = Math.min(...vals);
+        return `<tr><td class="metric-label">${label}${tip(k)}</td>${vals.map(x =>
+            `<td class="${Math.abs(x - v) < 1e-9 ? 'best' : ''}">${fmt(x)}</td>`).join('')}</tr>`;
     };
-    const row = (label, vals, fmt, lower = true, tip = '') => {
-        const b = best(vals, lower);
-        return `<tr title="${tip}"><td class="metric-label">${label}</td>${vals.map((v, i) =>
-            `<td style="${b[i] ? 'color:#00ff88;font-weight:bold;' : ''}">${fmt(v)}</td>`).join('')}</tr>`;
-    };
-
+    const cls = { fastest: 'r-fast', balanced: 'r-bal', safest: 'r-safe' };
     panel.innerHTML = `
-        <h3 style="margin: 0 0 6px 0; color:#00ff88;">🛡️ Convoy Route Comparison</h3>
-        <div id="reroute-banner" class="reroute-banner" style="display:${rerouteMsg ? 'block' : 'none'};">${rerouteMsg || ''}</div>
+        <h3>Route comparison</h3>
+        <div id="reroute-banner" class="reroute-banner" ${rerouteMsg ? '' : 'hidden'}>${rerouteMsg || ''}</div>
         <table class="route-table">
-            <thead><tr><th></th>${keys.map(k => `<th style="color:${routes[k].color};">${routes[k].name}</th>`).join('')}</tr></thead>
+            <thead><tr><th></th>${keys.map(k => `<th class="${cls[k]}">${routes[k].name.replace(/^\S+\s/, '')}</th>`).join('')}</tr></thead>
             <tbody>
-                ${row('Distance', ms_.map(m => m.distanceKm), v => `${v.toFixed(2)} km`)}
-                ${row(`ETA @ ${CONFIG.convoy.speedKmph} km/h`, ms_.map(m => m.etaMin), v => `${v.toFixed(0)} min`)}
-                ${row('Route incident prob.', ms_.map(m => m.incidentProb), v => `${(100 * v).toFixed(2)}%`, true, 'P = 1 − Π(1 − p_i), Krumm & Horvitz 2017')}
-                ${row('Mean segment risk', ms_.map(m => m.meanRisk), v => v.toFixed(1), true, 'length-weighted, 0-100')}
-                ${row('Max segment risk', ms_.map(m => m.maxRisk), v => v.toFixed(0))}
-                ${row('High-risk segments', ms_.map(m => m.highRiskSegments), v => v)}
-                ${row('Exposure time (risk ≥ 60)', ms_.map(m => m.exposureMin), v => `${v.toFixed(1)} min`)}
-                ${row('Chokepoints crossed', ms_.map(m => m.chokepoints), v => v)}
-                ${row('Threat-zone segments', ms_.map(m => m.threatSegments), v => v)}
+                ${row('Distance', 'distance', ms_.map(m => m.distanceKm), v => `${v.toFixed(2)} km`)}
+                ${row(`ETA @ ${CONFIG.convoy.speedKmph} km/h`, 'eta', ms_.map(m => m.etaMin), v => `${v.toFixed(0)} min`)}
+                ${row('Incident prob.', 'prob', ms_.map(m => m.incidentProb), v => `${(100 * v).toFixed(2)}%`)}
+                ${row('Mean seg. risk', 'mean', ms_.map(m => m.meanRisk), v => v.toFixed(1))}
+                ${row('Max seg. risk', 'max', ms_.map(m => m.maxRisk), v => v.toFixed(0))}
+                ${row('High-risk segs', 'high', ms_.map(m => m.highRiskSegments), v => v)}
+                ${row('Exposure ≥ 60', 'exposure', ms_.map(m => m.exposureMin), v => `${v.toFixed(1)} min`)}
+                ${row('Chokepoints', 'choke', ms_.map(m => m.chokepoints), v => v)}
+                ${row('Threat-zone segs', 'zone', ms_.map(m => m.threatSegments), v => v)}
             </tbody>
         </table>
         <div class="lambda-control">
-            <label>Balanced λ (risk weight): <b id="lambda-value">${customLambda.toFixed(2)}</b></label>
-            <input type="range" id="lambda-slider" min="0" max="1" step="0.05" value="${customLambda}"
-                oninput="document.getElementById('lambda-value').textContent=Number(this.value).toFixed(2)"
-                onchange="setBalancedLambda(this.value)">
+            <div class="row-between"><span>Balanced λ (risk weight)${tip('lambda')}</span><b id="lambda-value" class="num">${customLambda.toFixed(2)}</b></div>
+            <input type="range" id="lambda-slider" class="range" min="0" max="0.95" step="0.05" value="${customLambda}">
+            <div id="lambda-sentence" class="lambda-sentence"></div>
         </div>
-        <div style="font-size:10px; color:#777; margin:4px 0 8px;">3 routes in ${ms.toFixed(0)} ms · risk from ML model on SYNTHETIC data</div>
-        <button id="animate-route-btn" onclick="startRouteAnimation()" class="animate-btn">🚚 Animate Convoy (Safest)</button>
-        <div id="animation-controls" style="display: none; margin-bottom: 8px;">
-            <button id="stop-animation-btn" onclick="stopRouteAnimation()" class="stop-btn">⏹️ Stop Animation</button>
-        </div>
-        <button onclick="resetRouting()" class="reset-btn">🔄 Plan New Route</button>
-    `;
-    panel.style.display = 'block';
+        <div class="route-footnote">3 routes in ${ms.toFixed(0)} ms · risk from the ML model on SYNTHETIC data</div>
+        <div class="btn-row">
+            <button id="animate-route-btn" class="btn btn-secondary grow"><svg class="icon"><use href="#i-play"/></svg><span>Preview drive (safest)</span></button>
+            <button id="go-live-btn" class="btn btn-primary grow"><svg class="icon"><use href="#i-radio"/></svg><span>Start live</span></button>
+        </div>`;
+    panel.hidden = false;
+    const slider = panel.querySelector('#lambda-slider');
+    const sentence = () => {
+        const v = Number(slider.value);
+        panel.querySelector('#lambda-value').textContent = v.toFixed(2);
+        const s = panel.querySelector('#lambda-sentence');
+        if (typeof Guide !== 'undefined') s.textContent = Guide.lambdaSentence(v);
+    };
+    slider.addEventListener('input', sentence);
+    slider.addEventListener('change', () => setBalancedLambda(slider.value));
+    sentence();
+    panel.querySelector('#animate-route-btn').addEventListener('click', () => (anim ? stopRouteAnimation() : startRouteAnimation()));
+    panel.querySelector('#go-live-btn').addEventListener('click', () => {
+        if (typeof Live !== 'undefined' && Live.startFromPlan) Live.startFromPlan();
+        else UI.toast('Live tracking arrives in the Live tab.', { type: 'info' });
+    });
 }
 
-window.setBalancedLambda = function(v) {
+window.setBalancedLambda = function (v) {
     customLambda = Number(v);
+    const chip = document.getElementById('chip-bal-lambda');
+    if (chip) chip.textContent = customLambda.toFixed(2).replace(/0$/, '');
     if (startNode && endNode) calculateConvoyRoutes(false);
 };
 
-// Transport mode selector removed
-
-// Toggle routing mode
-window.toggleRoutingMode = function(keepRoute = false) {
+window.toggleRoutingMode = function (keepRoute = false) {
     routingMode = !routingMode;
     const btn = document.getElementById('routing-toggle-btn');
     const instructions = document.getElementById('routing-instructions');
-
+    document.body.classList.toggle('mode-route', routingMode);
     if (routingMode) {
         if (Threats.reportMode) Threats.setReportMode(false);
-        btn.textContent = '🛑 Cancel Route Planning';
-        btn.style.background = 'linear-gradient(135deg, #ff4444 0%, #cc0000 100%)';
-        instructions.style.display = 'block';
-        if (coverageArea) coverageArea.setStyle({ fillOpacity: 0.08, opacity: 0.6 });
+        if (startNode && endNode) resetRouting();
+        btn.classList.add('is-active');
+        btn.querySelector('span').textContent = 'Cancel (Esc)';
+        instructions.hidden = false;
+        Shell.switchTab('plan');
     } else {
-        btn.textContent = '🗺️ Plan Convoy Route';
-        btn.style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)';
-        instructions.style.display = 'none';
-        if (coverageArea) coverageArea.setStyle({ fillOpacity: 0.03, opacity: 0.3 });
+        btn.classList.remove('is-active');
+        btn.querySelector('span').textContent = 'Pick start & destination';
+        instructions.hidden = true;
         if (!keepRoute) resetRouting();
     }
 };
 
-// Reset routing state
-window.resetRouting = function() {
+window.resetRouting = function () {
     stopRouteAnimation();
     startNode = null;
     endNode = null;
-    directLine = null;
     currentRoute = null;
     lastRoutes = null;
     routeLayers.forEach(layer => map.removeLayer(layer));
@@ -533,155 +602,97 @@ window.resetRouting = function() {
     markerLayers.forEach(marker => map.removeLayer(marker));
     markerLayers = [];
     const panel = document.getElementById('route-result');
-    if (panel) panel.style.display = 'none';
+    if (panel) panel.hidden = true;
+    document.dispatchEvent(new CustomEvent('routeschange', { detail: { routes: null } }));
 };
 
-// ============================================
-// VEHICLE ANIMATION FUNCTIONS
-// ============================================
+// ------------------------------------------------------------------ preview drive (rAF, time-based)
+const PREVIEW_SPEEDUP = 20;   // 30 km/h × 20 for a quick on-map preview
 
-// Start route animation
-window.startRouteAnimation = function() {
-    if (!currentRoute || !currentRoute.coordinates) {
-        console.error('No route to animate');
-        return;
-    }
-    
-    // Stop any existing animation
+/** Cumulative distances along a latlng polyline (metres). */
+function cumulative(latlngs) {
+    const cum = [0];
+    for (let i = 1; i < latlngs.length; i++) cum.push(cum[i - 1] + getDistance(latlngs[i - 1][0], latlngs[i - 1][1], latlngs[i][0], latlngs[i][1]));
+    return cum;
+}
+
+/** Point + bearing at distance d along a polyline with cumulative distances. */
+function pointAlong(latlngs, cum, d) {
+    let i = 1;
+    while (i < cum.length - 1 && cum[i] < d) i++;
+    const seg = cum[i] - cum[i - 1] || 1;
+    const t = Math.max(0, Math.min(1, (d - cum[i - 1]) / seg));
+    const a = latlngs[i - 1], b = latlngs[i];
+    return { lat: a[0] + (b[0] - a[0]) * t, lon: a[1] + (b[1] - a[1]) * t, bearing: calculateBearing(a[0], a[1], b[0], b[1]), seg: i - 1 };
+}
+window.cumulative = cumulative;
+window.pointAlong = pointAlong;
+
+window.startRouteAnimation = function () {
+    if (!currentRoute) return;
     stopRouteAnimation();
-    
-        
-    // Show/hide buttons
-    document.getElementById('animate-route-btn').style.display = 'none';
-    document.getElementById('animation-controls').style.display = 'block';
-    
-    // Create convoy marker (triangle)
-    const startCoord = currentRoute.coordinates[0];
-    vehicleMarker = L.marker([startCoord[1], startCoord[0]], {
-        icon: L.divIcon({
-            className: 'vehicle-marker',
-            html: '<div style="width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 25px solid #667eea; transform: rotate(0deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));"></div>',
-            iconSize: [30, 30],
-            iconAnchor: [15, 25]
-        }),
-        zIndexOffset: 1000
-    }).addTo(map);
-    
-    // Create risk popup
-    riskPopup = L.popup({
-        closeButton: false,
-        autoClose: false,
-        closeOnClick: false,
-        className: 'risk-popup'
+    const latlngs = routeLatLngs(currentRoute);
+    const cum = cumulative(latlngs);
+    // edge index at each latlng vertex, to read live segment risk
+    const edgeAt = [];
+    currentRoute.edges.forEach((e, i) => {
+        const n = (orientedEdgeLatLngs(e, currentRoute.path[i]) || [0, 0]).length - (i ? 1 : 0);
+        for (let k = 0; k < n; k++) edgeAt.push(i);
     });
-    
-    // Animation variables
-    let currentSegment = 0;
-    let progress = 0;
-    const speed = 0.02; // Progress per frame (0-1), adjust for speed
-    const delayMs = 30; // Frame delay in milliseconds
-    
-    // Animation loop
-    animationInterval = setInterval(() => {
-        if (currentSegment >= currentRoute.coordinates.length - 1) {
-            // Animation complete
-            stopRouteAnimation();
-            return;
+    const marker = L.marker(latlngs[0], {
+        icon: L.divIcon({ className: 'convoy-marker-wrap', html: '<div class="convoy-arrow"></div>', iconSize: [22, 24], iconAnchor: [11, 16] }),
+        zIndexOffset: 1800
+    }).addTo(map);
+    const popup = L.popup({ closeButton: false, autoClose: false, closeOnClick: false, className: 'risk-popup', offset: [0, -14] });
+    const mps = CONFIG.convoy.speedKmph / 3.6 * PREVIEW_SPEEDUP;
+    const t0 = performance.now();
+    let lastHud = 0;
+    anim = { marker, popup, raf: 0 };
+    const btn = document.querySelector('#animate-route-btn span');
+    if (btn) btn.textContent = 'Stop preview';
+    const frame = (now) => {
+        const d = (now - t0) / 1000 * mps;
+        if (d >= cum[cum.length - 1]) { stopRouteAnimation(); return; }
+        const p = pointAlong(latlngs, cum, d);
+        marker.setLatLng([p.lat, p.lon]);
+        const arrow = marker.getElement() && marker.getElement().firstChild;
+        if (arrow) arrow.style.transform = `rotate(${p.bearing}deg)`;
+        if (now - lastHud > 200) {   // HUD at 5 Hz is plenty
+            lastHud = now;
+            const edge = currentRoute.edges[edgeAt[Math.min(p.seg, edgeAt.length - 1)]];
+            const w = edge ? window.getAdjustedEdgeWeight(edge) : 0;
+            const band = w === Infinity ? { label: 'ROAD CLOSED', key: 'closed' } : getDangerLevel(Math.min(100, w));
+            const road = edge && edgeFeatures[edge.eid] ? edgeFeatures[edge.eid].properties.street_name : '';
+            popup.setLatLng([p.lat, p.lon]).setContent(`
+                <div class="risk-hud">
+                    <div class="rh-road">${escapeHtml(road)}</div>
+                    <div class="rh-band risk-${band.key}">${band.label}</div>
+                    <div class="rh-val risk-${band.key}">${w === Infinity ? '∞' : Math.min(100, w).toFixed(0)}</div>
+                    <div class="muted">${(d / 1000).toFixed(2)} / ${(cum[cum.length - 1] / 1000).toFixed(2)} km · ×${PREVIEW_SPEEDUP}</div>
+                </div>`);
+            if (!map.hasLayer(popup)) popup.openOn(map);
         }
-        
-        // Get current and next points
-        const start = currentRoute.coordinates[currentSegment];
-        const end = currentRoute.coordinates[currentSegment + 1];
-        
-        // Interpolate position
-        const lat = start[1] + (end[1] - start[1]) * progress;
-        const lon = start[0] + (end[0] - start[0]) * progress;
-        
-        // Calculate bearing (rotation) for triangle
-        const bearing = calculateBearing(start[1], start[0], end[1], end[0]);
-        
-        // Update vehicle position
-        vehicleMarker.setLatLng([lat, lon]);
-        
-        // Update vehicle rotation
-        const vehicleElement = vehicleMarker.getElement();
-        if (vehicleElement) {
-            const triangle = vehicleElement.querySelector('div');
-            if (triangle) {
-                triangle.style.transform = `rotate(${bearing}deg)`;
-            }
-        }
-        
-        // Get current edge data for risk
-        const edgeIndex = Math.min(currentSegment, currentRoute.edges.length - 1);
-        const currentEdge = currentRoute.edges[edgeIndex];
-        
-        // Effective risk of the current segment under the live threat picture
-        const w = currentEdge ? window.getAdjustedEdgeWeight(currentEdge) : 0;
-        const riskScore = w === Infinity ? 100 : Math.min(100, w);
-        const dangerLevel = w === Infinity ? { label: 'ROAD CLOSED', color: '#ff00ff' } : getDangerLevel(riskScore);
-        const props = currentEdge && edgeFeatures[currentEdge.eid] ? edgeFeatures[currentEdge.eid].properties : {};
-        const roadName = props.street_name || 'Unnamed road';
-
-        const riskHtml = `
-            <div style="text-align: center; min-width: 200px;">
-                <div style="font-size: 24px; margin-bottom: 5px;">🚚</div>
-                <div style="font-weight: bold; color: #00ff88; font-size: 14px; margin-bottom: 8px;">📍 ${escapeHtml(roadName)}</div>
-                <div style="font-weight: bold; color: ${dangerLevel.color}; font-size: 16px; margin-bottom: 6px;">${dangerLevel.label}</div>
-                <div style="font-size: 12px; color: #888;">Segment risk</div>
-                <div style="font-size: 20px; font-weight: bold; color: ${dangerLevel.color};">${riskScore.toFixed(1)}</div>
-                ${currentEdge && currentEdge.chokepoint ? '<div style="color:#ff9900; font-size:11px;">⚠️ Chokepoint</div>' : ''}
-                <div style="margin-top: 6px; font-size: 11px; color: #aaa;">Segment ${currentSegment + 1}/${currentRoute.coordinates.length - 1}</div>
-            </div>
-        `;
-
-        riskPopup.setLatLng([lat, lon]).setContent(riskHtml).openOn(map);
-        
-        // Update progress
-        progress += speed;
-        if (progress >= 1) {
-            progress = 0;
-            currentSegment++;
-        }
-        
-    }, delayMs);
+        anim.raf = requestAnimationFrame(frame);
+    };
+    anim.raf = requestAnimationFrame(frame);
 };
 
-// Stop route animation
-window.stopRouteAnimation = function() {
-    if (animationInterval) {
-        clearInterval(animationInterval);
-        animationInterval = null;
-    }
-    
-    if (vehicleMarker) {
-        map.removeLayer(vehicleMarker);
-        vehicleMarker = null;
-    }
-    
-    if (riskPopup) {
-        map.closePopup(riskPopup);
-        riskPopup = null;
-    }
-    
-    // Show/hide buttons
-    const animateBtn = document.getElementById('animate-route-btn');
-    const controlsDiv = document.getElementById('animation-controls');
-    
-    if (animateBtn) animateBtn.style.display = 'block';
-    if (controlsDiv) controlsDiv.style.display = 'none';
-    
+window.stopRouteAnimation = function () {
+    if (!anim) return;
+    cancelAnimationFrame(anim.raf);
+    map.removeLayer(anim.marker);
+    map.closePopup(anim.popup);
+    anim = null;
+    const btn = document.querySelector('#animate-route-btn span');
+    if (btn) btn.textContent = 'Preview drive (safest)';
 };
 
-// Calculate bearing between two points (for triangle rotation)
 function calculateBearing(lat1, lon1, lat2, lon2) {
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const y = Math.sin(dLon) * Math.cos(lat2 * Math.PI / 180);
     const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
               Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLon);
-    const bearing = Math.atan2(y, x) * 180 / Math.PI;
-    return (bearing + 360) % 360; // Normalize to 0-360
+    return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
 }
 
-// Run when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
