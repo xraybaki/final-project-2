@@ -1,0 +1,218 @@
+"""
+M1 - Road network.
+
+Downloads the drivable OSM road network around config.CENTER with OSMnx (cached to
+data/cache/graph.graphml), converts it to an undirected simple graph with consecutive
+integer node ids and normalised edge attributes.
+
+Fallback: if the download fails (no internet / Overpass down) the legacy Toronto street
+extract in legacy_toronto/ is used instead so the demo still runs (different city).
+"""
+from __future__ import annotations
+
+import json
+import math
+import warnings
+from collections import Counter
+
+import networkx as nx
+
+from . import config as C
+
+DRIVABLE = {
+    "motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+    "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified",
+    "residential", "living_street", "service", "road",
+}
+UNPAVED = {"unpaved", "gravel", "dirt", "earth", "ground", "sand", "mud", "grass",
+           "compacted", "fine_gravel", "pebblestone", "rock"}
+
+
+def haversine_m(lat1, lon1, lat2, lon2):
+    r = 6_371_000.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def _first(v):
+    if isinstance(v, (list, tuple)):
+        return v[0] if v else None
+    if isinstance(v, str) and v.startswith("[") and v.endswith("]"):
+        # graphml round-trip stores lists as strings like "['primary', 'secondary']"
+        inner = v[1:-1].split(",")[0].strip().strip("'\"")
+        return inner or None
+    return v
+
+
+def _to_float(v, default=None):
+    v = _first(v)
+    if v is None:
+        return default
+    try:
+        s = str(v).lower().replace("km/h", "").replace("kmh", "").replace("mph", "").strip()
+        s = s.split(";")[0].split("|")[0]
+        return float(s)
+    except (TypeError, ValueError):
+        return default
+
+
+def _to_bool(v):
+    v = _first(v)
+    if v is None:
+        return False
+    return str(v).lower() not in ("no", "false", "0", "nan", "none", "")
+
+
+# --------------------------------------------------------------------------- OSMnx path
+def _download_osm():
+    import osmnx as ox
+
+    ox.settings.use_cache = True
+    ox.settings.cache_folder = str(C.CACHE_DIR / "osmnx_http")
+    ox.settings.requests_timeout = 300
+    ox.settings.log_console = False
+
+    if C.GRAPHML_CACHE.exists():
+        print(f"  [M1] using cached graph {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
+        G = ox.load_graphml(C.GRAPHML_CACHE)
+    else:
+        print(f"  [M1] downloading OSM '{C.NETWORK_TYPE}' network: {C.REGION_NAME} "
+              f"centre={C.CENTER} r={C.RADIUS_M} m ...")
+        G = ox.graph_from_point(C.CENTER, dist=C.RADIUS_M, network_type=C.NETWORK_TYPE,
+                                simplify=True)
+        G = ox.add_edge_speeds(G)
+        G = ox.add_edge_travel_times(G)
+        ox.save_graphml(G, C.GRAPHML_CACHE)
+        print(f"  [M1] cached to {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
+    return G
+
+
+def _osmnx_to_simple(Gm) -> nx.Graph:
+    """MultiDiGraph (osmnx) -> undirected simple Graph with normalised attributes."""
+    H = nx.Graph()
+    for n, d in Gm.nodes(data=True):
+        H.add_node(n, lat=float(d["y"]), lon=float(d["x"]))
+
+    for u, v, d in Gm.edges(data=True):
+        if u == v:
+            continue
+        length = float(d.get("length", 0) or 0)
+        if length <= 0:
+            length = haversine_m(H.nodes[u]["lat"], H.nodes[u]["lon"],
+                                 H.nodes[v]["lat"], H.nodes[v]["lon"])
+        if H.has_edge(u, v) and H.edges[u, v]["length_m"] <= length:
+            continue  # keep the shortest parallel edge
+        geom = d.get("geometry")
+        if geom is not None and hasattr(geom, "coords"):
+            coords = [(float(x), float(y)) for x, y in geom.coords]
+        else:
+            coords = [(H.nodes[u]["lon"], H.nodes[u]["lat"]), (H.nodes[v]["lon"], H.nodes[v]["lat"])]
+        speed = _to_float(d.get("speed_kph"), None)
+        tt = _to_float(d.get("travel_time"), None)
+        H.add_edge(
+            u, v,
+            length_m=length,
+            highway_type=str(_first(d.get("highway")) or "unclassified"),
+            street_name=str(_first(d.get("name")) or "Unnamed road"),
+            lanes=_to_float(d.get("lanes"), None),
+            maxspeed=_to_float(d.get("maxspeed"), None),
+            speed_kph=speed,
+            travel_time_s=tt if tt is not None else length / ((speed or 30) / 3.6),
+            bridge=_to_bool(d.get("bridge")),
+            tunnel=_to_bool(d.get("tunnel")),
+            surface=str(_first(d.get("surface")) or "unknown"),
+            geometry=coords,
+        )
+    return H
+
+
+# --------------------------------------------------------------------------- Toronto fallback
+def _toronto_fallback() -> tuple[nx.Graph, dict]:
+    path = C.LEGACY_DIR / "downtown_streets.geojson"
+    print(f"  [M1] !!! WARNING: OSM download failed - FALLING BACK to legacy Toronto streets "
+          f"({path.relative_to(C.ROOT)}). The demo will run on Toronto, not {C.REGION_NAME}.")
+    data = json.loads(path.read_text())
+    lines = []
+    for f in data["features"]:
+        p = f.get("properties", {})
+        if p.get("highway") not in DRIVABLE or f["geometry"]["type"] != "LineString":
+            continue
+        coords = [(round(x, 7), round(y, 7)) for x, y in f["geometry"]["coordinates"]]
+        if len(coords) >= 2:
+            lines.append((coords, p))
+
+    use = Counter()
+    for coords, _ in lines:
+        use.update(set(coords))
+        use[coords[0]] += 1
+        use[coords[-1]] += 1
+
+    H = nx.Graph()
+    ids: dict = {}
+
+    def nid(c):
+        if c not in ids:
+            ids[c] = len(ids)
+            H.add_node(ids[c], lat=c[1], lon=c[0])
+        return ids[c]
+
+    for coords, p in lines:
+        seg = [coords[0]]
+        for c in coords[1:]:
+            seg.append(c)
+            if use[c] > 1 or c == coords[-1]:
+                u, v = nid(seg[0]), nid(seg[-1])
+                if u != v:
+                    length = sum(haversine_m(a[1], a[0], b[1], b[0]) for a, b in zip(seg, seg[1:]))
+                    if not H.has_edge(u, v) or H.edges[u, v]["length_m"] > length:
+                        speed = _to_float(p.get("maxspeed"), 40.0)
+                        H.add_edge(u, v, length_m=length,
+                                   highway_type=p.get("highway", "unclassified"),
+                                   street_name=p.get("name") or "Unnamed road",
+                                   lanes=_to_float(p.get("lanes"), None),
+                                   maxspeed=_to_float(p.get("maxspeed"), None),
+                                   speed_kph=speed, travel_time_s=length / (speed / 3.6),
+                                   bridge=_to_bool(p.get("bridge")),
+                                   tunnel=_to_bool(p.get("tunnel")),
+                                   surface=p.get("surface") or "unknown",
+                                   geometry=list(seg))
+                seg = [c]
+    lats = [d["lat"] for _, d in H.nodes(data=True)]
+    lons = [d["lon"] for _, d in H.nodes(data=True)]
+    region = {"name": "Toronto (FALLBACK - OSM download failed)",
+              "center": [sum(lats) / len(lats), sum(lons) / len(lons)],
+              "radius_m": 5000, "source": "legacy_toronto/downtown_streets.geojson"}
+    return H, region
+
+
+# --------------------------------------------------------------------------- public API
+def build_graph() -> tuple[nx.Graph, dict]:
+    """Return (G, region) where G is an undirected nx.Graph with int nodes 0..N-1."""
+    try:
+        Gm = _download_osm()
+        H = _osmnx_to_simple(Gm)
+        region = {"name": C.REGION_NAME, "center": list(C.CENTER), "radius_m": C.RADIUS_M,
+                  "source": "OpenStreetMap via OSMnx"}
+    except Exception as exc:  # noqa: BLE001 - any download failure -> fallback
+        warnings.warn(f"OSM download failed: {exc!r}")
+        print(f"  [M1] OSM download failed: {type(exc).__name__}: {str(exc)[:200]}")
+        H, region = _toronto_fallback()
+
+    # keep largest connected component so every pair of nodes is routable
+    largest = max(nx.connected_components(H), key=len)
+    dropped = H.number_of_nodes() - len(largest)
+    H = H.subgraph(largest).copy()
+    H = nx.convert_node_labels_to_integers(H, ordering="sorted", label_attribute="osmid")
+
+    lats = [d["lat"] for _, d in H.nodes(data=True)]
+    lons = [d["lon"] for _, d in H.nodes(data=True)]
+    region["bounds"] = [[min(lats), min(lons)], [max(lats), max(lons)]]
+    print(f"  [M1] graph: {H.number_of_nodes():,} nodes, {H.number_of_edges():,} edges "
+          f"(dropped {dropped} nodes outside largest component)")
+    return H, region
+
+
+if __name__ == "__main__":
+    build_graph()
