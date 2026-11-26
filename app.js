@@ -37,8 +37,7 @@ const CONFIG = {
     },
     convoy: {
         speedKmph: 30,          // replaced by meta.convoy_speed_kmph
-        threatRadiusM: 300,     // replaced by meta.threat_zone_radius_m
-        hardBlockImpact: 90,    // impact >= this -> road closed (Infinity cost)
+        hardBlockImpact: 90,    // impact >= this -> road closed (Infinity cost); from threat_types.json
         highRiskWeight: 60
     }
 };
@@ -70,80 +69,11 @@ let riskPopup = null;      // Popup showing current risk
 let animationInterval = null;  // Animation timer
 let currentRoute = null;   // Currently displayed route for animation
 
-// Threat reporting state
-let reportThreatMode = false;  // Whether in threat reporting mode
-let threatEvents = [];         // Active threats {lat, lon, type, impact, radius, marker, circle, ...}
-let threatEdgeImpact = new Map(); // eid -> max impact (0-100) of threat zones covering the edge
-let affectedEdgesLayer = null; // Layer for edges affected by threats (red overlay)
-
-// Threat types (match pipeline/synthetic_threats.py) and default impact (0-100)
-const THREAT_TYPES = {
-    IED:           { label: 'IED / suspicious object', emoji: '💣', impact: 92 },
-    ambush:        { label: 'Ambush risk',              emoji: '🎯', impact: 80 },
-    stone_pelting: { label: 'Stone pelting',            emoji: '🪨', impact: 60 },
-    road_blockade: { label: 'Road blockade',            emoji: '🚧', impact: 70 },
-    landslide:     { label: 'Landslide (road closed)',  emoji: '⛰️', impact: 95 },
-    accident:      { label: 'Accident / obstruction',   emoji: '💥', impact: 45 }
-};
-
-// Distance (m) from a point to a polyline [[lon,lat],...] (local planar approximation)
-function distanceToPolyline(lat, lon, coords) {
-    const kx = 111320 * Math.cos(lat * Math.PI / 180), ky = 110540;
-    let best = Infinity;
-    for (let i = 0; i < coords.length - 1; i++) {
-        const ax = (coords[i][0] - lon) * kx, ay = (coords[i][1] - lat) * ky;
-        const bx = (coords[i + 1][0] - lon) * kx, by = (coords[i + 1][1] - lat) * ky;
-        const dx = bx - ax, dy = by - ay;
-        const L2 = dx * dx + dy * dy;
-        const t = L2 > 0 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / L2)) : 0;
-        const px = ax + t * dx, py = ay + t * dy;
-        best = Math.min(best, Math.hypot(px, py));
-    }
-    return best;
-}
-
-// Rebuild eid -> impact map after threats change (one pass over all edges)
-function recomputeThreatImpacts() {
-    threatEdgeImpact = new Map();
-    if (threatEvents.length === 0) return;
-    edgeFeatures.forEach((f, eid) => {
-        if (!f) return;
-        const coords = f.geometry.coordinates;
-        let maxImpact = 0;
-        for (const t of threatEvents) {
-            // cheap bounding check before exact distance
-            if (Math.abs(coords[0][1] - t.lat) > 0.05 || Math.abs(coords[0][0] - t.lon) > 0.05) continue;
-            if (distanceToPolyline(t.lat, t.lon, coords) <= t.radius) maxImpact = Math.max(maxImpact, t.impact);
-        }
-        if (maxImpact > 0) threatEdgeImpact.set(eid, maxImpact);
-    });
-}
-
-// Effective risk weight of an edge given live threats.
-//   impact >= hardBlockImpact  -> Infinity (convoy must not pass)
-//   otherwise multiplicative penalty scaled by impact (NO cap - see DECISIONS.md)
-window.getAdjustedEdgeWeight = function(edge) {
-    const impact = threatEdgeImpact.get(edge.eid);
-    if (!impact) return edge.weight;
-    if (impact >= CONFIG.convoy.hardBlockImpact) return Infinity;
-    const f = impact / 100;
-    return Math.max(edge.weight, impact) * (1 + 3 * f);
-};
-
-// Per-traversal incident probability for an edge with effective weight w
-function getAdjustedEdgeProb(edge, w) {
-    const p = edge.p_traverse || 0;
-    const impact = threatEdgeImpact.get(edge.eid);
-    if (!impact) return p;
-    if (w === Infinity) return 1;
-    return 1 - (1 - p) * (1 - 0.5 * impact / 100);
-}
-
 function routingOptions() {
     return {
         Lref: (graphMeta && graphMeta.L_ref) || 100,
         edgeWeight: window.getAdjustedEdgeWeight,
-        edgeProb: getAdjustedEdgeProb,
+        edgeProb: window.getAdjustedEdgeProb,
         speedKmph: CONFIG.convoy.speedKmph,
         highRisk: CONFIG.convoy.highRiskWeight,
         lambdas: { balanced: customLambda }
@@ -209,8 +139,6 @@ function applyGraphMeta(meta) {
     graphMeta = meta || {};
     const r = graphMeta.region || {};
     if (graphMeta.convoy_speed_kmph) CONFIG.convoy.speedKmph = graphMeta.convoy_speed_kmph;
-    if (graphMeta.threat_zone_radius_m) CONFIG.convoy.threatRadiusM = graphMeta.threat_zone_radius_m;
-    if (graphMeta.hard_block_impact) CONFIG.convoy.hardBlockImpact = graphMeta.hard_block_impact;
     if (graphMeta.high_risk_weight) CONFIG.convoy.highRiskWeight = graphMeta.high_risk_weight;
     if (r.center) {
         CONFIG.map.center = r.center;
@@ -231,200 +159,11 @@ function applyGraphMeta(meta) {
 // Initialize app
 async function init() {
     initMap();
+    await Threats.loadTypes();
     await loadRoutingGraph();
     // Show the ML risk map by default - it is the core of the demo
     if (routingGraph && !networkDisplayed) toggleNetworkDisplay();
 }
-
-// ============================================
-// LIVE THREAT INTEL (synthetic feed) + SITREP PARSING
-// ============================================
-
-function escapeHtml(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-// Fetch current intel reports (served from data/live_threats.json - SYNTHETIC)
-window.fetchLiveThreats = async function() {
-    const statusDiv = document.getElementById('fetch-status');
-    const btn = document.getElementById('fetch-crimes-btn');
-    statusDiv.style.display = 'block';
-    statusDiv.innerHTML = '<em style="color: #667eea;">📡 Fetching intel reports...</em>';
-    btn.disabled = true;
-    btn.style.opacity = '0.5';
-
-    try {
-        const response = await fetch('/fetch-live-threats');
-        const data = await response.json();
-        if (data.error || !data.success || !data.events || data.events.length === 0) {
-            statusDiv.innerHTML = `<em style="color: #ffaa00;">⚠️ ${escapeHtml(data.error || 'No current reports')}</em>`;
-            return;
-        }
-
-        clearThreats(false);
-        const eventCoords = [];
-        for (const event of data.events) {
-            if (createThreatAtLocation(event.lat, event.lon, event.type, event.impact, event.location, event.description, false)) {
-                eventCoords.push([event.lat, event.lon]);
-            }
-        }
-        onThreatsChanged();
-
-        if (eventCoords.length > 0 && !lastRoutes) {
-            map.fitBounds(L.latLngBounds(eventCoords), { padding: [50, 50], maxZoom: 14 });
-        }
-        showAllIncidentsPopup(data.events, data.source);
-        const blocks = data.events.filter(e => e.impact >= CONFIG.convoy.hardBlockImpact).length;
-        statusDiv.innerHTML = `
-            <div style="color: #00ff88; font-weight: bold; margin-bottom: 5px;">✅ ${eventCoords.length} intel reports loaded</div>
-            <div style="color: #ccc; font-size: 10px;">${blocks} road closure(s) (hard block) · ${CONFIG.convoy.threatRadiusM} m threat zones<br>
-            <span style="color:#ffaa00;">${escapeHtml(data.source || 'SYNTHETIC')}</span></div>`;
-    } catch (error) {
-        console.error('Fetch threats error:', error);
-        statusDiv.innerHTML = '<em style="color: #ff6b6b;">❌ Failed to reach intel service</em>';
-    } finally {
-        btn.disabled = false;
-        btn.style.opacity = '1';
-    }
-};
-window.fetchLiveCrimes = window.fetchLiveThreats;  // backwards-compatible alias
-
-// Create a threat zone at a location
-function createThreatAtLocation(lat, lon, type, impact, location, fullDescription, notify = true) {
-    if (!map) return false;
-    const t = THREAT_TYPES[type] || { label: type, emoji: '⚠️', impact: impact || 60 };
-    impact = Number(impact ?? t.impact);
-    const radius = CONFIG.convoy.threatRadiusM;
-    const hardBlock = impact >= CONFIG.convoy.hardBlockImpact;
-    const color = hardBlock ? '#ff00ff' : '#ff0000';
-
-    const marker = L.marker([lat, lon], {
-        icon: L.divIcon({
-            className: 'crime-event-marker',
-            html: `<div style="background: ${color}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px ${color}; display:flex; align-items:center; justify-content:center; font-size:11px; animation: pulse 2s infinite;">${t.emoji}</div>`,
-            iconSize: [22, 22],
-            iconAnchor: [11, 11]
-        }),
-        zIndexOffset: 2000
-    }).addTo(map);
-
-    const circle = L.circle([lat, lon], {
-        radius,
-        color,
-        fillColor: color,
-        fillOpacity: hardBlock ? 0.25 : 0.15,
-        weight: 2,
-        dashArray: hardBlock ? null : '5, 5',
-        interactive: false
-    }).addTo(map);
-
-    const event = { lat, lon, type, impact, radius, location: location || 'Map-reported location',
-                    description: fullDescription, timestamp: Date.now(), marker, circle };
-
-    marker.bindPopup(() => `
-        <div style="min-width: 240px; max-width: 340px;">
-            <div style="font-weight: bold; color: ${color}; font-size: 15px; margin-bottom: 6px;">${t.emoji} ${escapeHtml(t.label)}</div>
-            <div style="font-size: 13px; color: #00ff88; font-weight: bold; margin-bottom: 6px;">📍 ${escapeHtml(event.location)}</div>
-            ${fullDescription ? `<div style="font-size: 11px; color: #ccc; line-height: 1.5; margin-bottom: 8px; padding: 8px; background: rgba(0,0,0,0.3); border-radius: 4px;">${escapeHtml(fullDescription)}</div>` : ''}
-            <div style="font-size: 11px; color: #999;">
-                <div style="display:flex; justify-content:space-between;"><span>Impact:</span><strong style="color:#ffaa00;">${impact}/100</strong></div>
-                <div style="display:flex; justify-content:space-between;"><span>Zone:</span><strong>${radius} m radius</strong></div>
-                <div style="display:flex; justify-content:space-between;"><span>Effect:</span><strong style="color:${color};">${hardBlock ? 'ROAD CLOSED (hard block)' : 'Risk penalty ×' + (1 + 3 * impact / 100).toFixed(1)}</strong></div>
-            </div>
-            <div style="font-size: 10px; color: #ffaa00; margin-top: 6px;">SYNTHETIC - for demonstration only</div>
-            <button onclick="removeThreat(${event.timestamp})" style="margin-top:8px; width:100%; padding:5px; background:#333; color:#fff; border:1px solid #666; border-radius:4px; cursor:pointer;">🗑️ Remove this threat</button>
-        </div>
-    `);
-
-    threatEvents.push(event);
-    if (notify) onThreatsChanged();
-    return true;
-}
-const createCrimeEventAtLocation = createThreatAtLocation;  // backwards-compatible alias
-
-window.removeThreat = function(ts) {
-    const ev = threatEvents.find(e => e.timestamp === ts);
-    if (!ev) return;
-    map.removeLayer(ev.marker);
-    map.removeLayer(ev.circle);
-    threatEvents = threatEvents.filter(e => e !== ev);
-    map.closePopup();
-    onThreatsChanged();
-};
-
-// Called whenever the threat picture changes: recompute zones, overlay, and re-route
-function onThreatsChanged() {
-    recomputeThreatImpacts();
-    updateAffectedEdges();
-    if (startNode && endNode && lastRoutes) {
-        calculateConvoyRoutes(true);
-    }
-}
-
-// Show popup with all intel reports
-function showAllIncidentsPopup(events, source) {
-    const existingPopup = document.getElementById('all-incidents-popup');
-    if (existingPopup) existingPopup.remove();
-
-    let incidentsHTML = '';
-    events.forEach(event => {
-        const t = THREAT_TYPES[event.type] || { label: event.type, emoji: '⚠️' };
-        const hard = event.impact >= CONFIG.convoy.hardBlockImpact;
-        incidentsHTML += `
-            <div style="margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; border-left: 4px solid ${hard ? '#ff00ff' : event.impact > 70 ? '#ff6b6b' : '#ffaa00'};">
-                <div style="font-weight: bold; color: #ff4444; font-size: 13px; margin-bottom: 6px;">
-                    ${t.emoji} ${escapeHtml(t.label.toUpperCase())} - Impact ${event.impact}/100 ${hard ? '· <span style="color:#ff00ff;">ROAD CLOSED</span>' : ''}
-                </div>
-                <div style="font-size: 12px; color: #00ff88; margin-bottom: 6px;">📍 ${escapeHtml(event.location)}</div>
-                <div style="font-size: 11px; color: #ccc; line-height: 1.4;">${escapeHtml(event.description)}</div>
-            </div>`;
-    });
-
-    const regionName = (graphMeta && graphMeta.region && graphMeta.region.name) || '';
-    const popup = document.createElement('div');
-    popup.id = 'all-incidents-popup';
-    popup.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;" onclick="this.parentElement.remove()">
-            <div style="background: #1a1a2e; padding: 25px; border-radius: 10px; max-width: 700px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 50px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">
-                    <div>
-                        <div style="font-size: 20px; font-weight: bold; color: #fff;">📡 Current Intel Reports</div>
-                        <div style="font-size: 12px; color: #999; margin-top: 5px;">${escapeHtml(regionName)} - ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</div>
-                        <div style="font-size: 11px; color: #ffaa00; margin-top: 3px;">${escapeHtml(source || 'SYNTHETIC - for demonstration only')}</div>
-                    </div>
-                    <button onclick="this.closest('#all-incidents-popup').remove()" style="background: #ff4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">✕ Close</button>
-                </div>
-                <div style="color: #ccc;">${incidentsHTML}</div>
-            </div>
-        </div>`;
-    document.body.appendChild(popup);
-}
-
-// Parse a free-text SITREP into a threat (server: Gemini if configured, else rule-based)
-window.parseSitrep = async function() {
-    const input = document.getElementById('sitrep-input');
-    const status = document.getElementById('sitrep-status');
-    const text = (input.value || '').trim();
-    if (!text) return;
-    status.style.display = 'block';
-    status.innerHTML = '<em style="color:#667eea;">🤖 Parsing SITREP...</em>';
-    try {
-        const res = await fetch('/parse-sitrep', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
-        const t = await res.json();
-        if (!res.ok || t.error || t.lat == null) {
-            status.innerHTML = `<em style="color:#ff6b6b;">❌ ${escapeHtml(t.error || 'Could not locate the threat')}</em>`;
-            return;
-        }
-        createThreatAtLocation(t.lat, t.lon, t.type, t.impact, t.location, t.description);
-        if (!lastRoutes) map.setView([t.lat, t.lon], 15);
-        status.innerHTML = `<div style="color:#00ff88;">✅ ${escapeHtml((THREAT_TYPES[t.type] || {}).label || t.type)} at ${escapeHtml(t.location)} (impact ${t.impact})</div>
-            <div style="color:#888; font-size:10px;">parser: ${escapeHtml(t.parser || 'n/a')}</div>`;
-        input.value = '';
-    } catch (err) {
-        console.error(err);
-        status.innerHTML = '<em style="color:#ff6b6b;">❌ SITREP service unavailable</em>';
-    }
-};
 
 // Add coverage area circle to show where routing works
 function addCoverageArea() {
@@ -475,7 +214,8 @@ window.toggleNetworkDisplay = function() {
 // Edge popup content (risk map)
 function edgePopupContent(props) {
     const w = props.weight;
-    const impact = threatEdgeImpact.get(props.eid);
+    const eff = Threats.effectOf(props.eid);
+    const impact = eff ? eff.maxImpact : 0;
     const f = props.features || {};
     return `
         <div class="popup-title">${escapeHtml(props.street_name)}</div>
@@ -485,7 +225,7 @@ function edgePopupContent(props) {
         <div class="popup-stat">Length: <span>${props.length_m.toFixed(0)} m · ${(props.travel_time_s / 60).toFixed(1)} min @ ${CONFIG.convoy.speedKmph} km/h</span></div>
         ${f.curviness ? `<div class="popup-stat">Curviness: <span>${f.curviness.toFixed(2)}</span></div>` : ''}
         ${props.chokepoint ? '<div class="popup-stat" style="color:#ff9900;">⚠️ Chokepoint (top 5% betweenness)</div>' : ''}
-        ${impact ? `<div class="popup-stat" style="color:#ff4444;">🚨 Inside live threat zone (impact ${impact})</div>` : ''}
+        ${impact ? `<div class="popup-stat" style="color:#ff4444;">🚨 ${eff.hard ? 'CLOSED by' : 'Partly inside'} live threat zone (impact ${impact}${eff.hard ? '' : `, ${Math.round(100 * Math.min(1, eff.parts.reduce((a, p) => a + p.fIn, 0)))}% of length`})</div>` : ''}
     `;
 }
 
@@ -504,7 +244,7 @@ function loadEdges() {
                 onEachFeature: (feature, layer) => {
                     layer.on('click', (e) => {
                         // in routing / reporting mode the click belongs to the map handler
-                        if (routingMode || reportThreatMode) return;
+                        if (routingMode || Threats.reportMode || Threats.pin) return;
                         L.popup().setLatLng(e.latlng).setContent(edgePopupContent(feature.properties)).openOn(map);
                     });
                 }
@@ -543,6 +283,7 @@ async function loadRoutingGraph() {
         edgeFeatures = [];
         edgesData.features.forEach(f => { edgeFeatures[f.properties.eid] = f; });
 
+        await Threats.onGraphLoaded();
         updateStats();
         console.log(`✅ Routing graph loaded: ${routingGraph.nodes.length} nodes, ${edgeFeatures.length} edges`);
     } catch (error) {
@@ -554,10 +295,7 @@ async function loadRoutingGraph() {
 
 // Handle map clicks for routing / threat reporting
 function onMapClick(e) {
-    if (reportThreatMode) {
-        handleThreatClick(e);
-        return;
-    }
+    if (Threats.handleMapClick(e)) return;   // report mode / pin mode
     if (!routingMode || !routingGraph) return;
     setRoutePoint(e.latlng.lat, e.latlng.lng);
 }
@@ -566,7 +304,7 @@ function onMapClick(e) {
 function setRoutePoint(lat, lon) {
     const nearest = findNearestNode(lat, lon, nodesList);
     if (!nearest) {
-        alert('No road found near this location.');
+        UI.toast('No road found near this location.', { type: 'warn' });
         return;
     }
     const mk = (label, bg, fg) => L.marker([nearest.lat, nearest.lon], {
@@ -631,7 +369,7 @@ function calculateConvoyRoutes(isReroute = false) {
             showRerouteBanner('<span style="color:#ff00ff;">⛔ No passable route - all paths are blocked by road closures.</span>');
             return;
         }
-        alert('❌ No path found between these points (blocked or disconnected). Try different locations.');
+        UI.toast('No path found between these points (blocked or disconnected). Try different locations.', { type: 'danger' });
         resetRouting();
         return;
     }
@@ -762,13 +500,13 @@ window.setBalancedLambda = function(v) {
 // Transport mode selector removed
 
 // Toggle routing mode
-window.toggleRoutingMode = function() {
+window.toggleRoutingMode = function(keepRoute = false) {
     routingMode = !routingMode;
     const btn = document.getElementById('routing-toggle-btn');
     const instructions = document.getElementById('routing-instructions');
 
     if (routingMode) {
-        if (reportThreatMode) toggleReportThreatMode();
+        if (Threats.reportMode) Threats.setReportMode(false);
         btn.textContent = '🛑 Cancel Route Planning';
         btn.style.background = 'linear-gradient(135deg, #ff4444 0%, #cc0000 100%)';
         instructions.style.display = 'block';
@@ -778,7 +516,7 @@ window.toggleRoutingMode = function() {
         btn.style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)';
         instructions.style.display = 'none';
         if (coverageArea) coverageArea.setStyle({ fillOpacity: 0.03, opacity: 0.3 });
-        resetRouting();
+        if (!keepRoute) resetRouting();
     }
 };
 
@@ -943,106 +681,6 @@ function calculateBearing(lat1, lon1, lat2, lon2) {
               Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLon);
     const bearing = Math.atan2(y, x) * 180 / Math.PI;
     return (bearing + 360) % 360; // Normalize to 0-360
-}
-
-// ===========================
-// THREAT REPORTING (click on map)
-// ===========================
-
-window.toggleReportThreatMode = function() {
-    reportThreatMode = !reportThreatMode;
-    const btn = document.getElementById('report-crime-btn');
-    const panel = document.getElementById('report-crime-panel');
-    if (reportThreatMode) {
-        if (routingMode) {
-            // keep the active route so it can re-route; just stop placing A/B
-            routingMode = false;
-            document.getElementById('routing-toggle-btn').textContent = '🗺️ Plan Convoy Route';
-            document.getElementById('routing-toggle-btn').style.background = 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)';
-            document.getElementById('routing-instructions').style.display = 'none';
-        }
-        btn.style.background = '#ff4444';
-        btn.style.color = '#fff';
-        btn.textContent = '🚨 Click map to place threat';
-        panel.style.display = 'block';
-        updateImpactDefault();
-    } else {
-        btn.style.background = 'rgba(255,68,68,0.2)';
-        btn.style.color = '#ff4444';
-        btn.textContent = '🚨 Report Threat';
-        panel.style.display = 'none';
-    }
-};
-window.toggleReportCrimeMode = window.toggleReportThreatMode;  // alias
-
-window.updateImpactDefault = function() {
-    const type = document.getElementById('crime-event-type').value;
-    const slider = document.getElementById('threat-impact');
-    slider.value = (THREAT_TYPES[type] || {}).impact || 60;
-    updateImpactLabel();
-};
-
-window.updateImpactLabel = function() {
-    const v = Number(document.getElementById('threat-impact').value);
-    const el = document.getElementById('threat-impact-value');
-    el.textContent = v >= CONFIG.convoy.hardBlockImpact ? `${v} (ROAD CLOSED)` : v;
-    el.style.color = v >= CONFIG.convoy.hardBlockImpact ? '#ff00ff' : '#ffaa00';
-};
-
-// Handle threat placement click
-function handleThreatClick(e) {
-    const type = document.getElementById('crime-event-type').value;
-    const impact = Number(document.getElementById('threat-impact').value);
-    let location = 'Map-reported location';
-    // name the location after the nearest road
-    let bestD = Infinity;
-    edgeFeatures.forEach(f => {
-        if (!f) return;
-        const c = f.geometry.coordinates[0];
-        if (Math.abs(c[1] - e.latlng.lat) > 0.01 || Math.abs(c[0] - e.latlng.lng) > 0.01) return;
-        const d = distanceToPolyline(e.latlng.lat, e.latlng.lng, f.geometry.coordinates);
-        if (d < bestD) { bestD = d; location = f.properties.street_name; }
-    });
-    createThreatAtLocation(e.latlng.lat, e.latlng.lng, type, impact, location,
-        'Operator-reported threat (manual map entry).');
-}
-
-// Clear all threats
-window.clearThreats = function(notify = true) {
-    threatEvents.forEach(event => {
-        if (event.marker) map.removeLayer(event.marker);
-        if (event.circle) map.removeLayer(event.circle);
-    });
-    threatEvents = [];
-    if (notify) onThreatsChanged();
-    else {
-        threatEdgeImpact = new Map();
-        updateAffectedEdges();
-    }
-};
-window.clearCrimeEvents = window.clearThreats;  // alias
-
-// Red overlay for edges inside threat zones (magenta = closed)
-function updateAffectedEdges() {
-    if (affectedEdgesLayer) {
-        map.removeLayer(affectedEdgesLayer);
-        affectedEdgesLayer = null;
-    }
-    if (threatEdgeImpact.size === 0) return;
-    const feats = [];
-    threatEdgeImpact.forEach((impact, eid) => {
-        const f = edgeFeatures[eid];
-        if (f) feats.push({ ...f, properties: { ...f.properties, threatImpact: impact } });
-    });
-    affectedEdgesLayer = L.geoJSON({ type: 'FeatureCollection', features: feats }, {
-        style: (f) => ({
-            color: f.properties.threatImpact >= CONFIG.convoy.hardBlockImpact ? '#ff00ff' : '#ff0000',
-            weight: 5,
-            opacity: 0.9,
-            className: 'affected-edge'
-        }),
-        interactive: false
-    }).addTo(map);
 }
 
 // Run when DOM is ready

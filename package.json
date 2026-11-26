@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node tests/test_astar.js"
+    "test": "node tests/run_js_tests.js"
   },
   "keywords": [
     "leaflet",

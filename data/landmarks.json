@@ -1,0 +1,10838 @@
+[
+{
+"name": "15 Corps",
+"lat": 34.075984,
+"lon": 74.829303,
+"kind": "landmark"
+},
+{
+"name": "20 Al-Sultan Diagnostic Centre",
+"lat": 34.076357,
+"lon": 74.77602,
+"kind": "hospital"
+},
+{
+"name": "24x7 pharmacy",
+"lat": 34.084682,
+"lon": 74.795547,
+"kind": "hospital"
+},
+{
+"name": "A-Madina Super Speciality Care Centre",
+"lat": 34.08504,
+"lon": 74.797563,
+"kind": "hospital"
+},
+{
+"name": "Aala Group Reidency",
+"lat": 34.104266,
+"lon": 74.828997,
+"kind": "landmark"
+},
+{
+"name": "Aali Masjid",
+"lat": 34.104901,
+"lon": 74.794139,
+"kind": "religious"
+},
+{
+"name": "Aamina Hospital And Nursing Home",
+"lat": 34.023958,
+"lon": 74.813855,
+"kind": "hospital"
+},
+{
+"name": "Abdullah Bridge",
+"lat": 34.070261,
+"lon": 74.828033,
+"kind": "bridge"
+},
+{
+"name": "Abdullah Hospital",
+"lat": 34.051958,
+"lon": 74.832327,
+"kind": "hospital"
+},
+{
+"name": "Active Life Physiotherapy and Rehab Clinic",
+"lat": 34.087338,
+"lon": 74.807774,
+"kind": "hospital"
+},
+{
+"name": "Adalat Masjid",
+"lat": 34.114931,
+"lon": 74.810638,
+"kind": "religious"
+},
+{
+"name": "Adlife Luxury",
+"lat": 34.081791,
+"lon": 74.820244,
+"kind": "landmark"
+},
+{
+"name": "Aesthetica plastic surgery clinic",
+"lat": 34.043453,
+"lon": 74.801451,
+"kind": "hospital"
+},
+{
+"name": "AF Kids Clinic",
+"lat": 34.098597,
+"lon": 74.797878,
+"kind": "hospital"
+},
+{
+"name": "Aftab Market Budshah Chowk",
+"lat": 34.071526,
+"lon": 74.809734,
+"kind": "market"
+},
+{
+"name": "Ahdoos Hotel",
+"lat": 34.072593,
+"lon": 74.819109,
+"kind": "landmark"
+},
+{
+"name": "Ahlihadees Masjid Muhammad Peerbagh",
+"lat": 34.032156,
+"lon": 74.782116,
+"kind": "religious"
+},
+{
+"name": "Ahlul Hadith Masjid",
+"lat": 34.121651,
+"lon": 74.886094,
+"kind": "religious"
+},
+{
+"name": "Ahmadiyya Masjid Srinagar",
+"lat": 34.076686,
+"lon": 74.798564,
+"kind": "religious"
+},
+{
+"name": "Ahmed Hospital and Nursing Homes",
+"lat": 34.02631,
+"lon": 74.820288,
+"kind": "hospital"
+},
+{
+"name": "Airport Market Place II",
+"lat": 34.013155,
+"lon": 74.76651,
+"kind": "market"
+},
+{
+"name": "Aiwa Bridge",
+"lat": 34.122914,
+"lon": 74.793282,
+"kind": "bridge"
+},
+{
+"name": "Aiwa Kadal",
+"lat": 34.122896,
+"lon": 74.793345,
+"kind": "bridge"
+},
+{
+"name": "Akbar Residency",
+"lat": 34.074944,
+"lon": 74.832791,
+"kind": "landmark"
+},
+{
+"name": "Akmal Bridge",
+"lat": 34.124021,
+"lon": 74.809238,
+"kind": "bridge"
+},
+{
+"name": "Al hadeeth Masjid",
+"lat": 34.019358,
+"lon": 74.809275,
+"kind": "religious"
+},
+{
+"name": "Al Huda Publice School",
+"lat": 34.083428,
+"lon": 74.82132,
+"kind": "school"
+},
+{
+"name": "Al-Ameen Charitable Hospital And Nursing Home",
+"lat": 34.038412,
+"lon": 74.78858,
+"kind": "hospital"
+},
+{
+"name": "Al-Aziz Hospital",
+"lat": 34.083572,
+"lon": 74.820719,
+"kind": "hospital"
+},
+{
+"name": "Al-Dawa Diagnostic Centre",
+"lat": 34.080779,
+"lon": 74.801024,
+"kind": "hospital"
+},
+{
+"name": "Al-Habib Health Clinic",
+"lat": 34.111022,
+"lon": 74.836836,
+"kind": "hospital"
+},
+{
+"name": "Al-Hamzah Diagnostic Centre",
+"lat": 34.085728,
+"lon": 74.795966,
+"kind": "hospital"
+},
+{
+"name": "Al-Hareem Pharmacy and Clinic",
+"lat": 34.093208,
+"lon": 74.819877,
+"kind": "hospital"
+},
+{
+"name": "Al-Hijama Unani Laser Asthetic Clinic",
+"lat": 34.115209,
+"lon": 74.794853,
+"kind": "hospital"
+},
+{
+"name": "Al-Huda Renal Care & Dialysis Centre",
+"lat": 34.134136,
+"lon": 74.803112,
+"kind": "hospital"
+},
+{
+"name": "Al-Huda Renal Care and Dialysis Centre",
+"lat": 34.134831,
+"lon": 74.803624,
+"kind": "hospital"
+},
+{
+"name": "Al-Kabir Eye Care Centre",
+"lat": 34.060623,
+"lon": 74.818881,
+"kind": "hospital"
+},
+{
+"name": "Al-Kareem Heart Centre",
+"lat": 34.057554,
+"lon": 74.816858,
+"kind": "hospital"
+},
+{
+"name": "Al-Madina Tul Shifa",
+"lat": 34.127504,
+"lon": 74.837107,
+"kind": "hospital"
+},
+{
+"name": "Al-Mustaqeem International School",
+"lat": 34.033785,
+"lon": 74.790819,
+"kind": "school"
+},
+{
+"name": "Al-Qudas Market",
+"lat": 34.070597,
+"lon": 74.803992,
+"kind": "market"
+},
+{
+"name": "Al-Qutub Polyclinic & Pharmacy",
+"lat": 34.134252,
+"lon": 74.803458,
+"kind": "hospital"
+},
+{
+"name": "Al-Rahat Imaging and Diagnostic Centre",
+"lat": 34.084527,
+"lon": 74.795628,
+"kind": "hospital"
+},
+{
+"name": "Alaie Hospital",
+"lat": 34.131454,
+"lon": 74.668975,
+"kind": "hospital"
+},
+{
+"name": "Alamdar Mission Sec School",
+"lat": 34.00803,
+"lon": 74.812832,
+"kind": "school"
+},
+{
+"name": "Alamgari Bazar Chowk",
+"lat": 34.114483,
+"lon": 74.806555,
+"kind": "junction"
+},
+{
+"name": "Alamgiri Masjid",
+"lat": 34.108061,
+"lon": 74.813779,
+"kind": "religious"
+},
+{
+"name": "Albarq Multi Speciality Hospital",
+"lat": 34.074193,
+"lon": 74.7878,
+"kind": "hospital"
+},
+{
+"name": "Ali Jana",
+"lat": 34.133634,
+"lon": 74.80071,
+"kind": "hospital"
+},
+{
+"name": "Ali Kadal",
+"lat": 34.09558,
+"lon": 74.802757,
+"kind": "bridge"
+},
+{
+"name": "Ali kadel",
+"lat": 34.095903,
+"lon": 74.802861,
+"kind": "area"
+},
+{
+"name": "Ali Park",
+"lat": 34.11128,
+"lon": 74.804736,
+"kind": "park"
+},
+{
+"name": "All Saints Chruch",
+"lat": 34.071479,
+"lon": 74.831927,
+"kind": "religious"
+},
+{
+"name": "Allama Iqbal Library",
+"lat": 34.133816,
+"lon": 74.836014,
+"kind": "public"
+},
+{
+"name": "Allama Iqbal Park",
+"lat": 34.060546,
+"lon": 74.817179,
+"kind": "park"
+},
+{
+"name": "Alshafa Dental Clinic",
+"lat": 34.086496,
+"lon": 74.788765,
+"kind": "hospital"
+},
+{
+"name": "Amandeep BR Medicity",
+"lat": 34.066847,
+"lon": 74.777415,
+"kind": "hospital"
+},
+{
+"name": "amar singh college",
+"lat": 34.059798,
+"lon": 74.809774,
+"kind": "school"
+},
+{
+"name": "Amda Kadal",
+"lat": 34.116343,
+"lon": 74.816261,
+"kind": "bridge"
+},
+{
+"name": "Amira kadal",
+"lat": 34.055683,
+"lon": 74.813034,
+"kind": "area"
+},
+{
+"name": "Amira Kadal",
+"lat": 34.069689,
+"lon": 74.8069,
+"kind": "bridge"
+},
+{
+"name": "Amira Kadal Bridge",
+"lat": 34.069687,
+"lon": 74.807031,
+"kind": "bridge"
+},
+{
+"name": "Anchar",
+"lat": 34.14191,
+"lon": 74.797908,
+"kind": "area"
+},
+{
+"name": "Anganwadi Hospital",
+"lat": 34.02936,
+"lon": 74.821083,
+"kind": "hospital"
+},
+{
+"name": "Angels Convent School",
+"lat": 34.046689,
+"lon": 74.811578,
+"kind": "school"
+},
+{
+"name": "Anjum Masjid",
+"lat": 34.087256,
+"lon": 74.775014,
+"kind": "religious"
+},
+{
+"name": "Ansar-i-Shareef",
+"lat": 34.123314,
+"lon": 74.818163,
+"kind": "religious"
+},
+{
+"name": "Anyees Filling Station",
+"lat": 34.112862,
+"lon": 74.717734,
+"kind": "fuel"
+},
+{
+"name": "Apex Super Speciality Centre Diagnostic and Polyclinic",
+"lat": 34.083728,
+"lon": 74.797034,
+"kind": "hospital"
+},
+{
+"name": "Apollo Clinic",
+"lat": 34.08053,
+"lon": 74.798744,
+"kind": "hospital"
+},
+{
+"name": "Apple Montessori Pre-School",
+"lat": 34.154969,
+"lon": 74.808419,
+"kind": "school"
+},
+{
+"name": "Aribagh Colony",
+"lat": 34.016115,
+"lon": 74.827103,
+"kind": "area"
+},
+{
+"name": "Aripora",
+"lat": 34.039299,
+"lon": 74.899617,
+"kind": "area"
+},
+{
+"name": "Aroma Diagnostics",
+"lat": 34.133202,
+"lon": 74.823597,
+"kind": "hospital"
+},
+{
+"name": "Arun Public High School",
+"lat": 34.047487,
+"lon": 74.809663,
+"kind": "school"
+},
+{
+"name": "ASG Eye Hospital",
+"lat": 34.089691,
+"lon": 74.778069,
+"kind": "hospital"
+},
+{
+"name": "ASH VALE",
+"lat": 34.132947,
+"lon": 74.877508,
+"kind": "landmark"
+},
+{
+"name": "Ashahi Bagh Bridge",
+"lat": 34.114731,
+"lon": 74.836391,
+"kind": "bridge"
+},
+{
+"name": "Assembly Park",
+"lat": 34.073436,
+"lon": 74.802107,
+"kind": "park"
+},
+{
+"name": "Astaan -E- Aaliya",
+"lat": 34.097601,
+"lon": 74.874879,
+"kind": "religious"
+},
+{
+"name": "Astaan Sheikh-ul-Aalam",
+"lat": 34.131455,
+"lon": 74.80255,
+"kind": "religious"
+},
+{
+"name": "Astaan Syed Ashbab Saheb",
+"lat": 34.087597,
+"lon": 74.806066,
+"kind": "religious"
+},
+{
+"name": "Athwajan Pandrethan Park",
+"lat": 34.045313,
+"lon": 74.872138,
+"kind": "park"
+},
+{
+"name": "Auqaf Bagh",
+"lat": 34.132747,
+"lon": 74.808652,
+"kind": "park"
+},
+{
+"name": "Awanta Bhawan",
+"lat": 34.139367,
+"lon": 74.811803,
+"kind": "area"
+},
+{
+"name": "Axis Bank",
+"lat": 34.041195,
+"lon": 74.799909,
+"kind": "public"
+},
+{
+"name": "Axis Bank",
+"lat": 34.141585,
+"lon": 74.80869,
+"kind": "public"
+},
+{
+"name": "Axis Bank and Atm",
+"lat": 34.08378,
+"lon": 74.819383,
+"kind": "public"
+},
+{
+"name": "Axis Bank and Atm",
+"lat": 34.082493,
+"lon": 74.798237,
+"kind": "public"
+},
+{
+"name": "AXIS BANK SHALTENG",
+"lat": 34.10971,
+"lon": 74.743334,
+"kind": "public"
+},
+{
+"name": "Aysaar Clinical Laboratory",
+"lat": 34.130895,
+"lon": 74.877967,
+"kind": "hospital"
+},
+{
+"name": "Azam Health Care Pharmacy Clinic And Diagnostics",
+"lat": 34.119842,
+"lon": 74.81286,
+"kind": "hospital"
+},
+{
+"name": "Aziz Bridge",
+"lat": 34.073241,
+"lon": 74.8311,
+"kind": "bridge"
+},
+{
+"name": "Aziz Complex",
+"lat": 34.038586,
+"lon": 74.819243,
+"kind": "market"
+},
+{
+"name": "bab ul iqbal (بابِ اقبال) Gateway of Shehar khaas۔",
+"lat": 34.08873,
+"lon": 74.81636,
+"kind": "landmark"
+},
+{
+"name": "bab-ul- iqbal ( بابِ اقبال) Gateway of shehar khaas.",
+"lat": 34.088737,
+"lon": 74.816325,
+"kind": "landmark"
+},
+{
+"name": "Baba Adam Masjid",
+"lat": 34.103069,
+"lon": 74.812256,
+"kind": "religious"
+},
+{
+"name": "Baba Dawood Khaki Bridge",
+"lat": 34.086794,
+"lon": 74.818191,
+"kind": "bridge"
+},
+{
+"name": "Baba Dawood Khaki Masjid",
+"lat": 34.103344,
+"lon": 74.81282,
+"kind": "religious"
+},
+{
+"name": "Baba Gulamdin Sahib",
+"lat": 34.095279,
+"lon": 74.908277,
+"kind": "area"
+},
+{
+"name": "Babapore",
+"lat": 34.081906,
+"lon": 74.810629,
+"kind": "area"
+},
+{
+"name": "Badam Waari",
+"lat": 34.111521,
+"lon": 74.821235,
+"kind": "park"
+},
+{
+"name": "Badgam",
+"lat": 34.015472,
+"lon": 74.722009,
+"kind": "area"
+},
+{
+"name": "Badgam station",
+"lat": 34.038525,
+"lon": 74.736016,
+"kind": "station"
+},
+{
+"name": "Bagati Kani Pora",
+"lat": 34.027684,
+"lon": 74.830997,
+"kind": "area"
+},
+{
+"name": "Bagh e Mehtab",
+"lat": 34.016144,
+"lon": 74.812002,
+"kind": "area"
+},
+{
+"name": "Bagh i Mehtab",
+"lat": 34.016523,
+"lon": 74.812699,
+"kind": "area"
+},
+{
+"name": "Bagh-e-Shugufta",
+"lat": 34.11783,
+"lon": 74.834762,
+"kind": "park"
+},
+{
+"name": "Bagh-i-usman colony",
+"lat": 34.174568,
+"lon": 74.821204,
+"kind": "area"
+},
+{
+"name": "Baghati Shoora",
+"lat": 34.142426,
+"lon": 74.814095,
+"kind": "area"
+},
+{
+"name": "Baghe Ali Mardan Khan",
+"lat": 34.121552,
+"lon": 74.80929,
+"kind": "area"
+},
+{
+"name": "Baghwanpora",
+"lat": 34.12035,
+"lon": 74.820805,
+"kind": "area"
+},
+{
+"name": "Bait Ul Salaam Mosque",
+"lat": 34.08997,
+"lon": 74.771822,
+"kind": "religious"
+},
+{
+"name": "Bakshi Stadium",
+"lat": 34.062972,
+"lon": 74.804717,
+"kind": "park"
+},
+{
+"name": "Bakshipora Bridge",
+"lat": 34.128859,
+"lon": 74.720136,
+"kind": "bridge"
+},
+{
+"name": "Bakura",
+"lat": 34.185818,
+"lon": 74.840415,
+"kind": "area"
+},
+{
+"name": "Balakh Sahib Masjid",
+"lat": 34.127114,
+"lon": 74.799776,
+"kind": "religious"
+},
+{
+"name": "Balgarden Community Park",
+"lat": 34.078871,
+"lon": 74.796133,
+"kind": "park"
+},
+{
+"name": "Balgarden Park",
+"lat": 34.078555,
+"lon": 74.798587,
+"kind": "park"
+},
+{
+"name": "Barbarshah",
+"lat": 34.079119,
+"lon": 74.811088,
+"kind": "area"
+},
+{
+"name": "Barbarshah bridge",
+"lat": 34.078111,
+"lon": 74.813196,
+"kind": "area"
+},
+{
+"name": "Barzulla Bridge",
+"lat": 34.049835,
+"lon": 74.80266,
+"kind": "bridge"
+},
+{
+"name": "Batamaloo",
+"lat": 34.069232,
+"lon": 74.791703,
+"kind": "area"
+},
+{
+"name": "Batamaloo Bus Stop",
+"lat": 34.075595,
+"lon": 74.794914,
+"kind": "bus_stop"
+},
+{
+"name": "Batamaloo Bus Stop",
+"lat": 34.074224,
+"lon": 74.798129,
+"kind": "bus_stop"
+},
+{
+"name": "Batapora",
+"lat": 34.160918,
+"lon": 74.844979,
+"kind": "area"
+},
+{
+"name": "Batra Hotel",
+"lat": 34.075266,
+"lon": 74.831642,
+"kind": "landmark"
+},
+{
+"name": "Batwara",
+"lat": 34.058391,
+"lon": 74.851987,
+"kind": "area"
+},
+{
+"name": "Batyar Mandir",
+"lat": 34.09599,
+"lon": 74.801816,
+"kind": "religious"
+},
+{
+"name": "Bayjaqi Masjid",
+"lat": 34.086998,
+"lon": 74.802948,
+"kind": "religious"
+},
+{
+"name": "Bazaar Masjid Ahlihadith",
+"lat": 34.09479,
+"lon": 74.809276,
+"kind": "religious"
+},
+{
+"name": "Bemina",
+"lat": 34.076354,
+"lon": 74.768159,
+"kind": "area"
+},
+{
+"name": "Bemina Crossing Bus Stop",
+"lat": 34.081794,
+"lon": 74.784467,
+"kind": "bus_stop"
+},
+{
+"name": "Bemina Police Station",
+"lat": 34.072241,
+"lon": 74.765351,
+"kind": "police"
+},
+{
+"name": "Best Dental Clinic",
+"lat": 34.087105,
+"lon": 74.789287,
+"kind": "hospital"
+},
+{
+"name": "Bharat Petrol Pump",
+"lat": 34.069116,
+"lon": 74.770458,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum",
+"lat": 34.076573,
+"lon": 74.830025,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum  Petrol Pump",
+"lat": 34.067302,
+"lon": 74.775314,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Abdullah Petrol Station",
+"lat": 34.024189,
+"lon": 74.808898,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Kashmir Filling Station Petrol Pump",
+"lat": 34.157035,
+"lon": 74.84121,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.07589,
+"lon": 74.825102,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.037695,
+"lon": 74.890421,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.048172,
+"lon": 74.866632,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.03938,
+"lon": 74.881833,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.08179,
+"lon": 74.788181,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.0753,
+"lon": 74.797383,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.073095,
+"lon": 74.836677,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.096113,
+"lon": 74.77374,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.008163,
+"lon": 74.835397,
+"kind": "fuel"
+},
+{
+"name": "Bharat Petroleum Petrol Pump",
+"lat": 34.095497,
+"lon": 74.821391,
+"kind": "fuel"
+},
+{
+"name": "Bhat Complex",
+"lat": 34.07096,
+"lon": 74.787944,
+"kind": "market"
+},
+{
+"name": "Bhat mohalla",
+"lat": 34.160429,
+"lon": 74.832199,
+"kind": "area"
+},
+{
+"name": "Bibi Halima College of Nursing and Medical Technology",
+"lat": 34.08668,
+"lon": 74.796015,
+"kind": "school"
+},
+{
+"name": "Bilal Masjid",
+"lat": 34.140315,
+"lon": 74.805983,
+"kind": "religious"
+},
+{
+"name": "Bilal Masjid Park",
+"lat": 34.140547,
+"lon": 74.805962,
+"kind": "park"
+},
+{
+"name": "Bilaliya Educational institute",
+"lat": 34.120082,
+"lon": 74.823685,
+"kind": "school"
+},
+{
+"name": "Bio- Assay Diagnostics",
+"lat": 34.024576,
+"lon": 74.816288,
+"kind": "hospital"
+},
+{
+"name": "Biomedicare Diagnostic and Research Centre",
+"lat": 34.087239,
+"lon": 74.795003,
+"kind": "hospital"
+},
+{
+"name": "Biscoe Boys School",
+"lat": 34.07101,
+"lon": 74.811562,
+"kind": "school"
+},
+{
+"name": "Bismillah colony",
+"lat": 34.157342,
+"lon": 74.835713,
+"kind": "area"
+},
+{
+"name": "Bismillah Masjid",
+"lat": 34.082441,
+"lon": 74.764637,
+"kind": "religious"
+},
+{
+"name": "Bismillah Trade Centre Karan Nagar",
+"lat": 34.081037,
+"lon": 74.80055,
+"kind": "market"
+},
+{
+"name": "Boat Tour",
+"lat": 34.086088,
+"lon": 74.839052,
+"kind": "landmark"
+},
+{
+"name": "Bohlochipora",
+"lat": 34.132295,
+"lon": 74.799948,
+"kind": "area"
+},
+{
+"name": "Bohlochipora Pharmacy Market SKIMS",
+"lat": 34.132617,
+"lon": 74.800621,
+"kind": "market"
+},
+{
+"name": "Bone and Eye Clinic",
+"lat": 34.0459,
+"lon": 74.788148,
+"kind": "hospital"
+},
+{
+"name": "Bone and Joint Hospital",
+"lat": 34.048523,
+"lon": 74.804566,
+"kind": "hospital"
+},
+{
+"name": "Bota Kadal",
+"lat": 34.118935,
+"lon": 74.81258,
+"kind": "bridge"
+},
+{
+"name": "Botanical Garden SPC",
+"lat": 34.0775,
+"lon": 74.815705,
+"kind": "park"
+},
+{
+"name": "Botshah Mohalla",
+"lat": 34.129628,
+"lon": 74.819995,
+"kind": "area"
+},
+{
+"name": "Boys Higher Secondary School Soura",
+"lat": 34.139544,
+"lon": 74.807063,
+"kind": "school"
+},
+{
+"name": "Boys Higher Secondary School Zadibal",
+"lat": 34.119598,
+"lon": 74.807128,
+"kind": "school"
+},
+{
+"name": "Boys Hr. Sec. School Humhama",
+"lat": 34.017729,
+"lon": 74.770217,
+"kind": "school"
+},
+{
+"name": "Boys' Hostel Mosque",
+"lat": 34.123472,
+"lon": 74.84278,
+"kind": "religious"
+},
+{
+"name": "Braiwar",
+"lat": 34.123426,
+"lon": 74.791667,
+"kind": "area"
+},
+{
+"name": "BSc. Nursing College",
+"lat": 34.083648,
+"lon": 74.801392,
+"kind": "school"
+},
+{
+"name": "Buchpora",
+"lat": 34.150877,
+"lon": 74.803135,
+"kind": "area"
+},
+{
+"name": "Budshah Bridge",
+"lat": 34.071658,
+"lon": 74.807381,
+"kind": "bridge"
+},
+{
+"name": "Budshah Chowk",
+"lat": 34.071921,
+"lon": 74.809195,
+"kind": "junction"
+},
+{
+"name": "Budshah Flyover",
+"lat": 34.071531,
+"lon": 74.80514,
+"kind": "bridge"
+},
+{
+"name": "Budshah Guest House",
+"lat": 34.071832,
+"lon": 74.807509,
+"kind": "landmark"
+},
+{
+"name": "Budshah Masjid",
+"lat": 34.129496,
+"lon": 74.80154,
+"kind": "religious"
+},
+{
+"name": "Budshah tomb",
+"lat": 34.094922,
+"lon": 74.806105,
+"kind": "landmark"
+},
+{
+"name": "Bulbul Saob Park",
+"lat": 34.095875,
+"lon": 74.800346,
+"kind": "park"
+},
+{
+"name": "Burn Hall School",
+"lat": 34.074118,
+"lon": 74.833136,
+"kind": "school"
+},
+{
+"name": "Burzahama",
+"lat": 34.170601,
+"lon": 74.859698,
+"kind": "area"
+},
+{
+"name": "Burzahom Archaeological Site",
+"lat": 34.16915,
+"lon": 74.866985,
+"kind": "landmark"
+},
+{
+"name": "Bus Adda",
+"lat": 34.019747,
+"lon": 74.91675,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop",
+"lat": 34.090183,
+"lon": 74.777994,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop",
+"lat": 34.087273,
+"lon": 74.780295,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop",
+"lat": 34.047179,
+"lon": 74.868513,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop",
+"lat": 34.082307,
+"lon": 74.783128,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop Ellahi Bagh",
+"lat": 34.15168,
+"lon": 74.80862,
+"kind": "bus_stop"
+},
+{
+"name": "Bus Stop Sem",
+"lat": 34.035054,
+"lon": 74.899221,
+"kind": "bus_stop"
+},
+{
+"name": "bus to tangmarg",
+"lat": 34.076196,
+"lon": 74.794565,
+"kind": "station"
+},
+{
+"name": "Bussiness School Park",
+"lat": 34.13371,
+"lon": 74.836788,
+"kind": "park"
+},
+{
+"name": "Butta Shah Sahib (RA) Diagnostic Centre",
+"lat": 34.130154,
+"lon": 74.819935,
+"kind": "hospital"
+},
+{
+"name": "Butterfly",
+"lat": 34.084384,
+"lon": 74.823228,
+"kind": "landmark"
+},
+{
+"name": "Bāchi Darwaza",
+"lat": 34.102722,
+"lon": 74.812809,
+"kind": "landmark"
+},
+{
+"name": "Cambridge Mission School",
+"lat": 34.009529,
+"lon": 74.800712,
+"kind": "school"
+},
+{
+"name": "Canara Bank",
+"lat": 34.072764,
+"lon": 74.819336,
+"kind": "public"
+},
+{
+"name": "Candid Higher Secondary School",
+"lat": 34.028697,
+"lon": 74.82483,
+"kind": "school"
+},
+{
+"name": "Capital Centre Complex",
+"lat": 34.125345,
+"lon": 74.806017,
+"kind": "market"
+},
+{
+"name": "car parking",
+"lat": 34.132137,
+"lon": 74.84076,
+"kind": "park"
+},
+{
+"name": "Caset Higher Secondary School",
+"lat": 34.083988,
+"lon": 74.79929,
+"kind": "school"
+},
+{
+"name": "Caset School",
+"lat": 34.08287,
+"lon": 74.798321,
+"kind": "school"
+},
+{
+"name": "Casualty",
+"lat": 34.047871,
+"lon": 74.805786,
+"kind": "hospital"
+},
+{
+"name": "Cement Kadal",
+"lat": 34.092512,
+"lon": 74.779664,
+"kind": "bridge"
+},
+{
+"name": "Central Bank of India",
+"lat": 34.06334,
+"lon": 74.810274,
+"kind": "public"
+},
+{
+"name": "Central Library",
+"lat": 34.067529,
+"lon": 74.81309,
+"kind": "public"
+},
+{
+"name": "Central Library",
+"lat": 34.088425,
+"lon": 74.796118,
+"kind": "public"
+},
+{
+"name": "Central Market Abi Guzar",
+"lat": 34.071991,
+"lon": 74.813075,
+"kind": "market"
+},
+{
+"name": "Chaar Yaar Complex",
+"lat": 34.025052,
+"lon": 74.913425,
+"kind": "market"
+},
+{
+"name": "Chak i Dara",
+"lat": 34.187092,
+"lon": 74.915329,
+"kind": "area"
+},
+{
+"name": "Chana Mohalla Masjid",
+"lat": 34.084737,
+"lon": 74.788218,
+"kind": "religious"
+},
+{
+"name": "Chanapora",
+"lat": 34.033981,
+"lon": 74.808052,
+"kind": "area"
+},
+{
+"name": "Chashma shahi",
+"lat": 34.06987,
+"lon": 74.862406,
+"kind": "landmark"
+},
+{
+"name": "Chatta Bal Bridge",
+"lat": 34.088943,
+"lon": 74.790527,
+"kind": "bridge"
+},
+{
+"name": "Chattabugh",
+"lat": 34.068604,
+"lon": 74.671585,
+"kind": "area"
+},
+{
+"name": "Chattergam",
+"lat": 33.987,
+"lon": 74.838997,
+"kind": "area"
+},
+{
+"name": "Cherry Park",
+"lat": 34.117564,
+"lon": 74.827478,
+"kind": "park"
+},
+{
+"name": "Cheshme Shahi",
+"lat": 34.086031,
+"lon": 74.886892,
+"kind": "park"
+},
+{
+"name": "Chesmeshahi",
+"lat": 34.085677,
+"lon": 74.886887,
+"kind": "landmark"
+},
+{
+"name": "Chest Diseases Hospital",
+"lat": 34.077747,
+"lon": 74.830744,
+"kind": "hospital"
+},
+{
+"name": "Chicago group of houseboats",
+"lat": 34.087918,
+"lon": 74.837567,
+"kind": "landmark"
+},
+{
+"name": "Children Park",
+"lat": 34.065905,
+"lon": 74.806741,
+"kind": "park"
+},
+{
+"name": "Children Park Munshi Bagh",
+"lat": 34.074046,
+"lon": 74.823301,
+"kind": "park"
+},
+{
+"name": "Chinar Masjid",
+"lat": 34.023281,
+"lon": 74.824932,
+"kind": "religious"
+},
+{
+"name": "Chinar Park",
+"lat": 34.130559,
+"lon": 74.814255,
+"kind": "park"
+},
+{
+"name": "Chinar Super Market",
+"lat": 34.071649,
+"lon": 74.830113,
+"kind": "market"
+},
+{
+"name": "Chinkral Mohalla",
+"lat": 34.084461,
+"lon": 74.809697,
+"kind": "area"
+},
+{
+"name": "Chotta Bazar",
+"lat": 34.081226,
+"lon": 74.802294,
+"kind": "area"
+},
+{
+"name": "Chowderi Bagh",
+"lat": 34.03813,
+"lon": 74.728003,
+"kind": "area"
+},
+{
+"name": "Chrysanthemum Garden",
+"lat": 34.147582,
+"lon": 74.87855,
+"kind": "park"
+},
+{
+"name": "Chundina",
+"lat": 34.174855,
+"lon": 74.728266,
+"kind": "area"
+},
+{
+"name": "City Eye Care Centre",
+"lat": 34.033107,
+"lon": 74.781593,
+"kind": "hospital"
+},
+{
+"name": "City Grace",
+"lat": 34.090333,
+"lon": 74.820695,
+"kind": "landmark"
+},
+{
+"name": "City Museum",
+"lat": 34.073328,
+"lon": 74.806123,
+"kind": "landmark"
+},
+{
+"name": "City Poly Clinic & Diagnostic Centre",
+"lat": 34.09326,
+"lon": 74.81423,
+"kind": "hospital"
+},
+{
+"name": "Classic Hospital and Diagnostic Center",
+"lat": 34.045416,
+"lon": 74.78917,
+"kind": "hospital"
+},
+{
+"name": "Cluster University Srinagar",
+"lat": 34.061797,
+"lon": 74.807227,
+"kind": "school"
+},
+{
+"name": "CMO Hospital",
+"lat": 34.01653,
+"lon": 74.720988,
+"kind": "hospital"
+},
+{
+"name": "College Jamia Masjid",
+"lat": 34.08713,
+"lon": 74.759733,
+"kind": "religious"
+},
+{
+"name": "Comforts",
+"lat": 34.084209,
+"lon": 74.823467,
+"kind": "landmark"
+},
+{
+"name": "Community hall Malik Sahib Soura",
+"lat": 34.141951,
+"lon": 74.801293,
+"kind": "public"
+},
+{
+"name": "Community Hall Mallabagh",
+"lat": 34.142768,
+"lon": 74.826168,
+"kind": "public"
+},
+{
+"name": "Composite Regional Centre Srinagar",
+"lat": 34.080375,
+"lon": 74.76227,
+"kind": "hospital"
+},
+{
+"name": "Convocation Hall Park",
+"lat": 34.128709,
+"lon": 74.83782,
+"kind": "park"
+},
+{
+"name": "Creative Minds Creche Cum Preparatiry School",
+"lat": 34.09124,
+"lon": 74.820779,
+"kind": "school"
+},
+{
+"name": "Crescent Higher Secondary School",
+"lat": 34.041516,
+"lon": 74.818232,
+"kind": "school"
+},
+{
+"name": "Crescent public school",
+"lat": 34.137273,
+"lon": 74.835382,
+"kind": "school"
+},
+{
+"name": "Crescent Speech amd Hearing Centre",
+"lat": 34.078108,
+"lon": 74.79905,
+"kind": "hospital"
+},
+{
+"name": "Crime Branch Headquarters Kashmir",
+"lat": 34.071425,
+"lon": 74.803218,
+"kind": "police"
+},
+{
+"name": "CRL Diagnostic Center",
+"lat": 34.084951,
+"lon": 74.819484,
+"kind": "hospital"
+},
+{
+"name": "CSIR-Indian Institute of Integrative Medicine",
+"lat": 34.033013,
+"lon": 74.799334,
+"kind": "school"
+},
+{
+"name": "Cutis Institute of Dermatology",
+"lat": 34.049143,
+"lon": 74.787242,
+"kind": "hospital"
+},
+{
+"name": "Cutis Skin and Laser Clinic",
+"lat": 34.079559,
+"lon": 74.799278,
+"kind": "hospital"
+},
+{
+"name": "Cutis Skin Care Clinic",
+"lat": 34.046895,
+"lon": 74.787928,
+"kind": "hospital"
+},
+{
+"name": "Daharmuna",
+"lat": 34.077396,
+"lon": 74.694015,
+"kind": "area"
+},
+{
+"name": "Dal Gate",
+"lat": 34.080214,
+"lon": 74.829198,
+"kind": "area"
+},
+{
+"name": "dal hassan yar",
+"lat": 34.08464,
+"lon": 74.805393,
+"kind": "area"
+},
+{
+"name": "Dal Side Park",
+"lat": 34.125003,
+"lon": 74.844178,
+"kind": "park"
+},
+{
+"name": "Dalgate Cantilever Bridge",
+"lat": 34.080225,
+"lon": 74.829073,
+"kind": "bridge"
+},
+{
+"name": "Dalgate Cantilever Bridge",
+"lat": 34.081631,
+"lon": 74.826846,
+"kind": "bridge"
+},
+{
+"name": "Daliha Garden",
+"lat": 34.075048,
+"lon": 74.826101,
+"kind": "park"
+},
+{
+"name": "Dangerpora",
+"lat": 34.158538,
+"lon": 74.691641,
+"kind": "area"
+},
+{
+"name": "Danmar",
+"lat": 34.127958,
+"lon": 74.780997,
+"kind": "area"
+},
+{
+"name": "Dar Cottage.",
+"lat": 34.139825,
+"lon": 74.811098,
+"kind": "landmark"
+},
+{
+"name": "Dar Mohalla Back side",
+"lat": 34.139049,
+"lon": 74.813428,
+"kind": "bridge"
+},
+{
+"name": "Dar Park",
+"lat": 34.137958,
+"lon": 74.811571,
+"kind": "park"
+},
+{
+"name": "Dara",
+"lat": 34.179157,
+"lon": 74.908676,
+"kind": "area"
+},
+{
+"name": "Dargah Chinar Park",
+"lat": 34.129612,
+"lon": 74.842737,
+"kind": "park"
+},
+{
+"name": "Dargah Hazratbal",
+"lat": 34.129081,
+"lon": 74.842425,
+"kind": "religious"
+},
+{
+"name": "Dargah Kashaniya Sharief",
+"lat": 34.145616,
+"lon": 74.872733,
+"kind": "religious"
+},
+{
+"name": "Dargah Market",
+"lat": 34.130946,
+"lon": 74.842031,
+"kind": "market"
+},
+{
+"name": "Darish Kadal",
+"lat": 34.089662,
+"lon": 74.793139,
+"kind": "bridge"
+},
+{
+"name": "Darul Uloom Muhamadiya",
+"lat": 34.086188,
+"lon": 74.79197,
+"kind": "religious"
+},
+{
+"name": "Darussalam Restaurant & Inn",
+"lat": 34.07829,
+"lon": 74.795104,
+"kind": "landmark"
+},
+{
+"name": "Dastgeer Sahab",
+"lat": 34.069273,
+"lon": 74.805036,
+"kind": "religious"
+},
+{
+"name": "DAV School",
+"lat": 34.061268,
+"lon": 74.816305,
+"kind": "school"
+},
+{
+"name": "Delhi Moder Public School",
+"lat": 34.013445,
+"lon": 74.911965,
+"kind": "school"
+},
+{
+"name": "Delhi Public School Budgam (DPS)",
+"lat": 34.020039,
+"lon": 74.747314,
+"kind": "school"
+},
+{
+"name": "Delhi Public School Srinagar",
+"lat": 34.040954,
+"lon": 74.88007,
+"kind": "school"
+},
+{
+"name": "Department of Libraries and Research",
+"lat": 34.078013,
+"lon": 74.799307,
+"kind": "public"
+},
+{
+"name": "Derma Asthetics Skin Care And Laser Clinic",
+"lat": 34.041148,
+"lon": 74.800191,
+"kind": "hospital"
+},
+{
+"name": "Dermis Skin Laser Hair Transplant Clinic",
+"lat": 34.073352,
+"lon": 74.768087,
+"kind": "hospital"
+},
+{
+"name": "Dewan Mandir",
+"lat": 34.087804,
+"lon": 74.807139,
+"kind": "religious"
+},
+{
+"name": "Dhooin Bhagh Masjid",
+"lat": 34.137824,
+"lon": 74.809369,
+"kind": "religious"
+},
+{
+"name": "Diagno Labs",
+"lat": 34.034315,
+"lon": 74.819676,
+"kind": "hospital"
+},
+{
+"name": "Dialysis Centre Ultrasound Laboratory",
+"lat": 34.143664,
+"lon": 74.838052,
+"kind": "hospital"
+},
+{
+"name": "Diplomat",
+"lat": 34.086546,
+"lon": 74.842986,
+"kind": "landmark"
+},
+{
+"name": "Dispensary",
+"lat": 34.047752,
+"lon": 74.863836,
+"kind": "hospital"
+},
+{
+"name": "Dispensary",
+"lat": 34.14681,
+"lon": 74.87685,
+"kind": "hospital"
+},
+{
+"name": "District Court",
+"lat": 34.070673,
+"lon": 74.779185,
+"kind": "public"
+},
+{
+"name": "District Police Lines",
+"lat": 34.075624,
+"lon": 74.798221,
+"kind": "police"
+},
+{
+"name": "District Police Lines Srinagar",
+"lat": 34.076437,
+"lon": 74.798385,
+"kind": "police"
+},
+{
+"name": "Doctor and Drug",
+"lat": 34.097151,
+"lon": 74.822294,
+"kind": "hospital"
+},
+{
+"name": "Dr Bhats Al Habib Health Care",
+"lat": 34.096003,
+"lon": 74.783666,
+"kind": "hospital"
+},
+{
+"name": "Dr Lal Path Labs",
+"lat": 34.136889,
+"lon": 74.804646,
+"kind": "hospital"
+},
+{
+"name": "Dr's Hub Health and Care Clinic Chanpora",
+"lat": 34.030586,
+"lon": 74.808718,
+"kind": "hospital"
+},
+{
+"name": "Dr. Abrar Wani's Skin Hair and Laser Clinic",
+"lat": 34.126963,
+"lon": 74.817616,
+"kind": "hospital"
+},
+{
+"name": "Dr. AGM's City School",
+"lat": 34.030034,
+"lon": 74.831528,
+"kind": "school"
+},
+{
+"name": "Dr. Anwar Hussain Nagoo",
+"lat": 34.103775,
+"lon": 74.829618,
+"kind": "hospital"
+},
+{
+"name": "Dr. Bashirs Medical/Dental Clinic",
+"lat": 34.114955,
+"lon": 74.806525,
+"kind": "hospital"
+},
+{
+"name": "Dr. Farooq's Unani Hospital",
+"lat": 34.074341,
+"lon": 74.787654,
+"kind": "hospital"
+},
+{
+"name": "Dr. Fazili Eye Clinic",
+"lat": 34.046421,
+"lon": 74.80184,
+"kind": "hospital"
+},
+{
+"name": "Dr. Ferovas Labs And Imaging",
+"lat": 34.134834,
+"lon": 74.80437,
+"kind": "hospital"
+},
+{
+"name": "Dr. Firdous Manzoor",
+"lat": 34.066414,
+"lon": 74.803225,
+"kind": "hospital"
+},
+{
+"name": "Dr. GR Mir's Orthopaedic Clinic",
+"lat": 34.07207,
+"lon": 74.813573,
+"kind": "hospital"
+},
+{
+"name": "Dr. Haris Nazir",
+"lat": 34.124742,
+"lon": 74.817053,
+"kind": "hospital"
+},
+{
+"name": "Dr. Hasim Chiropractor Imperial Poly clinic",
+"lat": 34.065008,
+"lon": 74.820949,
+"kind": "hospital"
+},
+{
+"name": "Dr. HN Khan",
+"lat": 34.124717,
+"lon": 74.816866,
+"kind": "hospital"
+},
+{
+"name": "Dr. HP Singh",
+"lat": 34.03405,
+"lon": 74.790797,
+"kind": "hospital"
+},
+{
+"name": "Dr. Hyders Dental Clinic",
+"lat": 34.051933,
+"lon": 74.805369,
+"kind": "hospital"
+},
+{
+"name": "Dr. Iffat Hassan's Skin and Reserch Clinic",
+"lat": 34.078877,
+"lon": 74.799344,
+"kind": "hospital"
+},
+{
+"name": "Dr. Ifrah Muzamil",
+"lat": 34.047236,
+"lon": 74.801642,
+"kind": "hospital"
+},
+{
+"name": "Dr. Imtiyaz Ahmad Eye Specialists",
+"lat": 34.126957,
+"lon": 74.817923,
+"kind": "hospital"
+},
+{
+"name": "Dr. Irshad Ahmad Diabetes Clinic",
+"lat": 34.066423,
+"lon": 74.811155,
+"kind": "hospital"
+},
+{
+"name": "Dr. Irshad Nehvis Diagnostic and Imaging Centre",
+"lat": 34.080007,
+"lon": 74.799318,
+"kind": "hospital"
+},
+{
+"name": "Dr. Kaiser's Clinic",
+"lat": 34.064572,
+"lon": 74.811972,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.066535,
+"lon": 74.803321,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.075214,
+"lon": 74.77412,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.034154,
+"lon": 74.808912,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.020361,
+"lon": 74.770247,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.081397,
+"lon": 74.801961,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.095897,
+"lon": 74.821114,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.149125,
+"lon": 74.837242,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs",
+"lat": 34.127553,
+"lon": 74.837613,
+"kind": "hospital"
+},
+{
+"name": "Dr. Lal Path Labs Authorised Collection Center",
+"lat": 34.045926,
+"lon": 74.815198,
+"kind": "hospital"
+},
+{
+"name": "Dr. M Ashraf Residential Clinic",
+"lat": 34.170365,
+"lon": 74.808509,
+"kind": "hospital"
+},
+{
+"name": "Dr. Manzoor Eye Clinic Centre",
+"lat": 34.065369,
+"lon": 74.808968,
+"kind": "hospital"
+},
+{
+"name": "Dr. Manzoors Polyclinic and Diagnostic Centre",
+"lat": 34.09835,
+"lon": 74.806629,
+"kind": "hospital"
+},
+{
+"name": "Dr. Manzoors Skin Care Clinic",
+"lat": 34.074157,
+"lon": 74.797528,
+"kind": "hospital"
+},
+{
+"name": "Dr. Masood's Multispeciality Health Centre",
+"lat": 34.078952,
+"lon": 74.829691,
+"kind": "hospital"
+},
+{
+"name": "Dr. Mehraj u Din Tantray's Clinic",
+"lat": 34.154687,
+"lon": 74.840268,
+"kind": "hospital"
+},
+{
+"name": "Dr. Mir Nisar Ahmad's Clinic",
+"lat": 34.1133,
+"lon": 74.807928,
+"kind": "hospital"
+},
+{
+"name": "Dr. Mushtaq Ganai",
+"lat": 34.008488,
+"lon": 74.803166,
+"kind": "hospital"
+},
+{
+"name": "Dr. Mushtaq Skin Clinic",
+"lat": 34.102165,
+"lon": 74.822323,
+"kind": "hospital"
+},
+{
+"name": "Dr. Muzaffars Health Hub Clinic",
+"lat": 34.145528,
+"lon": 74.802187,
+"kind": "hospital"
+},
+{
+"name": "Dr. Najeeb Drabus Ortho Clinic",
+"lat": 34.085708,
+"lon": 74.796729,
+"kind": "hospital"
+},
+{
+"name": "Dr. Naseer's Unani & Panchkarma Hospital",
+"lat": 34.095767,
+"lon": 74.792226,
+"kind": "hospital"
+},
+{
+"name": "Dr. Naveed Nazir Shah",
+"lat": 34.081917,
+"lon": 74.829823,
+"kind": "hospital"
+},
+{
+"name": "Dr. Nazir Sheikh Clinic",
+"lat": 34.122168,
+"lon": 74.814351,
+"kind": "hospital"
+},
+{
+"name": "Dr. Qadri's Clinical Laboratory",
+"lat": 34.097396,
+"lon": 74.822174,
+"kind": "hospital"
+},
+{
+"name": "Dr. Qadris Clinical Laboratory",
+"lat": 34.027369,
+"lon": 74.824896,
+"kind": "hospital"
+},
+{
+"name": "Dr. Qadris Hematology Lab",
+"lat": 34.080101,
+"lon": 74.799758,
+"kind": "hospital"
+},
+{
+"name": "Dr. Reshi's Kidney Care & Diagnostic Centre",
+"lat": 34.143845,
+"lon": 74.838298,
+"kind": "hospital"
+},
+{
+"name": "Dr. Rubina Amin",
+"lat": 34.067176,
+"lon": 74.80643,
+"kind": "hospital"
+},
+{
+"name": "Dr. Sami Jan Clinic",
+"lat": 34.13779,
+"lon": 74.827329,
+"kind": "hospital"
+},
+{
+"name": "Dr. Sethi's Clinic",
+"lat": 34.063655,
+"lon": 74.812562,
+"kind": "hospital"
+},
+{
+"name": "Dr. Shad Salim's Oncology Clinic",
+"lat": 34.045733,
+"lon": 74.788312,
+"kind": "hospital"
+},
+{
+"name": "Dr. Shakeel Ahmad Mir",
+"lat": 34.019842,
+"lon": 74.737035,
+"kind": "hospital"
+},
+{
+"name": "Dr. Sheikh Abdul Samad",
+"lat": 34.023654,
+"lon": 74.815899,
+"kind": "hospital"
+},
+{
+"name": "Dr. Sheikh Mohd Saleem",
+"lat": 34.02864,
+"lon": 74.81116,
+"kind": "hospital"
+},
+{
+"name": "Dr. Syed Ashiq Hussain Naqshbandi",
+"lat": 34.095191,
+"lon": 74.813399,
+"kind": "hospital"
+},
+{
+"name": "Dr. Syed Kaiser Dental Clinic",
+"lat": 34.030229,
+"lon": 74.798558,
+"kind": "hospital"
+},
+{
+"name": "Dr. Tahir Malik Clinic",
+"lat": 34.047534,
+"lon": 74.803522,
+"kind": "hospital"
+},
+{
+"name": "Dr. Tariq Eye Clinic",
+"lat": 34.080574,
+"lon": 74.821493,
+"kind": "hospital"
+},
+{
+"name": "Dr. Waleed's Clinic",
+"lat": 34.013765,
+"lon": 74.812611,
+"kind": "hospital"
+},
+{
+"name": "Dr. Wassim Physiotherapy Clinic",
+"lat": 34.136454,
+"lon": 74.805587,
+"kind": "hospital"
+},
+{
+"name": "Dr. Yaseen's Skin Clinic",
+"lat": 34.083798,
+"lon": 74.794683,
+"kind": "hospital"
+},
+{
+"name": "Dr. Zulfiqar Ali",
+"lat": 34.112054,
+"lon": 74.807153,
+"kind": "hospital"
+},
+{
+"name": "Duck Park",
+"lat": 34.146228,
+"lon": 74.846655,
+"kind": "park"
+},
+{
+"name": "Dug Kadal",
+"lat": 34.134574,
+"lon": 74.812776,
+"kind": "bridge"
+},
+{
+"name": "Dulbagh Park",
+"lat": 34.139919,
+"lon": 74.804225,
+"kind": "park"
+},
+{
+"name": "Durga Nag Temple",
+"lat": 34.075651,
+"lon": 74.832557,
+"kind": "religious"
+},
+{
+"name": "Durrani's Uro Surgery Super Speciality Clinic",
+"lat": 34.026154,
+"lon": 74.803172,
+"kind": "hospital"
+},
+{
+"name": "EIC Public School",
+"lat": 34.101122,
+"lon": 74.767078,
+"kind": "school"
+},
+{
+"name": "Eid Gah Park",
+"lat": 34.096926,
+"lon": 74.793064,
+"kind": "park"
+},
+{
+"name": "Eidgah Mihrab & Minbar",
+"lat": 34.103216,
+"lon": 74.792891,
+"kind": "religious"
+},
+{
+"name": "Eidgah Park",
+"lat": 34.097505,
+"lon": 74.791919,
+"kind": "park"
+},
+{
+"name": "Eidgah Park Dargah",
+"lat": 34.128498,
+"lon": 74.840658,
+"kind": "park"
+},
+{
+"name": "Eidgah Shah-i-Hamdan",
+"lat": 34.102797,
+"lon": 74.792558,
+"kind": "religious"
+},
+{
+"name": "Eidgah Wanabal",
+"lat": 34.012776,
+"lon": 74.800411,
+"kind": "religious"
+},
+{
+"name": "Elan Rehab Physiotherapy and Clinic",
+"lat": 34.127324,
+"lon": 74.832394,
+"kind": "hospital"
+},
+{
+"name": "Elen Buds Creche Cum Preparatory School",
+"lat": 34.150735,
+"lon": 74.802259,
+"kind": "school"
+},
+{
+"name": "Ellahibagh",
+"lat": 34.152028,
+"lon": 74.810686,
+"kind": "area"
+},
+{
+"name": "Ellaquai Dehati Bank",
+"lat": 34.020529,
+"lon": 74.768731,
+"kind": "public"
+},
+{
+"name": "Ellaquai Dehati Bank",
+"lat": 34.029433,
+"lon": 74.822551,
+"kind": "public"
+},
+{
+"name": "Ellaquai Dehati Bank",
+"lat": 34.03813,
+"lon": 74.78771,
+"kind": "public"
+},
+{
+"name": "Ellaquai Dehati Bank",
+"lat": 34.132082,
+"lon": 74.877478,
+"kind": "public"
+},
+{
+"name": "Ellquai Dehati Bank",
+"lat": 34.152544,
+"lon": 74.802711,
+"kind": "public"
+},
+{
+"name": "Emporium Park",
+"lat": 34.072145,
+"lon": 74.827306,
+"kind": "park"
+},
+{
+"name": "Ennco Resorts",
+"lat": 34.063598,
+"lon": 74.80847,
+"kind": "landmark"
+},
+{
+"name": "Entrance Lalit Grand Palace",
+"lat": 34.080361,
+"lon": 74.860399,
+"kind": "landmark"
+},
+{
+"name": "Environment Park",
+"lat": 34.061564,
+"lon": 74.819116,
+"kind": "park"
+},
+{
+"name": "erc eye care",
+"lat": 34.08467,
+"lon": 74.795601,
+"kind": "hospital"
+},
+{
+"name": "Eve's Garden Educational Institute",
+"lat": 34.121284,
+"lon": 74.814911,
+"kind": "school"
+},
+{
+"name": "Exceptional Minds - Special Centre",
+"lat": 34.074824,
+"lon": 74.76834,
+"kind": "hospital"
+},
+{
+"name": "Exchange Park",
+"lat": 34.086535,
+"lon": 74.771575,
+"kind": "park"
+},
+{
+"name": "Eye Care & Research Centre",
+"lat": 34.084129,
+"lon": 74.794922,
+"kind": "hospital"
+},
+{
+"name": "Fair Mount, Airport Road, Humhama Srinagar",
+"lat": 34.020984,
+"lon": 74.771145,
+"kind": "landmark"
+},
+{
+"name": "Fakhr-e-Kashmir bridge",
+"lat": 34.078993,
+"lon": 74.819872,
+"kind": "bridge"
+},
+{
+"name": "Falah Health Care Pharmacy and Clinic",
+"lat": 34.022832,
+"lon": 74.774364,
+"kind": "hospital"
+},
+{
+"name": "Farashgund",
+"lat": 34.066023,
+"lon": 74.681876,
+"kind": "area"
+},
+{
+"name": "Fateh Kadal",
+"lat": 34.086747,
+"lon": 74.80805,
+"kind": "area"
+},
+{
+"name": "Fayaz Educational Institute",
+"lat": 34.035101,
+"lon": 74.818029,
+"kind": "school"
+},
+{
+"name": "Firdous Park",
+"lat": 34.08381,
+"lon": 74.76803,
+"kind": "park"
+},
+{
+"name": "Fire and Emergency Station Safakadal",
+"lat": 34.095256,
+"lon": 74.787096,
+"kind": "fire_station"
+},
+{
+"name": "Fire Service Station",
+"lat": 33.998325,
+"lon": 74.792298,
+"kind": "fire_station"
+},
+{
+"name": "Fire Station Headquarter Srinagar",
+"lat": 34.074661,
+"lon": 74.797809,
+"kind": "fire_station"
+},
+{
+"name": "First Aid Clinical Laboratory",
+"lat": 34.168445,
+"lon": 74.808735,
+"kind": "hospital"
+},
+{
+"name": "Florence Hospital, Srinagar",
+"lat": 34.038854,
+"lon": 74.80903,
+"kind": "hospital"
+},
+{
+"name": "Flyover",
+"lat": 34.035767,
+"lon": 74.861311,
+"kind": "bridge"
+},
+{
+"name": "Flyover",
+"lat": 34.034984,
+"lon": 74.858134,
+"kind": "bridge"
+},
+{
+"name": "Footbridge",
+"lat": 34.125096,
+"lon": 74.804852,
+"kind": "bridge"
+},
+{
+"name": "Fortune Resorts Heevan",
+"lat": 34.135472,
+"lon": 74.876024,
+"kind": "landmark"
+},
+{
+"name": "Foundation World School",
+"lat": 34.164743,
+"lon": 74.819462,
+"kind": "school"
+},
+{
+"name": "Foundation World School (Kindergarten)",
+"lat": 34.019903,
+"lon": 74.774248,
+"kind": "school"
+},
+{
+"name": "Foundation World School (Main)",
+"lat": 34.000131,
+"lon": 74.716861,
+"kind": "school"
+},
+{
+"name": "Fountain Chowk Rainawari",
+"lat": 34.097988,
+"lon": 74.8229,
+"kind": "landmark"
+},
+{
+"name": "Fountain Park",
+"lat": 34.084792,
+"lon": 74.798722,
+"kind": "park"
+},
+{
+"name": "Four Points By Sheraton",
+"lat": 34.067578,
+"lon": 74.844369,
+"kind": "landmark"
+},
+{
+"name": "Fracture and Orthopaedic Care Dr. G.M Wani",
+"lat": 34.040352,
+"lon": 74.798483,
+"kind": "hospital"
+},
+{
+"name": "Fruit Mandi",
+"lat": 34.098093,
+"lon": 74.761364,
+"kind": "market"
+},
+{
+"name": "Fruit mandi Bus Stop",
+"lat": 34.100489,
+"lon": 74.76761,
+"kind": "bus_stop"
+},
+{
+"name": "G.B. Panth Children Hospital",
+"lat": 34.068914,
+"lon": 74.843723,
+"kind": "hospital"
+},
+{
+"name": "Gadadhar temple",
+"lat": 34.074343,
+"lon": 74.806217,
+"kind": "religious"
+},
+{
+"name": "Gadyar Masjid",
+"lat": 34.094497,
+"lon": 74.806279,
+"kind": "religious"
+},
+{
+"name": "Galacy Public Secondary School",
+"lat": 34.17857,
+"lon": 74.808285,
+"kind": "school"
+},
+{
+"name": "Galandhar",
+"lat": 33.990001,
+"lon": 74.925104,
+"kind": "area"
+},
+{
+"name": "Gandhi Bahawan Park",
+"lat": 34.133635,
+"lon": 74.83754,
+"kind": "park"
+},
+{
+"name": "Gandhi Memorial College",
+"lat": 34.089388,
+"lon": 74.810684,
+"kind": "school"
+},
+{
+"name": "Gani Complex",
+"lat": 34.029808,
+"lon": 74.822993,
+"kind": "market"
+},
+{
+"name": "Gani Memorial Library and Reading Center",
+"lat": 34.101886,
+"lon": 74.80543,
+"kind": "public"
+},
+{
+"name": "Ganj Baksh Park",
+"lat": 34.09979,
+"lon": 74.813912,
+"kind": "park"
+},
+{
+"name": "Ganpatyar temple",
+"lat": 34.078165,
+"lon": 74.80672,
+"kind": "religious"
+},
+{
+"name": "Garand Kalan",
+"lat": 34.055571,
+"lon": 74.675905,
+"kind": "area"
+},
+{
+"name": "Gassu",
+"lat": 34.170883,
+"lon": 74.853082,
+"kind": "area"
+},
+{
+"name": "Gawkadal",
+"lat": 34.075103,
+"lon": 74.809159,
+"kind": "area"
+},
+{
+"name": "Gawkadal Bridge",
+"lat": 34.07476,
+"lon": 74.80918,
+"kind": "bridge"
+},
+{
+"name": "GD Goenka School",
+"lat": 34.132642,
+"lon": 74.82519,
+"kind": "school"
+},
+{
+"name": "GD Goenka Toddler House",
+"lat": 34.140851,
+"lon": 74.808666,
+"kind": "school"
+},
+{
+"name": "General Bus Station",
+"lat": 34.076741,
+"lon": 74.793204,
+"kind": "market"
+},
+{
+"name": "Genius Public School Creche Cum Preparatory School",
+"lat": 34.027874,
+"lon": 74.824096,
+"kind": "school"
+},
+{
+"name": "Ghalibabad",
+"lat": 34.114585,
+"lon": 74.741648,
+"kind": "area"
+},
+{
+"name": "Giggles Preparatory School",
+"lat": 34.025669,
+"lon": 74.80662,
+"kind": "school"
+},
+{
+"name": "Gil Kadal",
+"lat": 34.120254,
+"lon": 74.803406,
+"kind": "bridge"
+},
+{
+"name": "Gilli Kadal",
+"lat": 34.120248,
+"lon": 74.803379,
+"kind": "bridge"
+},
+{
+"name": "Girls Higher Secondary School Amira Kadal",
+"lat": 34.065499,
+"lon": 74.802557,
+"kind": "school"
+},
+{
+"name": "Girls Higher Secondary School Kothi Bagh",
+"lat": 34.075898,
+"lon": 74.813608,
+"kind": "school"
+},
+{
+"name": "Girls Higher Secondary School Soura",
+"lat": 34.139562,
+"lon": 74.798998,
+"kind": "school"
+},
+{
+"name": "Girls Higher Secondary School Zadibal",
+"lat": 34.1172,
+"lon": 74.809217,
+"kind": "school"
+},
+{
+"name": "GMC Park",
+"lat": 34.085662,
+"lon": 74.798735,
+"kind": "park"
+},
+{
+"name": "GMC Srinagar",
+"lat": 34.085162,
+"lon": 74.799643,
+"kind": "school"
+},
+{
+"name": "Gogjibagh",
+"lat": 34.063013,
+"lon": 74.811155,
+"kind": "area"
+},
+{
+"name": "Gojwara",
+"lat": 34.101091,
+"lon": 74.810807,
+"kind": "area"
+},
+{
+"name": "Gol Park",
+"lat": 34.05949,
+"lon": 74.814964,
+"kind": "park"
+},
+{
+"name": "Gole Masjid",
+"lat": 34.130214,
+"lon": 74.800023,
+"kind": "religious"
+},
+{
+"name": "Gopalpora",
+"lat": 33.979538,
+"lon": 74.814678,
+"kind": "area"
+},
+{
+"name": "Goripora",
+"lat": 34.119701,
+"lon": 74.749751,
+"kind": "area"
+},
+{
+"name": "Gotapora",
+"lat": 34.086732,
+"lon": 74.678326,
+"kind": "area"
+},
+{
+"name": "Gousia Bridge",
+"lat": 34.086501,
+"lon": 74.823382,
+"kind": "bridge"
+},
+{
+"name": "Gousia colony",
+"lat": 34.16976,
+"lon": 74.824664,
+"kind": "area"
+},
+{
+"name": "Gousia Park",
+"lat": 34.08615,
+"lon": 74.811152,
+"kind": "park"
+},
+{
+"name": "Gousia Petrol Station",
+"lat": 34.076177,
+"lon": 74.686987,
+"kind": "fuel"
+},
+{
+"name": "Govenment Higher Secondary Institute",
+"lat": 34.010697,
+"lon": 74.83384,
+"kind": "school"
+},
+{
+"name": "Government Bone & Joint Hospital",
+"lat": 34.052016,
+"lon": 74.797359,
+"kind": "hospital"
+},
+{
+"name": "Government Boys High School Batpora",
+"lat": 34.159232,
+"lon": 74.844976,
+"kind": "school"
+},
+{
+"name": "Government Boys Higher Secondary School",
+"lat": 34.047561,
+"lon": 74.810587,
+"kind": "school"
+},
+{
+"name": "Government College of Nursing",
+"lat": 34.088861,
+"lon": 74.810578,
+"kind": "school"
+},
+{
+"name": "Government degree college, Bemina",
+"lat": 34.079679,
+"lon": 74.77805,
+"kind": "school"
+},
+{
+"name": "Government Dispensary",
+"lat": 34.034473,
+"lon": 74.824714,
+"kind": "hospital"
+},
+{
+"name": "Government Girls Higher Secondary School",
+"lat": 34.104495,
+"lon": 74.825732,
+"kind": "school"
+},
+{
+"name": "Government Gousia Hospital Khanyar",
+"lat": 34.092585,
+"lon": 74.813454,
+"kind": "hospital"
+},
+{
+"name": "Government Health Centre",
+"lat": 34.084481,
+"lon": 74.839507,
+"kind": "hospital"
+},
+{
+"name": "Government Higher Secondary School",
+"lat": 34.026498,
+"lon": 74.797132,
+"kind": "school"
+},
+{
+"name": "Government Higher Secondary School Pandrethan",
+"lat": 34.047941,
+"lon": 74.86462,
+"kind": "school"
+},
+{
+"name": "government land semi public",
+"lat": 34.031472,
+"lon": 74.902987,
+"kind": "hospital"
+},
+{
+"name": "Government Model School, Fisherman Colony",
+"lat": 34.149736,
+"lon": 74.844982,
+"kind": "school"
+},
+{
+"name": "Government of J&K anti Coreuption Bureau Headquarters",
+"lat": 34.030669,
+"lon": 74.779279,
+"kind": "police"
+},
+{
+"name": "Government Sub District Hospital 24x7 Hazratbal",
+"lat": 34.139895,
+"lon": 74.839684,
+"kind": "hospital"
+},
+{
+"name": "Government Super Speciality Hospital",
+"lat": 34.088401,
+"lon": 74.797916,
+"kind": "hospital"
+},
+{
+"name": "Government Unani Hospital Shalteng",
+"lat": 34.108171,
+"lon": 74.747554,
+"kind": "hospital"
+},
+{
+"name": "govt girl sec school",
+"lat": 33.98418,
+"lon": 74.753834,
+"kind": "school"
+},
+{
+"name": "Govt Girl's Higher Secondary School Narbal",
+"lat": 34.111596,
+"lon": 74.667886,
+"kind": "school"
+},
+{
+"name": "Govt Girls Higher Secondary School Nawakadal",
+"lat": 34.093767,
+"lon": 74.798311,
+"kind": "school"
+},
+{
+"name": "Govt Girls Higher Secondary School Rajbagh",
+"lat": 34.065807,
+"lon": 74.82107,
+"kind": "school"
+},
+{
+"name": "Govt. Boys Higher Secondary School Rawal Pora",
+"lat": 34.026459,
+"lon": 74.797185,
+"kind": "school"
+},
+{
+"name": "Govt. Children Hospital Bemina Srinagar",
+"lat": 34.091239,
+"lon": 74.759238,
+"kind": "hospital"
+},
+{
+"name": "Govt. College for Women",
+"lat": 34.074598,
+"lon": 74.816573,
+"kind": "school"
+},
+{
+"name": "Govt. College for Women, Nawakadal",
+"lat": 34.093396,
+"lon": 74.79743,
+"kind": "school"
+},
+{
+"name": "Govt. Degree College Hyderpora",
+"lat": 34.038029,
+"lon": 74.788728,
+"kind": "school"
+},
+{
+"name": "Govt. Dental College",
+"lat": 34.087958,
+"lon": 74.795863,
+"kind": "hospital"
+},
+{
+"name": "Govt. Girls High School",
+"lat": 34.036753,
+"lon": 74.79114,
+"kind": "school"
+},
+{
+"name": "Govt. Girls High School",
+"lat": 34.013153,
+"lon": 74.91593,
+"kind": "school"
+},
+{
+"name": "Govt. Girls Higher Secondary School",
+"lat": 34.03354,
+"lon": 74.807151,
+"kind": "school"
+},
+{
+"name": "Govt. Girls Higher Secondary School Khanyar",
+"lat": 34.088842,
+"lon": 74.821175,
+"kind": "school"
+},
+{
+"name": "Govt. Health Sub-center",
+"lat": 34.042841,
+"lon": 74.818345,
+"kind": "hospital"
+},
+{
+"name": "Govt. Middle School",
+"lat": 34.059336,
+"lon": 74.800361,
+"kind": "school"
+},
+{
+"name": "Govt. Middle School",
+"lat": 34.008203,
+"lon": 74.775847,
+"kind": "school"
+},
+{
+"name": "Govt. Middle School Buchpora",
+"lat": 34.152442,
+"lon": 74.80108,
+"kind": "school"
+},
+{
+"name": "Govt. Unani Hospital",
+"lat": 34.109569,
+"lon": 74.749561,
+"kind": "hospital"
+},
+{
+"name": "Govt. Urban Primary Health Centre Lalbazar",
+"lat": 34.125091,
+"lon": 74.816001,
+"kind": "hospital"
+},
+{
+"name": "Gowkadal Fire station",
+"lat": 34.074594,
+"lon": 74.811458,
+"kind": "fire_station"
+},
+{
+"name": "Grand Mir International",
+"lat": 34.064228,
+"lon": 74.811462,
+"kind": "landmark"
+},
+{
+"name": "Grand Park",
+"lat": 34.067378,
+"lon": 74.78118,
+"kind": "market"
+},
+{
+"name": "Grand Post Office GPO and Atm",
+"lat": 34.072186,
+"lon": 74.822921,
+"kind": "public"
+},
+{
+"name": "Grand Valley Inn",
+"lat": 34.14465,
+"lon": 74.873778,
+"kind": "landmark"
+},
+{
+"name": "Green Belt Park, Santanagar",
+"lat": 34.027383,
+"lon": 74.805326,
+"kind": "park"
+},
+{
+"name": "Green Hill",
+"lat": 34.08388,
+"lon": 74.838311,
+"kind": "landmark"
+},
+{
+"name": "Green Valley Educational Institute",
+"lat": 34.156666,
+"lon": 74.817281,
+"kind": "school"
+},
+{
+"name": "Guest House Park",
+"lat": 34.133806,
+"lon": 74.840217,
+"kind": "park"
+},
+{
+"name": "Gulab bagh",
+"lat": 34.176802,
+"lon": 74.819514,
+"kind": "area"
+},
+{
+"name": "Gulistan-I-Atfal School",
+"lat": 34.158655,
+"lon": 74.844106,
+"kind": "school"
+},
+{
+"name": "Gulmarg Shopping Complex",
+"lat": 34.081817,
+"lon": 74.832857,
+"kind": "market"
+},
+{
+"name": "Gulshan Abad Park",
+"lat": 34.083073,
+"lon": 74.765765,
+"kind": "park"
+},
+{
+"name": "Gulshan Nagar",
+"lat": 34.024494,
+"lon": 74.819571,
+"kind": "area"
+},
+{
+"name": "Gulswarm Childrens Clinic",
+"lat": 34.107735,
+"lon": 74.809285,
+"kind": "hospital"
+},
+{
+"name": "Gulzar Shopping Complex",
+"lat": 34.081694,
+"lon": 74.793019,
+"kind": "market"
+},
+{
+"name": "Gund Hassi Bhat",
+"lat": 34.112905,
+"lon": 74.695812,
+"kind": "area"
+},
+{
+"name": "Gurdwara Sahib Chatti Patshahi",
+"lat": 34.103001,
+"lon": 74.822015,
+"kind": "religious"
+},
+{
+"name": "Guru Bazar",
+"lat": 34.079119,
+"lon": 74.802709,
+"kind": "area"
+},
+{
+"name": "Gurudwara Sahib",
+"lat": 34.004483,
+"lon": 74.794897,
+"kind": "religious"
+},
+{
+"name": "Gurudwara Shaheed Bungha  Baghat e Barzulla",
+"lat": 34.04198,
+"lon": 74.802406,
+"kind": "religious"
+},
+{
+"name": "Habak Public Park",
+"lat": 34.142871,
+"lon": 74.841104,
+"kind": "park"
+},
+{
+"name": "Habak Stop",
+"lat": 34.140792,
+"lon": 74.838798,
+"kind": "bus_stop"
+},
+{
+"name": "Habba Kadal",
+"lat": 34.082091,
+"lon": 74.807947,
+"kind": "area"
+},
+{
+"name": "Habba Kadal Bridge",
+"lat": 34.081424,
+"lon": 74.805991,
+"kind": "bridge"
+},
+{
+"name": "Habba khatoon Masjid",
+"lat": 34.043395,
+"lon": 74.872614,
+"kind": "religious"
+},
+{
+"name": "Hafiz Bagh",
+"lat": 34.141024,
+"lon": 74.818802,
+"kind": "area"
+},
+{
+"name": "Hajj House Park",
+"lat": 34.08993,
+"lon": 74.760617,
+"kind": "park"
+},
+{
+"name": "Halmat Complex Jamallata Chowk",
+"lat": 34.093596,
+"lon": 74.799466,
+"kind": "market"
+},
+{
+"name": "Hamambal Masjid Sharief",
+"lat": 34.095196,
+"lon": 74.814377,
+"kind": "religious"
+},
+{
+"name": "Hamdan Park",
+"lat": 34.075494,
+"lon": 74.770175,
+"kind": "park"
+},
+{
+"name": "Hamdania Bridge",
+"lat": 34.070992,
+"lon": 74.764393,
+"kind": "bridge"
+},
+{
+"name": "Hamdaniya Mission High School",
+"lat": 34.013127,
+"lon": 74.912002,
+"kind": "school"
+},
+{
+"name": "Hamdaniya Mosque",
+"lat": 34.124542,
+"lon": 74.808098,
+"kind": "religious"
+},
+{
+"name": "Hamsa Plaza",
+"lat": 34.121329,
+"lon": 74.815044,
+"kind": "market"
+},
+{
+"name": "Hamza Colony",
+"lat": 34.144608,
+"lon": 74.81097,
+"kind": "area"
+},
+{
+"name": "Hamza Makhdoom's Tomb",
+"lat": 34.103515,
+"lon": 74.81506,
+"kind": "landmark"
+},
+{
+"name": "Hamza Masjid",
+"lat": 34.080093,
+"lon": 74.766584,
+"kind": "religious"
+},
+{
+"name": "Hamzah Hills",
+"lat": 34.137939,
+"lon": 74.877028,
+"kind": "landmark"
+},
+{
+"name": "Handia Masjid",
+"lat": 34.09388,
+"lon": 74.814923,
+"kind": "religious"
+},
+{
+"name": "Hanfia Haji Masjid",
+"lat": 34.073272,
+"lon": 74.809888,
+"kind": "religious"
+},
+{
+"name": "Hanfia Jamia Masjid",
+"lat": 34.039302,
+"lon": 74.885323,
+"kind": "religious"
+},
+{
+"name": "Hanfia Masjid Iqbal",
+"lat": 34.166484,
+"lon": 74.808276,
+"kind": "religious"
+},
+{
+"name": "Hanfia Masjid Lalbazar",
+"lat": 34.124181,
+"lon": 74.817057,
+"kind": "religious"
+},
+{
+"name": "Hanfiyah Masjid",
+"lat": 34.089197,
+"lon": 74.8097,
+"kind": "religious"
+},
+{
+"name": "Hari Parbhat Fort",
+"lat": 34.106267,
+"lon": 74.816422,
+"kind": "landmark"
+},
+{
+"name": "Harmain ENT Clinic",
+"lat": 34.135822,
+"lon": 74.828071,
+"kind": "hospital"
+},
+{
+"name": "Haroon Park",
+"lat": 34.081354,
+"lon": 74.765987,
+"kind": "park"
+},
+{
+"name": "Harwan Buddhist Ruins",
+"lat": 34.153775,
+"lon": 74.898378,
+"kind": "landmark"
+},
+{
+"name": "Harwan Garden",
+"lat": 34.160386,
+"lon": 74.904928,
+"kind": "park"
+},
+{
+"name": "Hawal",
+"lat": 34.106067,
+"lon": 74.807534,
+"kind": "area"
+},
+{
+"name": "Haya Unani Hospital",
+"lat": 34.077635,
+"lon": 74.79513,
+"kind": "hospital"
+},
+{
+"name": "Hazratbal",
+"lat": 34.127216,
+"lon": 74.835673,
+"kind": "area"
+},
+{
+"name": "Hazuri bagh",
+"lat": 34.070505,
+"lon": 74.814376,
+"kind": "area"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.080717,
+"lon": 74.819913,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.067935,
+"lon": 74.830726,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank",
+"lat": 34.089646,
+"lon": 74.778188,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.086441,
+"lon": 74.83991,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.020209,
+"lon": 74.798039,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.023882,
+"lon": 74.809018,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.14398,
+"lon": 74.801799,
+"kind": "public"
+},
+{
+"name": "HDFC Bank",
+"lat": 34.116525,
+"lon": 74.806167,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank And Atm",
+"lat": 34.072627,
+"lon": 74.819321,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank and Atm",
+"lat": 34.04517,
+"lon": 74.802022,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank and Atm",
+"lat": 34.026793,
+"lon": 74.823841,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank and Atm",
+"lat": 34.074137,
+"lon": 74.772203,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank and Atm",
+"lat": 34.029759,
+"lon": 74.808733,
+"kind": "public"
+},
+{
+"name": "HDFC Bank and Atm",
+"lat": 34.040085,
+"lon": 74.879896,
+"kind": "public"
+},
+{
+"name": "Hdfc Bank and Atm",
+"lat": 34.096739,
+"lon": 74.807133,
+"kind": "public"
+},
+{
+"name": "HDFC Bank and Atm",
+"lat": 34.085367,
+"lon": 74.796447,
+"kind": "public"
+},
+{
+"name": "HDFC Bank and Atm",
+"lat": 34.09234,
+"lon": 74.819796,
+"kind": "public"
+},
+{
+"name": "HDFC Bank and Atm",
+"lat": 34.127451,
+"lon": 74.83741,
+"kind": "public"
+},
+{
+"name": "Headquarters Jammu and Kashmir Armed Police",
+"lat": 34.077037,
+"lon": 74.798721,
+"kind": "police"
+},
+{
+"name": "Health Way Diagnostic Centre",
+"lat": 34.149116,
+"lon": 74.837178,
+"kind": "hospital"
+},
+{
+"name": "Heart Clinic",
+"lat": 34.032297,
+"lon": 74.780594,
+"kind": "hospital"
+},
+{
+"name": "HeemalHotel Heemal",
+"lat": 34.081952,
+"lon": 74.833988,
+"kind": "landmark"
+},
+{
+"name": "Heritage Arts Museum",
+"lat": 34.082499,
+"lon": 74.819972,
+"kind": "landmark"
+},
+{
+"name": "Hig Colony",
+"lat": 34.087148,
+"lon": 74.7718,
+"kind": "area"
+},
+{
+"name": "Hijama Cure Clinic",
+"lat": 34.036935,
+"lon": 74.916362,
+"kind": "hospital"
+},
+{
+"name": "Hijrat Masjid",
+"lat": 34.108609,
+"lon": 74.812198,
+"kind": "religious"
+},
+{
+"name": "Hill Site",
+"lat": 34.084529,
+"lon": 74.838854,
+"kind": "landmark"
+},
+{
+"name": "Himsustan Petroleum Petrol Pump",
+"lat": 34.041674,
+"lon": 74.789592,
+"kind": "fuel"
+},
+{
+"name": "Hindustan Petroleum Ahad Filling Petrol Pump",
+"lat": 34.177715,
+"lon": 74.807295,
+"kind": "fuel"
+},
+{
+"name": "Hindustan Petroleum Petrol Pump",
+"lat": 34.07578,
+"lon": 74.824615,
+"kind": "fuel"
+},
+{
+"name": "Hindustan Petroleum Petrol Pump",
+"lat": 34.06578,
+"lon": 74.777611,
+"kind": "fuel"
+},
+{
+"name": "Hindustan Petroleum Petrol Pump",
+"lat": 34.04603,
+"lon": 74.812626,
+"kind": "fuel"
+},
+{
+"name": "Hindustan Petroleum Petrol Pump",
+"lat": 34.036649,
+"lon": 74.895095,
+"kind": "fuel"
+},
+{
+"name": "Holiday Inn",
+"lat": 34.083388,
+"lon": 74.835263,
+"kind": "landmark"
+},
+{
+"name": "Holiday Villa",
+"lat": 34.089459,
+"lon": 74.822257,
+"kind": "landmark"
+},
+{
+"name": "Holy Faith Presentation School",
+"lat": 34.013685,
+"lon": 74.808783,
+"kind": "school"
+},
+{
+"name": "Holy Mission Public School",
+"lat": 34.117383,
+"lon": 74.670089,
+"kind": "school"
+},
+{
+"name": "Hope Medicate Multi Speciality Clinic",
+"lat": 34.119929,
+"lon": 74.806476,
+"kind": "hospital"
+},
+{
+"name": "Hotel Abc Reidency Plaza",
+"lat": 34.067349,
+"lon": 74.805982,
+"kind": "market"
+},
+{
+"name": "Hotel Apna Ghar",
+"lat": 34.0832,
+"lon": 74.820931,
+"kind": "landmark"
+},
+{
+"name": "Hotel Arjumand",
+"lat": 34.080746,
+"lon": 74.828533,
+"kind": "landmark"
+},
+{
+"name": "Hotel Asian Park",
+"lat": 34.081394,
+"lon": 74.818402,
+"kind": "landmark"
+},
+{
+"name": "Hotel Azhar",
+"lat": 34.087539,
+"lon": 74.811625,
+"kind": "landmark"
+},
+{
+"name": "Hotel Broadway",
+"lat": 34.07549,
+"lon": 74.822442,
+"kind": "landmark"
+},
+{
+"name": "Hotel Burge Green OYO",
+"lat": 34.069438,
+"lon": 74.783944,
+"kind": "landmark"
+},
+{
+"name": "Hotel Burj",
+"lat": 34.095038,
+"lon": 74.820521,
+"kind": "landmark"
+},
+{
+"name": "Hotel City Grace",
+"lat": 34.090784,
+"lon": 74.821256,
+"kind": "landmark"
+},
+{
+"name": "Hotel Comrade Inn",
+"lat": 34.065423,
+"lon": 74.822316,
+"kind": "landmark"
+},
+{
+"name": "Hotel Dar-Es-Salam",
+"lat": 34.113651,
+"lon": 74.836437,
+"kind": "landmark"
+},
+{
+"name": "Hotel Darbar And Restaurant",
+"lat": 34.076276,
+"lon": 74.830216,
+"kind": "landmark"
+},
+{
+"name": "Hotel Dawar Heevon",
+"lat": 34.088379,
+"lon": 74.843079,
+"kind": "landmark"
+},
+{
+"name": "Hotel Deewan Khan",
+"lat": 34.038849,
+"lon": 74.79718,
+"kind": "landmark"
+},
+{
+"name": "Hotel Downtown",
+"lat": 34.085086,
+"lon": 74.820232,
+"kind": "landmark"
+},
+{
+"name": "Hotel Golden Tulip",
+"lat": 34.042139,
+"lon": 74.788746,
+"kind": "landmark"
+},
+{
+"name": "HOTEL GRAND ALDEN",
+"lat": 34.069428,
+"lon": 74.846529,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Habib",
+"lat": 34.068081,
+"lon": 74.83192,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Mahal",
+"lat": 34.141125,
+"lon": 74.876719,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Mamta",
+"lat": 34.083659,
+"lon": 74.825431,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Mumtaz",
+"lat": 34.076325,
+"lon": 74.822098,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Rayan",
+"lat": 34.044645,
+"lon": 74.78935,
+"kind": "landmark"
+},
+{
+"name": "Hotel Grand Tulip",
+"lat": 34.041949,
+"lon": 74.788674,
+"kind": "landmark"
+},
+{
+"name": "Hotel Heidi",
+"lat": 34.153941,
+"lon": 74.887874,
+"kind": "landmark"
+},
+{
+"name": "Hotel Heritage Luxury",
+"lat": 34.034447,
+"lon": 74.78464,
+"kind": "landmark"
+},
+{
+"name": "Hotel Hillside",
+"lat": 34.104712,
+"lon": 74.83114,
+"kind": "landmark"
+},
+{
+"name": "Hotel International",
+"lat": 34.072919,
+"lon": 74.836953,
+"kind": "landmark"
+},
+{
+"name": "Hotel Jahangir",
+"lat": 34.071744,
+"lon": 74.80491,
+"kind": "landmark"
+},
+{
+"name": "Hotel Lake Avenue",
+"lat": 34.117511,
+"lon": 74.88168,
+"kind": "landmark"
+},
+{
+"name": "Hotel Maharaja",
+"lat": 34.0811,
+"lon": 74.828193,
+"kind": "landmark"
+},
+{
+"name": "Hotel Malik",
+"lat": 34.082707,
+"lon": 74.834094,
+"kind": "landmark"
+},
+{
+"name": "Hotel Malik Palace",
+"lat": 34.080831,
+"lon": 74.830533,
+"kind": "landmark"
+},
+{
+"name": "Hotel Marhaba United",
+"lat": 34.085877,
+"lon": 74.818918,
+"kind": "landmark"
+},
+{
+"name": "Hotel Mount Inn",
+"lat": 34.084434,
+"lon": 74.838817,
+"kind": "landmark"
+},
+{
+"name": "Hotel New Al Humza Iqbal Market Karan Nagar",
+"lat": 34.079241,
+"lon": 74.799578,
+"kind": "landmark"
+},
+{
+"name": "Hotel New Park",
+"lat": 34.084493,
+"lon": 74.837467,
+"kind": "landmark"
+},
+{
+"name": "Hotel New Rigadoon",
+"lat": 34.081424,
+"lon": 74.827689,
+"kind": "landmark"
+},
+{
+"name": "Hotel New Sahil",
+"lat": 34.016634,
+"lon": 74.80971,
+"kind": "landmark"
+},
+{
+"name": "Hotel Nishat View OYO",
+"lat": 34.140854,
+"lon": 74.876629,
+"kind": "landmark"
+},
+{
+"name": "Hotel Opera Inn",
+"lat": 34.081935,
+"lon": 74.785487,
+"kind": "landmark"
+},
+{
+"name": "Hotel Pacific",
+"lat": 34.081961,
+"lon": 74.827063,
+"kind": "landmark"
+},
+{
+"name": "Hotel Paradise",
+"lat": 34.082394,
+"lon": 74.833473,
+"kind": "landmark"
+},
+{
+"name": "Hotel Pine Spring",
+"lat": 34.080544,
+"lon": 74.829747,
+"kind": "landmark"
+},
+{
+"name": "Hotel Rocks",
+"lat": 34.074865,
+"lon": 74.83281,
+"kind": "landmark"
+},
+{
+"name": "Hotel Royal Bahar",
+"lat": 34.083557,
+"lon": 74.821748,
+"kind": "landmark"
+},
+{
+"name": "Hotel Royal Batoo",
+"lat": 34.084368,
+"lon": 74.82385,
+"kind": "landmark"
+},
+{
+"name": "Hotel Royal Inn",
+"lat": 34.082104,
+"lon": 74.827241,
+"kind": "landmark"
+},
+{
+"name": "Hotel Royal Park",
+"lat": 34.025945,
+"lon": 74.821745,
+"kind": "landmark"
+},
+{
+"name": "Hotel Royal Samad",
+"lat": 34.080315,
+"lon": 74.820117,
+"kind": "landmark"
+},
+{
+"name": "Hotel Sadaf",
+"lat": 34.074542,
+"lon": 74.814776,
+"kind": "landmark"
+},
+{
+"name": "Hotel Season Palace",
+"lat": 34.086223,
+"lon": 74.843097,
+"kind": "landmark"
+},
+{
+"name": "Hotel Shah Abas",
+"lat": 34.08522,
+"lon": 74.838721,
+"kind": "landmark"
+},
+{
+"name": "Hotel Shefaf",
+"lat": 34.099311,
+"lon": 74.822996,
+"kind": "landmark"
+},
+{
+"name": "Hotel Six Season",
+"lat": 34.028771,
+"lon": 74.830671,
+"kind": "landmark"
+},
+{
+"name": "Hotel Snow Land",
+"lat": 34.080725,
+"lon": 74.835271,
+"kind": "landmark"
+},
+{
+"name": "Hotel Snow Palace",
+"lat": 34.067698,
+"lon": 74.828601,
+"kind": "landmark"
+},
+{
+"name": "Hotel Sobo Central Restaurant OYO",
+"lat": 34.099932,
+"lon": 74.76907,
+"kind": "landmark"
+},
+{
+"name": "Hotel Solar Residency",
+"lat": 34.067895,
+"lon": 74.833918,
+"kind": "landmark"
+},
+{
+"name": "Hotel Solomon Heights",
+"lat": 34.06964,
+"lon": 74.843161,
+"kind": "landmark"
+},
+{
+"name": "Hotel Sterling",
+"lat": 34.065715,
+"lon": 74.825071,
+"kind": "landmark"
+},
+{
+"name": "Hotel Sun Shine",
+"lat": 34.082895,
+"lon": 74.834518,
+"kind": "landmark"
+},
+{
+"name": "Hotel Sunrise Lal Mandi",
+"lat": 34.066533,
+"lon": 74.810669,
+"kind": "landmark"
+},
+{
+"name": "Hotel Taj",
+"lat": 34.071969,
+"lon": 74.809399,
+"kind": "landmark"
+},
+{
+"name": "Hotel The Chocolate Box",
+"lat": 34.087168,
+"lon": 74.841315,
+"kind": "landmark"
+},
+{
+"name": "Hotel The Relax OYO",
+"lat": 34.087348,
+"lon": 74.822754,
+"kind": "landmark"
+},
+{
+"name": "Hotel The Residency",
+"lat": 34.072472,
+"lon": 74.819429,
+"kind": "landmark"
+},
+{
+"name": "Hotel Town Centre",
+"lat": 34.078012,
+"lon": 74.799009,
+"kind": "landmark"
+},
+{
+"name": "Hotel Tramboo Continental",
+"lat": 34.080683,
+"lon": 74.830384,
+"kind": "landmark"
+},
+{
+"name": "Hotel Vilasta",
+"lat": 34.062719,
+"lon": 74.826719,
+"kind": "landmark"
+},
+{
+"name": "Hotel Zabarvan",
+"lat": 34.08173,
+"lon": 74.831996,
+"kind": "landmark"
+},
+{
+"name": "Hotel Zam Zam",
+"lat": 34.050647,
+"lon": 74.805377,
+"kind": "landmark"
+},
+{
+"name": "Hotel Zamarud",
+"lat": 34.083359,
+"lon": 74.83527,
+"kind": "landmark"
+},
+{
+"name": "Houseboat Young Life",
+"lat": 34.085609,
+"lon": 74.835405,
+"kind": "landmark"
+},
+{
+"name": "HP Petrol Pump",
+"lat": 34.075055,
+"lon": 74.797182,
+"kind": "fuel"
+},
+{
+"name": "HP Petrol Pump",
+"lat": 34.120377,
+"lon": 74.8079,
+"kind": "fuel"
+},
+{
+"name": "Hubbi Medicate",
+"lat": 34.133106,
+"lon": 74.808947,
+"kind": "hospital"
+},
+{
+"name": "humanities dept Park",
+"lat": 34.132416,
+"lon": 74.835103,
+"kind": "park"
+},
+{
+"name": "Humhuma",
+"lat": 34.019923,
+"lon": 74.768336,
+"kind": "area"
+},
+{
+"name": "Humza",
+"lat": 34.084531,
+"lon": 74.838817,
+"kind": "landmark"
+},
+{
+"name": "Hunar the School of Creativity",
+"lat": 34.000956,
+"lon": 74.815807,
+"kind": "school"
+},
+{
+"name": "Hyderpora",
+"lat": 34.039628,
+"lon": 74.793433,
+"kind": "area"
+},
+{
+"name": "Hyderpora Flyover",
+"lat": 34.036979,
+"lon": 74.790561,
+"kind": "bridge"
+},
+{
+"name": "Hyderpora Post Office",
+"lat": 34.037879,
+"lon": 74.786937,
+"kind": "public"
+},
+{
+"name": "IBN Sina Hospital",
+"lat": 34.036309,
+"lon": 74.735572,
+"kind": "hospital"
+},
+{
+"name": "Ibrahs Mall",
+"lat": 34.027469,
+"lon": 74.778181,
+"kind": "market"
+},
+{
+"name": "Ichgam",
+"lat": 33.986209,
+"lon": 74.751544,
+"kind": "area"
+},
+{
+"name": "ICICI Bank",
+"lat": 34.071799,
+"lon": 74.811524,
+"kind": "public"
+},
+{
+"name": "ICICI Bank",
+"lat": 34.08314,
+"lon": 74.797673,
+"kind": "public"
+},
+{
+"name": "ICICI Bank",
+"lat": 34.072033,
+"lon": 74.804788,
+"kind": "public"
+},
+{
+"name": "ICICI Bank and Atm",
+"lat": 34.072509,
+"lon": 74.818801,
+"kind": "public"
+},
+{
+"name": "ICICI Bank and Atm",
+"lat": 34.083051,
+"lon": 74.797378,
+"kind": "public"
+},
+{
+"name": "ICICI Bank and Atm",
+"lat": 34.128683,
+"lon": 74.818903,
+"kind": "public"
+},
+{
+"name": "IDBI Bank amd Atm",
+"lat": 34.083169,
+"lon": 74.797784,
+"kind": "public"
+},
+{
+"name": "Ifam's health center",
+"lat": 34.090475,
+"lon": 74.820444,
+"kind": "hospital"
+},
+{
+"name": "IGNOU",
+"lat": 34.062499,
+"lon": 74.826636,
+"kind": "school"
+},
+{
+"name": "Ilahiya Dialysis Centre",
+"lat": 34.149658,
+"lon": 74.808474,
+"kind": "hospital"
+},
+{
+"name": "Imaginations Preschool",
+"lat": 34.005976,
+"lon": 74.835015,
+"kind": "school"
+},
+{
+"name": "Imam Bara",
+"lat": 34.014773,
+"lon": 74.88327,
+"kind": "religious"
+},
+{
+"name": "Imam bargah",
+"lat": 34.047659,
+"lon": 74.869779,
+"kind": "religious"
+},
+{
+"name": "Imam Hussain (A S) Hospital",
+"lat": 34.069451,
+"lon": 74.761641,
+"kind": "hospital"
+},
+{
+"name": "Imambara Madin Sahib",
+"lat": 34.116218,
+"lon": 74.810746,
+"kind": "religious"
+},
+{
+"name": "Imamia Park",
+"lat": 34.114969,
+"lon": 74.803858,
+"kind": "park"
+},
+{
+"name": "Imdia Post Payments Bank",
+"lat": 34.037666,
+"lon": 74.787095,
+"kind": "public"
+},
+{
+"name": "Imperial Polyclinic",
+"lat": 34.065145,
+"lon": 74.821452,
+"kind": "hospital"
+},
+{
+"name": "India Post Payments Bank",
+"lat": 34.064054,
+"lon": 74.848461,
+"kind": "public"
+},
+{
+"name": "India Post Payments Bank",
+"lat": 34.072463,
+"lon": 74.768891,
+"kind": "public"
+},
+{
+"name": "India Post Payments Bank and Post Office",
+"lat": 34.004619,
+"lon": 74.794854,
+"kind": "public"
+},
+{
+"name": "India Post Sanat Nagar",
+"lat": 34.034309,
+"lon": 74.800386,
+"kind": "public"
+},
+{
+"name": "India Post- Post Office(Lal Chowk Sub post Office)",
+"lat": 34.071662,
+"lon": 74.810637,
+"kind": "public"
+},
+{
+"name": "Indian Institute of Management (IIM) Jammu Srinagar Campus",
+"lat": 34.029863,
+"lon": 74.832225,
+"kind": "school"
+},
+{
+"name": "Indian Oil",
+"lat": 34.145289,
+"lon": 74.802414,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Filling Station",
+"lat": 34.119705,
+"lon": 74.685502,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.10912,
+"lon": 74.74673,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.085184,
+"lon": 74.819325,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol pump",
+"lat": 34.038352,
+"lon": 74.789736,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.03694,
+"lon": 74.867401,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.057906,
+"lon": 74.802832,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.075565,
+"lon": 74.797516,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.071485,
+"lon": 74.8391,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.068403,
+"lon": 74.772951,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.106257,
+"lon": 74.752994,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.063743,
+"lon": 74.783276,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.031266,
+"lon": 74.908789,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.041032,
+"lon": 74.876942,
+"kind": "fuel"
+},
+{
+"name": "Indian oil Petrol Pump",
+"lat": 34.015799,
+"lon": 74.913385,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.080868,
+"lon": 74.800549,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.144405,
+"lon": 74.837718,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump",
+"lat": 34.091789,
+"lon": 74.776795,
+"kind": "fuel"
+},
+{
+"name": "Indian Oil Petrol Pump Nowshera",
+"lat": 34.133618,
+"lon": 74.803809,
+"kind": "fuel"
+},
+{
+"name": "Indian Post Payments Bank",
+"lat": 34.08927,
+"lon": 74.844498,
+"kind": "public"
+},
+{
+"name": "Indira Gandhi Memorial Tulip Garden",
+"lat": 34.096976,
+"lon": 74.880168,
+"kind": "landmark"
+},
+{
+"name": "Indira Nagar",
+"lat": 34.068595,
+"lon": 74.846869,
+"kind": "area"
+},
+{
+"name": "Industrial Training Institute",
+"lat": 34.090015,
+"lon": 74.811319,
+"kind": "school"
+},
+{
+"name": "Innova Clinics",
+"lat": 34.034712,
+"lon": 74.819714,
+"kind": "hospital"
+},
+{
+"name": "Institute of Advanced Studies in Education (IASE)",
+"lat": 34.073677,
+"lon": 74.814863,
+"kind": "school"
+},
+{
+"name": "Institute of Mental Health and Neurosciences Kashmir",
+"lat": 34.108114,
+"lon": 74.821562,
+"kind": "hospital"
+},
+{
+"name": "Inter Lake Road Nishat Suth",
+"lat": 34.115588,
+"lon": 74.869477,
+"kind": "bridge"
+},
+{
+"name": "Inter Lake Road Nishat Suth",
+"lat": 34.118212,
+"lon": 74.872127,
+"kind": "bridge"
+},
+{
+"name": "Inter Lake Road Nishat Suth",
+"lat": 34.114998,
+"lon": 74.863244,
+"kind": "bridge"
+},
+{
+"name": "International Health Clinic",
+"lat": 34.043037,
+"lon": 74.80062,
+"kind": "hospital"
+},
+{
+"name": "International Islamic School",
+"lat": 34.035414,
+"lon": 74.783495,
+"kind": "school"
+},
+{
+"name": "International Islamic School",
+"lat": 34.024156,
+"lon": 74.778925,
+"kind": "school"
+},
+{
+"name": "Interventional Pulmonary and Sleep Disorders Center",
+"lat": 34.068376,
+"lon": 74.770975,
+"kind": "hospital"
+},
+{
+"name": "IPCA Laborataries Ltd",
+"lat": 34.103011,
+"lon": 74.762863,
+"kind": "hospital"
+},
+{
+"name": "IQ Shopping Mall",
+"lat": 34.037516,
+"lon": 74.789393,
+"kind": "market"
+},
+{
+"name": "Iqbal Medical Hall Pharmacy and Clinic",
+"lat": 34.191475,
+"lon": 74.807425,
+"kind": "hospital"
+},
+{
+"name": "Iqbal Memorial Institute (Boys Block)",
+"lat": 34.072421,
+"lon": 74.773411,
+"kind": "school"
+},
+{
+"name": "Iqbal Memorial Institute (Girls Block)",
+"lat": 34.078819,
+"lon": 74.781781,
+"kind": "school"
+},
+{
+"name": "Iqbal Park",
+"lat": 34.06504,
+"lon": 74.804656,
+"kind": "park"
+},
+{
+"name": "Iqbal Public School",
+"lat": 34.136009,
+"lon": 74.808747,
+"kind": "school"
+},
+{
+"name": "Iqbal Sabzi Mandi Batamaloo",
+"lat": 34.081845,
+"lon": 74.791569,
+"kind": "market"
+},
+{
+"name": "Iqbal Sabzi Mandi II",
+"lat": 34.081812,
+"lon": 74.790621,
+"kind": "market"
+},
+{
+"name": "Iqra International School",
+"lat": 34.157334,
+"lon": 74.842002,
+"kind": "school"
+},
+{
+"name": "Ishwar Ashram",
+"lat": 34.128925,
+"lon": 74.879239,
+"kind": "religious"
+},
+{
+"name": "Islamia College of Science and Commerce",
+"lat": 34.10509,
+"lon": 74.810524,
+"kind": "school"
+},
+{
+"name": "Islamia High School",
+"lat": 34.099859,
+"lon": 74.807494,
+"kind": "school"
+},
+{
+"name": "Islamia High School, Pampore",
+"lat": 34.017478,
+"lon": 74.916286,
+"kind": "school"
+},
+{
+"name": "Islamia Mission Secondary School",
+"lat": 34.123923,
+"lon": 74.81698,
+"kind": "school"
+},
+{
+"name": "Islamia Public High School, Kralpora",
+"lat": 33.998026,
+"lon": 74.809094,
+"kind": "school"
+},
+{
+"name": "IT Market",
+"lat": 34.070234,
+"lon": 74.809516,
+"kind": "market"
+},
+{
+"name": "J K Public School",
+"lat": 34.023489,
+"lon": 74.775552,
+"kind": "school"
+},
+{
+"name": "j&k bank",
+"lat": 34.186816,
+"lon": 74.75111,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.146647,
+"lon": 74.824845,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.0731,
+"lon": 74.825733,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.025748,
+"lon": 74.820995,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.077319,
+"lon": 74.795119,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.150005,
+"lon": 74.835369,
+"kind": "public"
+},
+{
+"name": "J&K Bank",
+"lat": 34.062112,
+"lon": 74.783938,
+"kind": "public"
+},
+{
+"name": "J&K Bank amd Atm",
+"lat": 34.082655,
+"lon": 74.798103,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.000876,
+"lon": 74.792428,
+"kind": "public"
+},
+{
+"name": "J&K Bank And Atm",
+"lat": 34.084735,
+"lon": 74.823171,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.06543,
+"lon": 74.846582,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.098901,
+"lon": 74.77013,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.09159,
+"lon": 74.776892,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.021549,
+"lon": 74.76964,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.042916,
+"lon": 74.81752,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.027454,
+"lon": 74.823813,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.091012,
+"lon": 74.819699,
+"kind": "public"
+},
+{
+"name": "J&K Bank And Atm",
+"lat": 34.017259,
+"lon": 74.91245,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.012062,
+"lon": 74.832964,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.099465,
+"lon": 74.805028,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.095414,
+"lon": 74.783198,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.088089,
+"lon": 74.801005,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.096582,
+"lon": 74.799259,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.087156,
+"lon": 74.808819,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.078471,
+"lon": 74.808253,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.078454,
+"lon": 74.799463,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.116208,
+"lon": 74.7946,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.168676,
+"lon": 74.808266,
+"kind": "public"
+},
+{
+"name": "J&K Bank And Atm",
+"lat": 34.104246,
+"lon": 74.826907,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.1229,
+"lon": 74.816637,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.146987,
+"lon": 74.871376,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.082977,
+"lon": 74.834636,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.131642,
+"lon": 74.821452,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.081219,
+"lon": 74.830839,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm",
+"lat": 34.099003,
+"lon": 74.812793,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm Al-Gani Plaza",
+"lat": 34.017874,
+"lon": 74.809896,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm Amira Kadal",
+"lat": 34.072986,
+"lon": 74.810133,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm Corporate Office",
+"lat": 34.063321,
+"lon": 74.81435,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm Ladies Counter",
+"lat": 34.064183,
+"lon": 74.813083,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm NRI Services",
+"lat": 34.040098,
+"lon": 74.80933,
+"kind": "public"
+},
+{
+"name": "J&K Bank and Atm NRI Services",
+"lat": 34.039212,
+"lon": 74.787757,
+"kind": "public"
+},
+{
+"name": "J&K Bank Atm",
+"lat": 34.097268,
+"lon": 74.821917,
+"kind": "public"
+},
+{
+"name": "J&K Bank Financial Services Centre",
+"lat": 34.131495,
+"lon": 74.84114,
+"kind": "public"
+},
+{
+"name": "J&K Bank ILM Centre",
+"lat": 34.03116,
+"lon": 74.904132,
+"kind": "public"
+},
+{
+"name": "J&K Bank Lawaypora",
+"lat": 34.116913,
+"lon": 74.697082,
+"kind": "public"
+},
+{
+"name": "J&K Bank Narbal",
+"lat": 34.117252,
+"lon": 74.671958,
+"kind": "public"
+},
+{
+"name": "J&K Bank NRI Services And Atm",
+"lat": 34.072995,
+"lon": 74.817679,
+"kind": "public"
+},
+{
+"name": "J&K Bank Poloview",
+"lat": 34.072465,
+"lon": 74.820371,
+"kind": "public"
+},
+{
+"name": "J&K Fire Station",
+"lat": 34.09159,
+"lon": 74.800688,
+"kind": "fire_station"
+},
+{
+"name": "J&K Grameen Bank",
+"lat": 34.10957,
+"lon": 74.744808,
+"kind": "public"
+},
+{
+"name": "J&K Police Hospital",
+"lat": 34.070372,
+"lon": 74.798078,
+"kind": "hospital"
+},
+{
+"name": "J&K Police Public School",
+"lat": 34.073435,
+"lon": 74.765964,
+"kind": "school"
+},
+{
+"name": "J&K Police Station Housing Colony Bemina",
+"lat": 34.086879,
+"lon": 74.780187,
+"kind": "police"
+},
+{
+"name": "J&K Police Station, Mochowa",
+"lat": 34.013804,
+"lon": 74.810119,
+"kind": "police"
+},
+{
+"name": "J&K State Cooperative Bank",
+"lat": 34.067936,
+"lon": 74.81768,
+"kind": "public"
+},
+{
+"name": "J&K State Cooperative Bank",
+"lat": 34.029084,
+"lon": 74.822765,
+"kind": "public"
+},
+{
+"name": "J&K State Cooperative Bank",
+"lat": 34.050763,
+"lon": 74.806126,
+"kind": "public"
+},
+{
+"name": "J&K State Cooperative Bank and Atm",
+"lat": 34.096215,
+"lon": 74.793115,
+"kind": "public"
+},
+{
+"name": "J&K State Cooperative Bank Ltd",
+"lat": 34.037947,
+"lon": 74.790686,
+"kind": "public"
+},
+{
+"name": "Jahangir Chowk Bus Stop",
+"lat": 34.071655,
+"lon": 74.804359,
+"kind": "bus_stop"
+},
+{
+"name": "Jalali Heritage House",
+"lat": 34.114811,
+"lon": 74.803303,
+"kind": "landmark"
+},
+{
+"name": "jalazad house boat",
+"lat": 34.070812,
+"lon": 74.827483,
+"kind": "landmark"
+},
+{
+"name": "Jamal Resorts",
+"lat": 34.13417,
+"lon": 74.875886,
+"kind": "landmark"
+},
+{
+"name": "Jamaluddin baba",
+"lat": 34.010405,
+"lon": 74.778927,
+"kind": "landmark"
+},
+{
+"name": "Jamia Ahle Hadees",
+"lat": 34.13303,
+"lon": 74.803631,
+"kind": "religious"
+},
+{
+"name": "Jamia Ahli Hadith Nowhatta",
+"lat": 34.10133,
+"lon": 74.812033,
+"kind": "religious"
+},
+{
+"name": "Jamia Ahlihadees Chanpora",
+"lat": 34.031662,
+"lon": 74.808462,
+"kind": "religious"
+},
+{
+"name": "Jamia Ahlihadees Kundangar",
+"lat": 34.095843,
+"lon": 74.811771,
+"kind": "religious"
+},
+{
+"name": "Jamia Ahlihadees Masjid Nowgam",
+"lat": 34.031382,
+"lon": 74.821535,
+"kind": "religious"
+},
+{
+"name": "Jamia Chowk Nowgam",
+"lat": 34.031431,
+"lon": 74.821375,
+"kind": "area"
+},
+{
+"name": "Jamia Hanfia Masjid",
+"lat": 34.152493,
+"lon": 74.808182,
+"kind": "religious"
+},
+{
+"name": "Jamia Market",
+"lat": 34.097975,
+"lon": 74.810367,
+"kind": "market"
+},
+{
+"name": "Jamia Market Gate II",
+"lat": 34.09931,
+"lon": 74.809378,
+"kind": "market"
+},
+{
+"name": "Jamia Masjid",
+"lat": 34.001955,
+"lon": 74.827805,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid",
+"lat": 34.098469,
+"lon": 74.809725,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Ahli Hadith",
+"lat": 34.074173,
+"lon": 74.770767,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Ahlihadees",
+"lat": 34.034968,
+"lon": 74.819342,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Bait Al Noor",
+"lat": 34.012115,
+"lon": 74.811815,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Botshah Mohallah",
+"lat": 34.129909,
+"lon": 74.819602,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Brein",
+"lat": 34.10793,
+"lon": 74.880035,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Buchpora",
+"lat": 34.152736,
+"lon": 74.801672,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Goripora",
+"lat": 34.029618,
+"lon": 74.791693,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Gousia",
+"lat": 34.036188,
+"lon": 74.818394,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Gulshan Nagar",
+"lat": 34.025219,
+"lon": 74.819941,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Hanafia",
+"lat": 34.020348,
+"lon": 74.821869,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Ibrahim",
+"lat": 34.026559,
+"lon": 74.745326,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Millat",
+"lat": 34.000068,
+"lon": 74.836644,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Narbal",
+"lat": 34.116282,
+"lon": 74.672796,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Padshahi bagh",
+"lat": 34.053393,
+"lon": 74.835757,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid PethDaharmuna",
+"lat": 34.076232,
+"lon": 74.69497,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Salfia",
+"lat": 34.021175,
+"lon": 74.822293,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Sanat Nagar",
+"lat": 34.028758,
+"lon": 74.804057,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Shareef Darul Salaam",
+"lat": 34.019672,
+"lon": 74.768135,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Sharief Rajbagh",
+"lat": 34.07051,
+"lon": 74.821072,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Soiteng",
+"lat": 34.053854,
+"lon": 74.850111,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid Umar Hanfiya",
+"lat": 34.01436,
+"lon": 74.822787,
+"kind": "religious"
+},
+{
+"name": "Jamia Masjid, Gogoo",
+"lat": 34.009616,
+"lon": 74.778727,
+"kind": "religious"
+},
+{
+"name": "Jamia Patri Market",
+"lat": 34.099314,
+"lon": 74.809078,
+"kind": "market"
+},
+{
+"name": "Jamia Syed Jafar",
+"lat": 34.021832,
+"lon": 74.798399,
+"kind": "religious"
+},
+{
+"name": "Jammu & Kashmir Police Headquarters",
+"lat": 34.029184,
+"lon": 74.778252,
+"kind": "police"
+},
+{
+"name": "Jammu & Kashmir State Legislative Assembly",
+"lat": 34.073899,
+"lon": 74.802398,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Armed Police Headquarters",
+"lat": 34.073386,
+"lon": 74.799005,
+"kind": "police"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.017809,
+"lon": 74.810019,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.083754,
+"lon": 74.819263,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.095053,
+"lon": 74.807882,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.085569,
+"lon": 74.797584,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.138309,
+"lon": 74.801977,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.152465,
+"lon": 74.802502,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.141666,
+"lon": 74.808689,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.1149,
+"lon": 74.806256,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.031143,
+"lon": 74.904652,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.125514,
+"lon": 74.838009,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.121101,
+"lon": 74.806601,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank",
+"lat": 34.07426,
+"lon": 74.771669,
+"kind": "public"
+},
+{
+"name": "JAMMU AND KASHMIR BANK SHALTENG",
+"lat": 34.109698,
+"lon": 74.743521,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir Bank SSI Branch",
+"lat": 34.071745,
+"lon": 74.809861,
+"kind": "public"
+},
+{
+"name": "Jammu and Kashmir High Court",
+"lat": 34.072744,
+"lon": 74.80363,
+"kind": "public"
+},
+{
+"name": "Jawahar Lal Nehru Memorial Hospital",
+"lat": 34.097668,
+"lon": 74.821282,
+"kind": "hospital"
+},
+{
+"name": "Jawahar Nagar",
+"lat": 34.060659,
+"lon": 74.811702,
+"kind": "area"
+},
+{
+"name": "Jawahar Nagar Chowk",
+"lat": 34.063963,
+"lon": 74.812985,
+"kind": "junction"
+},
+{
+"name": "Jawahar Nagar Park",
+"lat": 34.060853,
+"lon": 74.815478,
+"kind": "park"
+},
+{
+"name": "Jawaharlal Nehru Memorial Botanical Garden",
+"lat": 34.091686,
+"lon": 74.88172,
+"kind": "park"
+},
+{
+"name": "Jeelani Ultrasound Clinic",
+"lat": 34.154097,
+"lon": 74.808556,
+"kind": "hospital"
+},
+{
+"name": "Jehlum Complex",
+"lat": 34.079819,
+"lon": 74.795021,
+"kind": "market"
+},
+{
+"name": "Jenab Sahib Park",
+"lat": 34.142439,
+"lon": 74.79695,
+"kind": "park"
+},
+{
+"name": "JK Bank",
+"lat": 34.06836,
+"lon": 74.825503,
+"kind": "public"
+},
+{
+"name": "JK bank Chattabal",
+"lat": 34.086483,
+"lon": 74.79094,
+"kind": "public"
+},
+{
+"name": "Jk Food Quality Control Lab",
+"lat": 34.088158,
+"lon": 74.811836,
+"kind": "hospital"
+},
+{
+"name": "JK Ply Agency",
+"lat": 34.023501,
+"lon": 74.775063,
+"kind": "market"
+},
+{
+"name": "JK State Cooperative Bank",
+"lat": 34.148701,
+"lon": 74.836997,
+"kind": "public"
+},
+{
+"name": "JLNM Hospital Gate Entrance",
+"lat": 34.097186,
+"lon": 74.821884,
+"kind": "hospital"
+},
+{
+"name": "Joggers Park",
+"lat": 34.067085,
+"lon": 74.820675,
+"kind": "park"
+},
+{
+"name": "Jogi Lankar Bridge",
+"lat": 34.09727,
+"lon": 74.829862,
+"kind": "bridge"
+},
+{
+"name": "JVC SKIMS Medical College & Hospital",
+"lat": 34.084472,
+"lon": 74.761596,
+"kind": "hospital"
+},
+{
+"name": "K2 Educational Institute",
+"lat": 34.133111,
+"lon": 74.87766,
+"kind": "school"
+},
+{
+"name": "Kabir",
+"lat": 34.087043,
+"lon": 74.844519,
+"kind": "landmark"
+},
+{
+"name": "Kadlabal",
+"lat": 34.009152,
+"lon": 74.909402,
+"kind": "area"
+},
+{
+"name": "Kaka Sahib Masjid",
+"lat": 34.092799,
+"lon": 74.799176,
+"kind": "religious"
+},
+{
+"name": "Kakan Maran",
+"lat": 34.031339,
+"lon": 74.702742,
+"kind": "area"
+},
+{
+"name": "Kanitar Bus Stop",
+"lat": 34.135665,
+"lon": 74.828333,
+"kind": "bus_stop"
+},
+{
+"name": "Kanitar Passenger Shed",
+"lat": 34.135789,
+"lon": 74.828432,
+"kind": "bus_stop"
+},
+{
+"name": "Kanni Kadal Bridge",
+"lat": 34.081444,
+"lon": 74.803647,
+"kind": "bridge"
+},
+{
+"name": "Kapar Market",
+"lat": 34.068113,
+"lon": 74.805124,
+"kind": "market"
+},
+{
+"name": "Karan Nagar",
+"lat": 34.083988,
+"lon": 74.796794,
+"kind": "area"
+},
+{
+"name": "Karan Nagar Post Office 190010",
+"lat": 34.08418,
+"lon": 74.797237,
+"kind": "public"
+},
+{
+"name": "Kashmir Clinics",
+"lat": 34.075794,
+"lon": 74.797347,
+"kind": "hospital"
+},
+{
+"name": "Kashmir Haat",
+"lat": 34.071398,
+"lon": 74.801598,
+"kind": "market"
+},
+{
+"name": "Kashmir Harvard Educational Institute",
+"lat": 34.142432,
+"lon": 74.829522,
+"kind": "school"
+},
+{
+"name": "Kashmir Law College",
+"lat": 34.131624,
+"lon": 74.808964,
+"kind": "school"
+},
+{
+"name": "Kashmir Lifeline and Health Centre",
+"lat": 34.042437,
+"lon": 74.806896,
+"kind": "hospital"
+},
+{
+"name": "Kashmir Mahal Resorts",
+"lat": 34.128466,
+"lon": 74.879237,
+"kind": "landmark"
+},
+{
+"name": "Kashmir naaz home stay",
+"lat": 34.083472,
+"lon": 74.82229,
+"kind": "park"
+},
+{
+"name": "Kashmir Polytechnic College",
+"lat": 34.059099,
+"lon": 74.812659,
+"kind": "school"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.012582,
+"lon": 74.811174,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.023169,
+"lon": 74.838389,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.062576,
+"lon": 74.678258,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.065498,
+"lon": 74.670838,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.017831,
+"lon": 74.88753,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.021813,
+"lon": 74.82897,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.023207,
+"lon": 74.860375,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.042063,
+"lon": 74.730296,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.023042,
+"lon": 74.77343,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.011961,
+"lon": 74.799735,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.013779,
+"lon": 74.790709,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.057928,
+"lon": 74.68791,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.020522,
+"lon": 74.881341,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.005979,
+"lon": 74.894847,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 33.992757,
+"lon": 74.894642,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 33.976678,
+"lon": 74.894352,
+"kind": "bridge"
+},
+{
+"name": "Kashmir Railway",
+"lat": 34.047845,
+"lon": 74.715503,
+"kind": "bridge"
+},
+{
+"name": "Kastoor Pend",
+"lat": 34.103552,
+"lon": 74.816289,
+"kind": "landmark"
+},
+{
+"name": "Kastoor Pend Park",
+"lat": 34.104671,
+"lon": 74.818199,
+"kind": "park"
+},
+{
+"name": "Kathi Darwaza",
+"lat": 34.10381,
+"lon": 74.821495,
+"kind": "landmark"
+},
+{
+"name": "Kawoosa Clinic",
+"lat": 34.090737,
+"lon": 74.776224,
+"kind": "hospital"
+},
+{
+"name": "Kawoosa Hospital",
+"lat": 34.112967,
+"lon": 74.7184,
+"kind": "hospital"
+},
+{
+"name": "Kawoosa Medical Hospital",
+"lat": 34.113104,
+"lon": 74.718376,
+"kind": "hospital"
+},
+{
+"name": "Kendriya Vidyalaya No 2",
+"lat": 34.004949,
+"lon": 74.764524,
+"kind": "school"
+},
+{
+"name": "Kendriya Vidyalaya No. 1 School",
+"lat": 34.063722,
+"lon": 74.846808,
+"kind": "school"
+},
+{
+"name": "Khadermoh",
+"lat": 33.982382,
+"lon": 74.899542,
+"kind": "area"
+},
+{
+"name": "Khalsa High School",
+"lat": 34.070087,
+"lon": 74.802119,
+"kind": "school"
+},
+{
+"name": "Khamenie Park",
+"lat": 34.115744,
+"lon": 74.813223,
+"kind": "park"
+},
+{
+"name": "Khan Arcade",
+"lat": 34.060221,
+"lon": 74.818638,
+"kind": "market"
+},
+{
+"name": "Khan Masjid",
+"lat": 34.10044,
+"lon": 74.808075,
+"kind": "religious"
+},
+{
+"name": "Khanam`S Hospital And Nursing Home",
+"lat": 34.067537,
+"lon": 74.802605,
+"kind": "hospital"
+},
+{
+"name": "Khanyar Police Station",
+"lat": 34.093057,
+"lon": 74.813022,
+"kind": "police"
+},
+{
+"name": "Khattab Clinic and Laboratory",
+"lat": 34.088137,
+"lon": 74.762686,
+"kind": "hospital"
+},
+{
+"name": "Khawaja Habibullah Nowshehri",
+"lat": 34.129711,
+"lon": 74.804503,
+"kind": "landmark"
+},
+{
+"name": "Khoja bazar",
+"lat": 34.092649,
+"lon": 74.805733,
+"kind": "area"
+},
+{
+"name": "Khoje Park",
+"lat": 34.088012,
+"lon": 74.76798,
+"kind": "park"
+},
+{
+"name": "Khushaal sar",
+"lat": 34.113642,
+"lon": 74.7992,
+"kind": "landmark"
+},
+{
+"name": "Khyber Medical Institute hospital",
+"lat": 34.084067,
+"lon": 74.821968,
+"kind": "hospital"
+},
+{
+"name": "Kidney College of Nursing",
+"lat": 34.172478,
+"lon": 74.821027,
+"kind": "school"
+},
+{
+"name": "Kidney Hospital",
+"lat": 34.072236,
+"lon": 74.83846,
+"kind": "hospital"
+},
+{
+"name": "Kidzee",
+"lat": 34.104643,
+"lon": 74.830334,
+"kind": "school"
+},
+{
+"name": "Kinder Valley International Preparatory School",
+"lat": 34.120038,
+"lon": 74.810406,
+"kind": "school"
+},
+{
+"name": "King's Palace",
+"lat": 34.086883,
+"lon": 74.8442,
+"kind": "landmark"
+},
+{
+"name": "Kite Highlands School",
+"lat": 34.013986,
+"lon": 74.783825,
+"kind": "school"
+},
+{
+"name": "Kite polytechnic",
+"lat": 34.002713,
+"lon": 74.784886,
+"kind": "school"
+},
+{
+"name": "KMC SRINAGAR کے ایم - سی سرینگر",
+"lat": 34.035309,
+"lon": 74.906488,
+"kind": "hospital"
+},
+{
+"name": "Kohlees",
+"lat": 34.074941,
+"lon": 74.832659,
+"kind": "landmark"
+},
+{
+"name": "Kong Posh Hospital",
+"lat": 34.027645,
+"lon": 74.90997,
+"kind": "hospital"
+},
+{
+"name": "Koolipora Community Centre",
+"lat": 34.087822,
+"lon": 74.820289,
+"kind": "public"
+},
+{
+"name": "Kotar Park",
+"lat": 34.144974,
+"lon": 74.878206,
+"kind": "park"
+},
+{
+"name": "Kothi Bagh",
+"lat": 34.074574,
+"lon": 74.813513,
+"kind": "area"
+},
+{
+"name": "kralpora,Dharambugh",
+"lat": 33.993673,
+"lon": 74.815493,
+"kind": "area"
+},
+{
+"name": "Krimson",
+"lat": 34.037466,
+"lon": 74.794217,
+"kind": "landmark"
+},
+{
+"name": "KU model high school",
+"lat": 34.138805,
+"lon": 74.836455,
+"kind": "school"
+},
+{
+"name": "Kulfakeer colony",
+"lat": 34.08372,
+"lon": 74.812494,
+"kind": "area"
+},
+{
+"name": "Kutte Park",
+"lat": 34.077382,
+"lon": 74.797338,
+"kind": "park"
+},
+{
+"name": "Lake Victoria Houseboats",
+"lat": 34.088058,
+"lon": 74.836035,
+"kind": "landmark"
+},
+{
+"name": "Lake Victoria houseboats",
+"lat": 34.085934,
+"lon": 74.834164,
+"kind": "landmark"
+},
+{
+"name": "Lal Bazar",
+"lat": 34.126955,
+"lon": 74.81882,
+"kind": "area"
+},
+{
+"name": "Lal Chowk",
+"lat": 34.071256,
+"lon": 74.810493,
+"kind": "square"
+},
+{
+"name": "Lal Mandi",
+"lat": 34.064712,
+"lon": 74.811391,
+"kind": "area"
+},
+{
+"name": "Lal Mandi Foot Bridge",
+"lat": 34.068165,
+"lon": 74.812519,
+"kind": "bridge"
+},
+{
+"name": "Lal Mandi Footbridge",
+"lat": 34.068323,
+"lon": 74.812421,
+"kind": "bridge"
+},
+{
+"name": "Lal Path Labs",
+"lat": 34.085245,
+"lon": 74.794213,
+"kind": "hospital"
+},
+{
+"name": "Lalbazar Police Station",
+"lat": 34.12597,
+"lon": 74.816325,
+"kind": "police"
+},
+{
+"name": "Lalla Ded Hospital",
+"lat": 34.066663,
+"lon": 74.808211,
+"kind": "hospital"
+},
+{
+"name": "Larks International Play Cum Preparatory School",
+"lat": 34.169734,
+"lon": 74.808494,
+"kind": "school"
+},
+{
+"name": "Lasjan",
+"lat": 34.040416,
+"lon": 74.870635,
+"kind": "area"
+},
+{
+"name": "Lasjan Bridge",
+"lat": 34.038352,
+"lon": 74.872275,
+"kind": "bridge"
+},
+{
+"name": "Lassipora",
+"lat": 34.038283,
+"lon": 74.7188,
+"kind": "area"
+},
+{
+"name": "Latter Masjid Sharief Safakadal",
+"lat": 34.093218,
+"lon": 74.791674,
+"kind": "religious"
+},
+{
+"name": "Lawaypora",
+"lat": 34.117328,
+"lon": 74.698675,
+"kind": "area"
+},
+{
+"name": "Lawrence Vidya Bhavan",
+"lat": 34.06002,
+"lon": 74.82465,
+"kind": "school"
+},
+{
+"name": "Lawrence Vidya Bhawan",
+"lat": 34.124653,
+"lon": 74.794956,
+"kind": "school"
+},
+{
+"name": "Learning Edge",
+"lat": 34.084141,
+"lon": 74.819757,
+"kind": "hospital"
+},
+{
+"name": "Lee Heritage",
+"lat": 34.070832,
+"lon": 74.813679,
+"kind": "landmark"
+},
+{
+"name": "Lemon Tree",
+"lat": 34.068793,
+"lon": 74.838201,
+"kind": "landmark"
+},
+{
+"name": "Leprosy Hospital",
+"lat": 34.115383,
+"lon": 74.827297,
+"kind": "hospital"
+},
+{
+"name": "Library Park",
+"lat": 34.133714,
+"lon": 74.835852,
+"kind": "park"
+},
+{
+"name": "Little Angels Educational Institute",
+"lat": 34.140487,
+"lon": 74.810243,
+"kind": "school"
+},
+{
+"name": "Little Angels High School",
+"lat": 34.067441,
+"lon": 74.824284,
+"kind": "school"
+},
+{
+"name": "Lone Star Hotel",
+"lat": 34.042767,
+"lon": 74.800328,
+"kind": "landmark"
+},
+{
+"name": "Lower court",
+"lat": 34.068978,
+"lon": 74.810215,
+"kind": "public"
+},
+{
+"name": "MA Bridge",
+"lat": 34.076623,
+"lon": 74.829377,
+"kind": "bridge"
+},
+{
+"name": "Madhuban",
+"lat": 34.087534,
+"lon": 74.844467,
+"kind": "landmark"
+},
+{
+"name": "Madin Sahib Mosque",
+"lat": 34.116906,
+"lon": 74.810032,
+"kind": "religious"
+},
+{
+"name": "Madin Sahib Shrine",
+"lat": 34.117027,
+"lon": 74.81006,
+"kind": "landmark"
+},
+{
+"name": "Magarmal bagh",
+"lat": 34.068484,
+"lon": 74.800707,
+"kind": "area"
+},
+{
+"name": "Maharaj Gunj Park",
+"lat": 34.095882,
+"lon": 74.804902,
+"kind": "park"
+},
+{
+"name": "mahjoor chowk",
+"lat": 34.040072,
+"lon": 74.877442,
+"kind": "junction"
+},
+{
+"name": "Maidan Masjid",
+"lat": 34.085337,
+"lon": 74.802747,
+"kind": "religious"
+},
+{
+"name": "Maisuma",
+"lat": 34.07296,
+"lon": 74.807968,
+"kind": "area"
+},
+{
+"name": "Makai Park",
+"lat": 34.097516,
+"lon": 74.87362,
+"kind": "park"
+},
+{
+"name": "Makkah market",
+"lat": 34.07209,
+"lon": 74.811766,
+"kind": "market"
+},
+{
+"name": "Malchimar Masjid",
+"lat": 34.096611,
+"lon": 74.803043,
+"kind": "religious"
+},
+{
+"name": "Malik Palace",
+"lat": 34.080883,
+"lon": 74.83028,
+"kind": "landmark"
+},
+{
+"name": "Malik Physiotherapy Clinic",
+"lat": 34.159849,
+"lon": 74.808467,
+"kind": "hospital"
+},
+{
+"name": "Malik Sahib Masjid",
+"lat": 34.141832,
+"lon": 74.800213,
+"kind": "religious"
+},
+{
+"name": "Mallabagh",
+"lat": 34.14614,
+"lon": 74.822966,
+"kind": "area"
+},
+{
+"name": "Mallinson Girls School",
+"lat": 34.070075,
+"lon": 74.811867,
+"kind": "school"
+},
+{
+"name": "Mandibal",
+"lat": 34.127115,
+"lon": 74.811086,
+"kind": "area"
+},
+{
+"name": "Mandibal Bridge",
+"lat": 34.129421,
+"lon": 74.811877,
+"kind": "bridge"
+},
+{
+"name": "Mangaleshwar Mahadev temple",
+"lat": 34.088196,
+"lon": 74.812935,
+"kind": "religious"
+},
+{
+"name": "Mankind Pharma Ltd",
+"lat": 34.021959,
+"lon": 74.828446,
+"kind": "hospital"
+},
+{
+"name": "Manora Palace",
+"lat": 34.086419,
+"lon": 74.842864,
+"kind": "landmark"
+},
+{
+"name": "Maqbool Complex",
+"lat": 34.017887,
+"lon": 74.829934,
+"kind": "market"
+},
+{
+"name": "Markazee Jamia Ahle-Hadees",
+"lat": 34.134859,
+"lon": 74.811944,
+"kind": "religious"
+},
+{
+"name": "Marriage Hall",
+"lat": 34.0432,
+"lon": 74.805428,
+"kind": "public"
+},
+{
+"name": "Marriage hall",
+"lat": 34.081531,
+"lon": 74.811859,
+"kind": "public"
+},
+{
+"name": "Marriage Hall Illahi Bagh",
+"lat": 34.149813,
+"lon": 74.814497,
+"kind": "public"
+},
+{
+"name": "Marriage Hall Nalbal",
+"lat": 34.125074,
+"lon": 74.807071,
+"kind": "public"
+},
+{
+"name": "Martyrs Park",
+"lat": 34.106508,
+"lon": 74.823871,
+"kind": "park"
+},
+{
+"name": "Marval",
+"lat": 33.975434,
+"lon": 74.903223,
+"kind": "area"
+},
+{
+"name": "Masjid",
+"lat": 34.049198,
+"lon": 74.86689,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.044843,
+"lon": 74.798964,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.07745,
+"lon": 74.833232,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.006872,
+"lon": 74.826622,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.079875,
+"lon": 74.81162,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 33.991248,
+"lon": 74.917834,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.107845,
+"lon": 74.795116,
+"kind": "religious"
+},
+{
+"name": "Masjid",
+"lat": 34.074613,
+"lon": 74.768167,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakar Bagander Lasjan",
+"lat": 34.048488,
+"lon": 74.857981,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 33.976149,
+"lon": 74.903778,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.068185,
+"lon": 74.773605,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.026306,
+"lon": 74.804512,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.009914,
+"lon": 74.802851,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.141477,
+"lon": 74.807956,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.142409,
+"lon": 74.801943,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.118579,
+"lon": 74.81223,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr",
+"lat": 34.09571,
+"lon": 74.798596,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Bakr Sidiq R.A",
+"lat": 34.035706,
+"lon": 74.808836,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Hanifa",
+"lat": 34.008962,
+"lon": 74.807964,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Hanifa",
+"lat": 34.089585,
+"lon": 74.773941,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Hanifa",
+"lat": 34.12947,
+"lon": 74.809378,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Hurairah (AS)",
+"lat": 34.096988,
+"lon": 74.81983,
+"kind": "religious"
+},
+{
+"name": "Masjid Abu Turab",
+"lat": 34.112161,
+"lon": 74.808273,
+"kind": "religious"
+},
+{
+"name": "Masjid Abubakr",
+"lat": 34.043212,
+"lon": 74.79784,
+"kind": "religious"
+},
+{
+"name": "Masjid Ahl Hadith",
+"lat": 34.015239,
+"lon": 74.825019,
+"kind": "religious"
+},
+{
+"name": "Masjid Ahle-Bayt",
+"lat": 34.152628,
+"lon": 74.804449,
+"kind": "religious"
+},
+{
+"name": "Masjid Ahli Hadith Gilli Kadal",
+"lat": 34.119991,
+"lon": 74.799832,
+"kind": "religious"
+},
+{
+"name": "Masjid Ahli-Hadith Sofi Mohalla",
+"lat": 34.136046,
+"lon": 74.807698,
+"kind": "religious"
+},
+{
+"name": "Masjid Ahlihadees",
+"lat": 34.16434,
+"lon": 74.808131,
+"kind": "religious"
+},
+{
+"name": "Masjid Aisha",
+"lat": 34.0244,
+"lon": 74.799591,
+"kind": "religious"
+},
+{
+"name": "Masjid Aisha",
+"lat": 34.070121,
+"lon": 74.813636,
+"kind": "religious"
+},
+{
+"name": "Masjid Aisha",
+"lat": 34.103578,
+"lon": 74.815456,
+"kind": "religious"
+},
+{
+"name": "Masjid Aishan Sahab Sarfi",
+"lat": 34.093382,
+"lon": 74.80542,
+"kind": "religious"
+},
+{
+"name": "Masjid Al Huda",
+"lat": 34.185323,
+"lon": 74.80707,
+"kind": "religious"
+},
+{
+"name": "Masjid Al-Farooq",
+"lat": 34.127524,
+"lon": 74.808203,
+"kind": "religious"
+},
+{
+"name": "Masjid Al-Huda Jamiat Ahli Hadith",
+"lat": 34.106232,
+"lon": 74.881315,
+"kind": "religious"
+},
+{
+"name": "Masjid al-Noor",
+"lat": 34.069167,
+"lon": 74.808868,
+"kind": "religious"
+},
+{
+"name": "Masjid Alamdar",
+"lat": 34.017738,
+"lon": 74.795187,
+"kind": "religious"
+},
+{
+"name": "Masjid Alamdar",
+"lat": 34.155494,
+"lon": 74.815333,
+"kind": "religious"
+},
+{
+"name": "Masjid Ameer Kabeer",
+"lat": 34.01825,
+"lon": 74.799027,
+"kind": "religious"
+},
+{
+"name": "Masjid Ameer-i-Kabeer",
+"lat": 34.01784,
+"lon": 74.815905,
+"kind": "religious"
+},
+{
+"name": "Masjid Anwar",
+"lat": 34.046524,
+"lon": 74.785398,
+"kind": "religious"
+},
+{
+"name": "Masjid Arafat Hanafia",
+"lat": 34.043825,
+"lon": 74.820335,
+"kind": "religious"
+},
+{
+"name": "Masjid Arkam(ra)",
+"lat": 34.105238,
+"lon": 74.807907,
+"kind": "religious"
+},
+{
+"name": "Masjid Arqum",
+"lat": 34.014219,
+"lon": 74.809245,
+"kind": "religious"
+},
+{
+"name": "Masjid Bait ul Kareem",
+"lat": 34.074603,
+"lon": 74.774208,
+"kind": "religious"
+},
+{
+"name": "Masjid Baitul Mukarram",
+"lat": 34.13855,
+"lon": 74.818642,
+"kind": "religious"
+},
+{
+"name": "Masjid Bilal",
+"lat": 34.025943,
+"lon": 74.820257,
+"kind": "religious"
+},
+{
+"name": "Masjid Bilal",
+"lat": 34.053294,
+"lon": 74.804897,
+"kind": "religious"
+},
+{
+"name": "Masjid Bilal",
+"lat": 34.072016,
+"lon": 74.819347,
+"kind": "religious"
+},
+{
+"name": "Masjid Bilal",
+"lat": 34.009524,
+"lon": 74.774917,
+"kind": "religious"
+},
+{
+"name": "Masjid Bulle",
+"lat": 34.105623,
+"lon": 74.88224,
+"kind": "religious"
+},
+{
+"name": "Masjid Chaar Yaar Hanfia",
+"lat": 34.024346,
+"lon": 74.91419,
+"kind": "religious"
+},
+{
+"name": "Masjid Dar Ul Huda Panthachoek",
+"lat": 34.038871,
+"lon": 74.882173,
+"kind": "religious"
+},
+{
+"name": "Masjid Darul Uloom Bilaliya",
+"lat": 34.118947,
+"lon": 74.821905,
+"kind": "religious"
+},
+{
+"name": "Masjid Dastgeer Sahib",
+"lat": 34.093176,
+"lon": 74.817256,
+"kind": "religious"
+},
+{
+"name": "Masjid e Mustafa",
+"lat": 34.050851,
+"lon": 74.850722,
+"kind": "religious"
+},
+{
+"name": "Masjid Ghazali",
+"lat": 34.099838,
+"lon": 74.818879,
+"kind": "religious"
+},
+{
+"name": "Masjid Gousia",
+"lat": 34.107701,
+"lon": 74.751544,
+"kind": "religious"
+},
+{
+"name": "Masjid Gousia",
+"lat": 34.08605,
+"lon": 74.823148,
+"kind": "religious"
+},
+{
+"name": "Masjid Gousia",
+"lat": 34.029107,
+"lon": 74.777713,
+"kind": "religious"
+},
+{
+"name": "Masjid Gousia Rangpora",
+"lat": 34.161727,
+"lon": 74.81773,
+"kind": "religious"
+},
+{
+"name": "Masjid Habibullah",
+"lat": 34.141952,
+"lon": 74.814327,
+"kind": "religious"
+},
+{
+"name": "Masjid Hafsa",
+"lat": 34.016592,
+"lon": 74.830356,
+"kind": "religious"
+},
+{
+"name": "Masjid Haider",
+"lat": 34.100599,
+"lon": 74.819869,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanafiya",
+"lat": 34.060776,
+"lon": 74.781097,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanafiyah",
+"lat": 34.135821,
+"lon": 74.81063,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfi",
+"lat": 34.09756,
+"lon": 74.781513,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfia Gilli Kadal",
+"lat": 34.120627,
+"lon": 74.800483,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfia Hawal",
+"lat": 34.110714,
+"lon": 74.809489,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfia Lal Nagar Chanpora",
+"lat": 34.028842,
+"lon": 74.808218,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfia Shakoor Baba Sahib",
+"lat": 34.089701,
+"lon": 74.82059,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfiya Jamia Awal Owaisi",
+"lat": 34.096003,
+"lon": 74.80216,
+"kind": "religious"
+},
+{
+"name": "Masjid Hanfiya Sheri bhat",
+"lat": 34.118057,
+"lon": 74.806108,
+"kind": "religious"
+},
+{
+"name": "Masjid Hangia Chotta Bazar",
+"lat": 34.081293,
+"lon": 74.803256,
+"kind": "religious"
+},
+{
+"name": "Masjid Hasan",
+"lat": 34.035977,
+"lon": 74.791053,
+"kind": "religious"
+},
+{
+"name": "Masjid Hubbi",
+"lat": 34.12985,
+"lon": 74.804711,
+"kind": "religious"
+},
+{
+"name": "Masjid Huda",
+"lat": 34.047851,
+"lon": 74.819848,
+"kind": "religious"
+},
+{
+"name": "Masjid Huda SMC",
+"lat": 34.078164,
+"lon": 74.800134,
+"kind": "religious"
+},
+{
+"name": "Masjid Hussain",
+"lat": 34.113523,
+"lon": 74.882242,
+"kind": "religious"
+},
+{
+"name": "Masjid Hyder",
+"lat": 34.151326,
+"lon": 74.811379,
+"kind": "religious"
+},
+{
+"name": "Masjid i Ibrahim",
+"lat": 34.037151,
+"lon": 74.792457,
+"kind": "religious"
+},
+{
+"name": "Masjid I Ismail Kanitar Sadrabal",
+"lat": 34.135534,
+"lon": 74.828537,
+"kind": "religious"
+},
+{
+"name": "Masjid Ibraheem",
+"lat": 34.092749,
+"lon": 74.776272,
+"kind": "religious"
+},
+{
+"name": "Masjid Ibraheem",
+"lat": 34.114003,
+"lon": 74.806125,
+"kind": "religious"
+},
+{
+"name": "Masjid Ibrahim",
+"lat": 34.000294,
+"lon": 74.793036,
+"kind": "religious"
+},
+{
+"name": "Masjid Ibrahim",
+"lat": 34.139495,
+"lon": 74.820628,
+"kind": "religious"
+},
+{
+"name": "Masjid Ikhrajpora",
+"lat": 34.06436,
+"lon": 74.817704,
+"kind": "religious"
+},
+{
+"name": "Masjid Illahi",
+"lat": 34.150477,
+"lon": 74.809917,
+"kind": "religious"
+},
+{
+"name": "Masjid Imam Ali (a.s)",
+"lat": 34.047292,
+"lon": 74.870009,
+"kind": "religious"
+},
+{
+"name": "Masjid Imam Ali (A.S)",
+"lat": 34.120271,
+"lon": 74.810125,
+"kind": "religious"
+},
+{
+"name": "Masjid Imam Zaman",
+"lat": 34.07103,
+"lon": 74.816347,
+"kind": "religious"
+},
+{
+"name": "Masjid Iqbal",
+"lat": 34.110096,
+"lon": 74.739778,
+"kind": "religious"
+},
+{
+"name": "Masjid Iqra",
+"lat": 34.067754,
+"lon": 74.803842,
+"kind": "religious"
+},
+{
+"name": "Masjid Ismail",
+"lat": 34.015629,
+"lon": 74.817123,
+"kind": "religious"
+},
+{
+"name": "Masjid Jami Ahli Hadees",
+"lat": 34.065372,
+"lon": 74.779879,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia",
+"lat": 34.048633,
+"lon": 74.807076,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Abu Bakr Sideeq R.A",
+"lat": 34.043113,
+"lon": 74.818128,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Ahlihadees",
+"lat": 34.013957,
+"lon": 74.810807,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Ahlihadees",
+"lat": 34.097965,
+"lon": 74.78162,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Ahlihadees Zaldagar",
+"lat": 34.087216,
+"lon": 74.802022,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Ahlihadith",
+"lat": 34.127498,
+"lon": 74.817838,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Hanfia Pandrethan",
+"lat": 34.047617,
+"lon": 74.867486,
+"kind": "religious"
+},
+{
+"name": "Masjid Jamia Syed Kamal Din Madni",
+"lat": 34.092822,
+"lon": 74.797029,
+"kind": "religious"
+},
+{
+"name": "Masjid Kausar Hanafia",
+"lat": 34.061749,
+"lon": 74.796361,
+"kind": "religious"
+},
+{
+"name": "Masjid Khairuz Zamaan",
+"lat": 34.08707,
+"lon": 74.804787,
+"kind": "religious"
+},
+{
+"name": "Masjid Khalid bin Waleed",
+"lat": 34.138671,
+"lon": 74.807152,
+"kind": "religious"
+},
+{
+"name": "Masjid Khalil",
+"lat": 34.043615,
+"lon": 74.783306,
+"kind": "religious"
+},
+{
+"name": "Masjid Madina Eidgah",
+"lat": 34.101593,
+"lon": 74.791104,
+"kind": "religious"
+},
+{
+"name": "Masjid Milat",
+"lat": 34.0084,
+"lon": 74.8288,
+"kind": "religious"
+},
+{
+"name": "Masjid Mirza Bagh KU",
+"lat": 34.126982,
+"lon": 74.832621,
+"kind": "religious"
+},
+{
+"name": "Masjid Moula Ali a.s",
+"lat": 34.110933,
+"lon": 74.804606,
+"kind": "religious"
+},
+{
+"name": "Masjid Muaviyah",
+"lat": 34.132827,
+"lon": 74.808954,
+"kind": "religious"
+},
+{
+"name": "Masjid Muhammad",
+"lat": 34.127237,
+"lon": 74.879098,
+"kind": "religious"
+},
+{
+"name": "Masjid Muhammad",
+"lat": 34.133376,
+"lon": 74.800723,
+"kind": "religious"
+},
+{
+"name": "Masjid Muhammadia",
+"lat": 34.139085,
+"lon": 74.812555,
+"kind": "religious"
+},
+{
+"name": "Masjid Muhammadia",
+"lat": 34.152812,
+"lon": 74.814053,
+"kind": "religious"
+},
+{
+"name": "Masjid Mulla Aakhoon Tayib",
+"lat": 34.091228,
+"lon": 74.796001,
+"kind": "religious"
+},
+{
+"name": "Masjid Munnawar",
+"lat": 34.081987,
+"lon": 74.786091,
+"kind": "religious"
+},
+{
+"name": "Masjid Nooh",
+"lat": 34.078465,
+"lon": 74.809882,
+"kind": "religious"
+},
+{
+"name": "Masjid Noor",
+"lat": 34.063737,
+"lon": 74.803149,
+"kind": "religious"
+},
+{
+"name": "Masjid Noor",
+"lat": 34.129546,
+"lon": 74.811657,
+"kind": "religious"
+},
+{
+"name": "Masjid Noor-ul-Huda",
+"lat": 34.110117,
+"lon": 74.807035,
+"kind": "religious"
+},
+{
+"name": "Masjid Numan Hanifiyah",
+"lat": 34.06293,
+"lon": 74.819189,
+"kind": "religious"
+},
+{
+"name": "Masjid Owais Karni",
+"lat": 34.153351,
+"lon": 74.816809,
+"kind": "religious"
+},
+{
+"name": "Masjid Owais Karni (RA)",
+"lat": 34.142774,
+"lon": 74.831146,
+"kind": "religious"
+},
+{
+"name": "Masjid Owais Qarni",
+"lat": 34.04142,
+"lon": 74.809563,
+"kind": "religious"
+},
+{
+"name": "Masjid Park",
+"lat": 34.126885,
+"lon": 74.83274,
+"kind": "park"
+},
+{
+"name": "Masjid Puhloo",
+"lat": 34.103365,
+"lon": 74.889576,
+"kind": "religious"
+},
+{
+"name": "Masjid Qadeema",
+"lat": 34.127966,
+"lon": 74.810459,
+"kind": "religious"
+},
+{
+"name": "Masjid Rehmat",
+"lat": 34.046063,
+"lon": 74.813803,
+"kind": "religious"
+},
+{
+"name": "Masjid Rehmat",
+"lat": 34.088831,
+"lon": 74.766734,
+"kind": "religious"
+},
+{
+"name": "Masjid Rehmat",
+"lat": 34.139861,
+"lon": 74.802338,
+"kind": "religious"
+},
+{
+"name": "Masjid Rehmatanlil Alimeen Jamiat Ahlihadees",
+"lat": 34.114083,
+"lon": 74.887298,
+"kind": "religious"
+},
+{
+"name": "Masjid Rintan Shah",
+"lat": 34.096064,
+"lon": 74.802595,
+"kind": "religious"
+},
+{
+"name": "Masjid Rouzat-ul-Jannah",
+"lat": 34.129275,
+"lon": 74.821498,
+"kind": "religious"
+},
+{
+"name": "Masjid Rozabal",
+"lat": 34.094104,
+"lon": 74.816095,
+"kind": "religious"
+},
+{
+"name": "Masjid Salaf as-Saliheen",
+"lat": 34.13666,
+"lon": 74.818758,
+"kind": "religious"
+},
+{
+"name": "Masjid Salafia",
+"lat": 34.068722,
+"lon": 74.775432,
+"kind": "religious"
+},
+{
+"name": "Masjid Salfia",
+"lat": 34.079885,
+"lon": 74.807458,
+"kind": "religious"
+},
+{
+"name": "Masjid Salman Farsi",
+"lat": 34.144786,
+"lon": 74.801235,
+"kind": "religious"
+},
+{
+"name": "Masjid Shah-E-Wilayat",
+"lat": 34.125958,
+"lon": 74.817581,
+"kind": "religious"
+},
+{
+"name": "Masjid Shah-i-Hamdan",
+"lat": 34.02114,
+"lon": 74.817494,
+"kind": "religious"
+},
+{
+"name": "Masjid Shah-i-Hamdan",
+"lat": 34.140776,
+"lon": 74.803556,
+"kind": "religious"
+},
+{
+"name": "Masjid Shahi Hamdan",
+"lat": 34.075489,
+"lon": 74.770416,
+"kind": "religious"
+},
+{
+"name": "Masjid Shareef Hazrat Abdullah Arabi RA",
+"lat": 34.085977,
+"lon": 74.793099,
+"kind": "religious"
+},
+{
+"name": "Masjid Shareif Khalid-bin-Waleed",
+"lat": 34.051996,
+"lon": 74.832054,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief",
+"lat": 34.178228,
+"lon": 74.807404,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Airport Road Peerbagh",
+"lat": 34.026729,
+"lon": 74.777476,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Batpora",
+"lat": 34.160412,
+"lon": 74.846672,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Bibi Ashraf",
+"lat": 34.146035,
+"lon": 74.833692,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Drangbal Pampore",
+"lat": 34.017984,
+"lon": 74.913343,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Hamdaan",
+"lat": 34.030228,
+"lon": 74.79889,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Hanfia Jamia",
+"lat": 34.09496,
+"lon": 74.782099,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Hassan Ul Bana colony 90 feet",
+"lat": 34.157693,
+"lon": 74.81026,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Jamallata Chowk",
+"lat": 34.093763,
+"lon": 74.799557,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Kawdara Chowk",
+"lat": 34.09879,
+"lon": 74.802453,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Mehboob Ul Alam",
+"lat": 34.11645,
+"lon": 74.88081,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Mukhdoom Poora Nowshera",
+"lat": 34.127671,
+"lon": 74.80619,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Nowhatta",
+"lat": 34.099011,
+"lon": 74.811763,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Safakadal",
+"lat": 34.092188,
+"lon": 74.792009,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Saidakadal",
+"lat": 34.104403,
+"lon": 74.827603,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Sekidafar Chowk",
+"lat": 34.095405,
+"lon": 74.792472,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Shah Mohalla",
+"lat": 34.088683,
+"lon": 74.800727,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Shah-E-Hamdan (RA)",
+"lat": 34.122078,
+"lon": 74.794859,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Umar Colony A",
+"lat": 34.138544,
+"lon": 74.82745,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Umer Colony A",
+"lat": 34.140572,
+"lon": 74.829866,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Wanbal",
+"lat": 34.024023,
+"lon": 74.826792,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Zakura Crossing",
+"lat": 34.154512,
+"lon": 74.84023,
+"kind": "religious"
+},
+{
+"name": "Masjid Sharief Zaldagar",
+"lat": 34.08657,
+"lon": 74.80119,
+"kind": "religious"
+},
+{
+"name": "Masjid Shuhada",
+"lat": 34.043404,
+"lon": 74.805594,
+"kind": "religious"
+},
+{
+"name": "Masjid Shukar Baba Katrew breng",
+"lat": 34.089809,
+"lon": 74.820838,
+"kind": "religious"
+},
+{
+"name": "Masjid Siddiqui",
+"lat": 34.130589,
+"lon": 74.808348,
+"kind": "religious"
+},
+{
+"name": "Masjid Syed Hanfia Sadrabal",
+"lat": 34.132889,
+"lon": 74.830339,
+"kind": "religious"
+},
+{
+"name": "Masjid Syed Jafar",
+"lat": 34.013393,
+"lon": 74.799448,
+"kind": "religious"
+},
+{
+"name": "Masjid Syed Yaqoob",
+"lat": 34.073775,
+"lon": 74.833934,
+"kind": "religious"
+},
+{
+"name": "Masjid Taqwa",
+"lat": 34.13997,
+"lon": 74.81529,
+"kind": "religious"
+},
+{
+"name": "Masjid Tawheed",
+"lat": 34.143674,
+"lon": 74.811308,
+"kind": "religious"
+},
+{
+"name": "Masjid Tawheed",
+"lat": 34.150074,
+"lon": 74.814677,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar",
+"lat": 34.030988,
+"lon": 74.811634,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar",
+"lat": 34.014772,
+"lon": 74.773317,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar",
+"lat": 34.104627,
+"lon": 74.81317,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar",
+"lat": 34.161776,
+"lon": 74.820542,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar (R.A)",
+"lat": 34.1578,
+"lon": 74.842106,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar (ra) Sheesh Bagh",
+"lat": 34.103104,
+"lon": 74.806752,
+"kind": "religious"
+},
+{
+"name": "Masjid Umar bin Khattab",
+"lat": 34.113603,
+"lon": 74.727754,
+"kind": "religious"
+},
+{
+"name": "Masjid Umer",
+"lat": 34.014657,
+"lon": 74.831618,
+"kind": "religious"
+},
+{
+"name": "Masjid Usmaan",
+"lat": 34.03807,
+"lon": 74.818239,
+"kind": "religious"
+},
+{
+"name": "Masjid Usmaan-E-Gani",
+"lat": 34.159892,
+"lon": 74.808046,
+"kind": "religious"
+},
+{
+"name": "Masjid Usmania Shagi Mohalla Soura",
+"lat": 34.14277,
+"lon": 74.800137,
+"kind": "religious"
+},
+{
+"name": "Masjid Usmaniya",
+"lat": 34.128433,
+"lon": 74.807365,
+"kind": "religious"
+},
+{
+"name": "Masjid Vakeel Colony",
+"lat": 34.109104,
+"lon": 74.885047,
+"kind": "religious"
+},
+{
+"name": "Masjid Zainab",
+"lat": 34.116628,
+"lon": 74.81255,
+"kind": "religious"
+},
+{
+"name": "Masjid Zubair",
+"lat": 34.08749,
+"lon": 74.769967,
+"kind": "religious"
+},
+{
+"name": "Masjid-e-Hamza",
+"lat": 34.174278,
+"lon": 74.806822,
+"kind": "religious"
+},
+{
+"name": "Masterpro Institute Of Technology",
+"lat": 34.029397,
+"lon": 74.840136,
+"kind": "school"
+},
+{
+"name": "Mata Roopa Bhawani temple",
+"lat": 34.0821,
+"lon": 74.882259,
+"kind": "religious"
+},
+{
+"name": "Mata Sharika Devi Temple",
+"lat": 34.108603,
+"lon": 74.816114,
+"kind": "religious"
+},
+{
+"name": "Maternity Hospital SKIMS Soura",
+"lat": 34.139165,
+"lon": 74.803311,
+"kind": "hospital"
+},
+{
+"name": "Maulana Kabir's Tomb",
+"lat": 34.127088,
+"lon": 74.805283,
+"kind": "landmark"
+},
+{
+"name": "Maulana Rumi Gate University of Kashmir",
+"lat": 34.131777,
+"lon": 74.841087,
+"kind": "school"
+},
+{
+"name": "Max Health Care Med Centre",
+"lat": 34.084519,
+"lon": 74.796958,
+"kind": "hospital"
+},
+{
+"name": "Max Health Clinic & Chemist",
+"lat": 34.043791,
+"lon": 74.783741,
+"kind": "hospital"
+},
+{
+"name": "Max Superspeciality Hospital",
+"lat": 34.071867,
+"lon": 74.804894,
+"kind": "hospital"
+},
+{
+"name": "Mayor's Hall",
+"lat": 34.078353,
+"lon": 74.799811,
+"kind": "public"
+},
+{
+"name": "Med 11 Medical Centre",
+"lat": 34.133612,
+"lon": 74.877823,
+"kind": "hospital"
+},
+{
+"name": "MED AGE Infertility Centre",
+"lat": 34.080066,
+"lon": 74.765713,
+"kind": "hospital"
+},
+{
+"name": "Medi-Tech Clinical Laboratory",
+"lat": 34.151239,
+"lon": 74.802346,
+"kind": "hospital"
+},
+{
+"name": "Medical College Masjid",
+"lat": 34.085499,
+"lon": 74.79846,
+"kind": "religious"
+},
+{
+"name": "Medicare Diagnostic and Imaging Centre",
+"lat": 34.080364,
+"lon": 74.799545,
+"kind": "hospital"
+},
+{
+"name": "Medicare Health Services Super Speciality Pvt Ltd",
+"lat": 34.086416,
+"lon": 74.794978,
+"kind": "hospital"
+},
+{
+"name": "Mediworld Clinics",
+"lat": 34.065765,
+"lon": 74.808945,
+"kind": "hospital"
+},
+{
+"name": "MedStar Medical Centre",
+"lat": 34.025984,
+"lon": 74.83523,
+"kind": "hospital"
+},
+{
+"name": "Meena Bazar (Floating Market)",
+"lat": 34.09324,
+"lon": 74.83951,
+"kind": "market"
+},
+{
+"name": "Mehboob Park",
+"lat": 34.081068,
+"lon": 74.767608,
+"kind": "park"
+},
+{
+"name": "Mehboob Ul Alam Masjid (Tengpora Masjid)",
+"lat": 34.097461,
+"lon": 74.797506,
+"kind": "religious"
+},
+{
+"name": "Mehjoor Nagar Bridge",
+"lat": 34.058735,
+"lon": 74.820884,
+"kind": "bridge"
+},
+{
+"name": "Mehjoor's Mausoleum",
+"lat": 34.043852,
+"lon": 74.872031,
+"kind": "landmark"
+},
+{
+"name": "Mehmoodabad Park",
+"lat": 34.152844,
+"lon": 74.801072,
+"kind": "park"
+},
+{
+"name": "MET Higher Secondary School",
+"lat": 34.04199,
+"lon": 74.804452,
+"kind": "school"
+},
+{
+"name": "MIG Colony Park",
+"lat": 34.089134,
+"lon": 74.769403,
+"kind": "park"
+},
+{
+"name": "MIG/HIG Park",
+"lat": 34.090208,
+"lon": 74.766621,
+"kind": "park"
+},
+{
+"name": "Mill Stop",
+"lat": 34.120449,
+"lon": 74.8068,
+"kind": "bus_stop"
+},
+{
+"name": "Minto Circle High School",
+"lat": 34.060318,
+"lon": 74.794048,
+"kind": "school"
+},
+{
+"name": "Mir Cottage",
+"lat": 34.151345,
+"lon": 74.800495,
+"kind": "landmark"
+},
+{
+"name": "Mir Sultan Complex",
+"lat": 34.144458,
+"lon": 74.808552,
+"kind": "market"
+},
+{
+"name": "Mirza Bagh Ground",
+"lat": 34.126069,
+"lon": 74.831318,
+"kind": "park"
+},
+{
+"name": "Mochow bridge",
+"lat": 34.012315,
+"lon": 74.810923,
+"kind": "bridge"
+},
+{
+"name": "Modern ENT Clinic",
+"lat": 34.03447,
+"lon": 74.782832,
+"kind": "hospital"
+},
+{
+"name": "Modern Higer Secondary School Solina",
+"lat": 34.056166,
+"lon": 74.804031,
+"kind": "school"
+},
+{
+"name": "Modern Hospital",
+"lat": 34.068018,
+"lon": 74.831508,
+"kind": "hospital"
+},
+{
+"name": "Mohammadiya Masjid",
+"lat": 34.110579,
+"lon": 74.813178,
+"kind": "religious"
+},
+{
+"name": "Molvi Masjid",
+"lat": 34.008384,
+"lon": 74.913257,
+"kind": "religious"
+},
+{
+"name": "Monson",
+"lat": 34.087963,
+"lon": 74.831535,
+"kind": "landmark"
+},
+{
+"name": "Mosque",
+"lat": 34.093328,
+"lon": 74.81238,
+"kind": "religious"
+},
+{
+"name": "Mosque",
+"lat": 34.093378,
+"lon": 74.818457,
+"kind": "religious"
+},
+{
+"name": "Mosque",
+"lat": 34.123181,
+"lon": 74.884701,
+"kind": "religious"
+},
+{
+"name": "Mother Care Clinic",
+"lat": 34.154024,
+"lon": 74.808044,
+"kind": "hospital"
+},
+{
+"name": "Mother's Care Clinic Womens Wellnes and Physio",
+"lat": 34.046506,
+"lon": 74.801435,
+"kind": "hospital"
+},
+{
+"name": "Motherhood Solace Dr. Nighat Salim",
+"lat": 34.073987,
+"lon": 74.771935,
+"kind": "hospital"
+},
+{
+"name": "Motherland High School",
+"lat": 34.098239,
+"lon": 74.81469,
+"kind": "school"
+},
+{
+"name": "Moulana Rasool Shah Library",
+"lat": 34.105409,
+"lon": 74.80968,
+"kind": "public"
+},
+{
+"name": "MPML Higher Secondary School",
+"lat": 34.089739,
+"lon": 74.812184,
+"kind": "school"
+},
+{
+"name": "Mubarak Hospital",
+"lat": 34.040187,
+"lon": 74.789099,
+"kind": "hospital"
+},
+{
+"name": "Mughal Garden Shalimar",
+"lat": 34.150414,
+"lon": 74.874417,
+"kind": "park"
+},
+{
+"name": "Mughal Mohalla Masjid",
+"lat": 34.08529,
+"lon": 74.790322,
+"kind": "religious"
+},
+{
+"name": "Muhajir e Millat Masjid Sharif",
+"lat": 34.1314,
+"lon": 74.814651,
+"kind": "religious"
+},
+{
+"name": "Muhajir-i-Millat Community Hall",
+"lat": 34.103442,
+"lon": 74.796316,
+"kind": "public"
+},
+{
+"name": "Muhammadiya Masjid",
+"lat": 34.126488,
+"lon": 74.810388,
+"kind": "religious"
+},
+{
+"name": "Mujgund",
+"lat": 34.133232,
+"lon": 74.70635,
+"kind": "area"
+},
+{
+"name": "Mulphaq",
+"lat": 34.16721,
+"lon": 74.878007,
+"kind": "area"
+},
+{
+"name": "Multicare Polyclinic",
+"lat": 34.061152,
+"lon": 74.78582,
+"kind": "hospital"
+},
+{
+"name": "Mumtaz Hotel",
+"lat": 34.070113,
+"lon": 74.803804,
+"kind": "landmark"
+},
+{
+"name": "Munawar abad",
+"lat": 34.083391,
+"lon": 74.81791,
+"kind": "area"
+},
+{
+"name": "Muslim Educational Institute (M.E.I) School",
+"lat": 34.012792,
+"lon": 74.91657,
+"kind": "school"
+},
+{
+"name": "Muslim Educational Institute (MEI)",
+"lat": 34.012803,
+"lon": 74.917266,
+"kind": "school"
+},
+{
+"name": "Muslim Educational Institute (MEI) block",
+"lat": 34.013092,
+"lon": 74.917171,
+"kind": "school"
+},
+{
+"name": "Muslim International School",
+"lat": 34.006625,
+"lon": 74.835598,
+"kind": "school"
+},
+{
+"name": "Mustafa-abad",
+"lat": 34.167201,
+"lon": 74.828434,
+"kind": "area"
+},
+{
+"name": "Muwest High School",
+"lat": 34.104474,
+"lon": 74.827805,
+"kind": "school"
+},
+{
+"name": "My Kashmir Home",
+"lat": 34.136639,
+"lon": 74.87583,
+"kind": "landmark"
+},
+{
+"name": "Nabeera Complex",
+"lat": 34.072108,
+"lon": 74.804966,
+"kind": "market"
+},
+{
+"name": "Nagin Lake Houseboat",
+"lat": 34.115693,
+"lon": 74.829493,
+"kind": "landmark"
+},
+{
+"name": "Nagsh Residency",
+"lat": 34.143707,
+"lon": 74.874634,
+"kind": "landmark"
+},
+{
+"name": "Nalabal",
+"lat": 34.124702,
+"lon": 74.805329,
+"kind": "area"
+},
+{
+"name": "Nalbal Bridge",
+"lat": 34.124906,
+"lon": 74.80626,
+"kind": "bridge"
+},
+{
+"name": "Nalbal Marriage Hall",
+"lat": 34.125159,
+"lon": 74.806794,
+"kind": "public"
+},
+{
+"name": "Nalband pora",
+"lat": 34.089496,
+"lon": 74.791843,
+"kind": "area"
+},
+{
+"name": "Naqsshband Sahib Masjid",
+"lat": 34.096115,
+"lon": 74.812781,
+"kind": "religious"
+},
+{
+"name": "Narakara",
+"lat": 34.043734,
+"lon": 74.755611,
+"kind": "area"
+},
+{
+"name": "Narayan Bagh",
+"lat": 34.174661,
+"lon": 74.690487,
+"kind": "area"
+},
+{
+"name": "Narbal",
+"lat": 34.117158,
+"lon": 74.672506,
+"kind": "area"
+},
+{
+"name": "Narbal Crossing",
+"lat": 34.121242,
+"lon": 74.678647,
+"kind": "bus_stop"
+},
+{
+"name": "Narbal Fuel Filling Station",
+"lat": 34.120694,
+"lon": 74.683644,
+"kind": "fuel"
+},
+{
+"name": "Narwara Primary Health Care",
+"lat": 34.10265,
+"lon": 74.799209,
+"kind": "hospital"
+},
+{
+"name": "Naseem Bagh",
+"lat": 34.138124,
+"lon": 74.838131,
+"kind": "park"
+},
+{
+"name": "Naseem Bagh Park",
+"lat": 34.135147,
+"lon": 74.841044,
+"kind": "park"
+},
+{
+"name": "Nasrullahpora",
+"lat": 34.043882,
+"lon": 74.703675,
+"kind": "area"
+},
+{
+"name": "National Center of Diabetes and Hormones",
+"lat": 34.026392,
+"lon": 74.809192,
+"kind": "hospital"
+},
+{
+"name": "National High School",
+"lat": 34.081336,
+"lon": 74.799203,
+"kind": "school"
+},
+{
+"name": "National Institute of Fashion Technology (NIFT)",
+"lat": 33.999424,
+"lon": 74.792002,
+"kind": "school"
+},
+{
+"name": "National Institute of Technology, Srinagar",
+"lat": 34.124911,
+"lon": 74.840585,
+"kind": "school"
+},
+{
+"name": "Natipora",
+"lat": 34.045344,
+"lon": 74.816351,
+"kind": "area"
+},
+{
+"name": "Nawa bazar",
+"lat": 34.088638,
+"lon": 74.802734,
+"kind": "area"
+},
+{
+"name": "Nawa Bazar Bridge",
+"lat": 34.0894,
+"lon": 74.801163,
+"kind": "bridge"
+},
+{
+"name": "Nawa Kadal",
+"lat": 34.094994,
+"lon": 74.798856,
+"kind": "bridge"
+},
+{
+"name": "Nawa kadel",
+"lat": 34.094116,
+"lon": 74.799087,
+"kind": "area"
+},
+{
+"name": "Nawab Bazar Bridge",
+"lat": 34.089417,
+"lon": 74.801179,
+"kind": "bridge"
+},
+{
+"name": "Nehru Park",
+"lat": 34.087868,
+"lon": 74.847677,
+"kind": "landmark"
+},
+{
+"name": "Nehru Park",
+"lat": 34.090241,
+"lon": 74.845784,
+"kind": "park"
+},
+{
+"name": "Nehru Park Floating Poat Office",
+"lat": 34.08928,
+"lon": 74.844532,
+"kind": "public"
+},
+{
+"name": "Neo Max Medicose",
+"lat": 34.129614,
+"lon": 74.7984,
+"kind": "hospital"
+},
+{
+"name": "Nesto Plaza Chotta Bazar",
+"lat": 34.081243,
+"lon": 74.801407,
+"kind": "market"
+},
+{
+"name": "New Amira Kadal foot bridge",
+"lat": 34.069557,
+"lon": 74.807176,
+"kind": "bridge"
+},
+{
+"name": "New Bota Kadal",
+"lat": 34.119828,
+"lon": 74.81233,
+"kind": "bridge"
+},
+{
+"name": "New Caset Secondary School",
+"lat": 34.022685,
+"lon": 74.79789,
+"kind": "school"
+},
+{
+"name": "New City Diagnostics",
+"lat": 34.127611,
+"lon": 74.818062,
+"kind": "hospital"
+},
+{
+"name": "New Era Public School",
+"lat": 34.06738,
+"lon": 74.825454,
+"kind": "school"
+},
+{
+"name": "New Government Hospital",
+"lat": 34.034345,
+"lon": 74.807775,
+"kind": "hospital"
+},
+{
+"name": "New High Court Kashmir",
+"lat": 34.089325,
+"lon": 74.754155,
+"kind": "public"
+},
+{
+"name": "New Life Clinic",
+"lat": 34.076948,
+"lon": 74.776869,
+"kind": "hospital"
+},
+{
+"name": "New Nadiyar Bridge",
+"lat": 34.100652,
+"lon": 74.830717,
+"kind": "bridge"
+},
+{
+"name": "New Sea Palace Houseboats",
+"lat": 34.088906,
+"lon": 74.838241,
+"kind": "landmark"
+},
+{
+"name": "New Style Diagnostic and Xray Centre",
+"lat": 34.127442,
+"lon": 74.837907,
+"kind": "hospital"
+},
+{
+"name": "New Sub District Hospital",
+"lat": 34.045302,
+"lon": 74.733019,
+"kind": "hospital"
+},
+{
+"name": "New Theed",
+"lat": 34.164042,
+"lon": 74.908197,
+"kind": "area"
+},
+{
+"name": "New Umer Colony Park",
+"lat": 34.084602,
+"lon": 74.770289,
+"kind": "park"
+},
+{
+"name": "New Wave Public High School",
+"lat": 34.189322,
+"lon": 74.80804,
+"kind": "school"
+},
+{
+"name": "New Zaina Kadal Bridge",
+"lat": 34.092807,
+"lon": 74.807084,
+"kind": "bridge"
+},
+{
+"name": "NIELIT Srinagar",
+"lat": 33.996367,
+"lon": 74.790621,
+"kind": "school"
+},
+{
+"name": "Nigah Pharmacy",
+"lat": 34.100196,
+"lon": 74.824252,
+"kind": "hospital"
+},
+{
+"name": "Nigeen Club",
+"lat": 34.12015,
+"lon": 74.83386,
+"kind": "public"
+},
+{
+"name": "Nishat",
+"lat": 34.128609,
+"lon": 74.880109,
+"kind": "area"
+},
+{
+"name": "Nishat",
+"lat": 34.119983,
+"lon": 74.881898,
+"kind": "bus_stop"
+},
+{
+"name": "Nishat Bagh",
+"lat": 34.125425,
+"lon": 74.881993,
+"kind": "landmark"
+},
+{
+"name": "Nishat Garden",
+"lat": 34.122961,
+"lon": 74.879047,
+"kind": "bus_stop"
+},
+{
+"name": "Nishat Market",
+"lat": 34.123671,
+"lon": 74.878383,
+"kind": "market"
+},
+{
+"name": "Nishat Mughal Garden",
+"lat": 34.124491,
+"lon": 74.878877,
+"kind": "park"
+},
+{
+"name": "Nishat Suth",
+"lat": 34.100841,
+"lon": 74.83436,
+"kind": "bridge"
+},
+{
+"name": "Nishat Suth",
+"lat": 34.105203,
+"lon": 74.837843,
+"kind": "bridge"
+},
+{
+"name": "Noor Bagh",
+"lat": 34.098962,
+"lon": 74.77985,
+"kind": "area"
+},
+{
+"name": "Noor Masjid",
+"lat": 34.079857,
+"lon": 74.797474,
+"kind": "religious"
+},
+{
+"name": "Noor Optics Eye Clinic",
+"lat": 34.140395,
+"lon": 74.839304,
+"kind": "hospital"
+},
+{
+"name": "Noor Polyclinic",
+"lat": 34.144403,
+"lon": 74.802234,
+"kind": "hospital"
+},
+{
+"name": "Noora Hospital",
+"lat": 34.112258,
+"lon": 74.725537,
+"kind": "hospital"
+},
+{
+"name": "Noorabad",
+"lat": 34.161434,
+"lon": 74.831516,
+"kind": "area"
+},
+{
+"name": "Nowgam",
+"lat": 34.028651,
+"lon": 74.826065,
+"kind": "area"
+},
+{
+"name": "Nowgam Byepass Chowk",
+"lat": 34.026943,
+"lon": 74.824692,
+"kind": "junction"
+},
+{
+"name": "Nowhatta",
+"lat": 34.098284,
+"lon": 74.812206,
+"kind": "area"
+},
+{
+"name": "Nowhatta Police Station",
+"lat": 34.098853,
+"lon": 74.815401,
+"kind": "police"
+},
+{
+"name": "Nowshera",
+"lat": 34.13,
+"lon": 74.805823,
+"kind": "area"
+},
+{
+"name": "Nowshera Fire Station",
+"lat": 34.129045,
+"lon": 74.805679,
+"kind": "fire_station"
+},
+{
+"name": "Nowshera Post Office",
+"lat": 34.132395,
+"lon": 74.802691,
+"kind": "public"
+},
+{
+"name": "Nundreshi Colony",
+"lat": 34.066841,
+"lon": 74.772484,
+"kind": "area"
+},
+{
+"name": "Oasis Child Development Centre",
+"lat": 34.152265,
+"lon": 74.805477,
+"kind": "school"
+},
+{
+"name": "Oasis Secondary School",
+"lat": 34.023337,
+"lon": 74.819764,
+"kind": "school"
+},
+{
+"name": "Old Barzulla Bridge",
+"lat": 34.050116,
+"lon": 74.801765,
+"kind": "bridge"
+},
+{
+"name": "Old Bota Kadal",
+"lat": 34.118907,
+"lon": 74.812606,
+"kind": "bridge"
+},
+{
+"name": "Old Fateh Kadal",
+"lat": 34.088968,
+"lon": 74.806856,
+"kind": "bridge"
+},
+{
+"name": "Old Habba Kadal Bridge",
+"lat": 34.08195,
+"lon": 74.806075,
+"kind": "bridge"
+},
+{
+"name": "Old Nadiyar Bridge",
+"lat": 34.10041,
+"lon": 74.830472,
+"kind": "bridge"
+},
+{
+"name": "Old Zaina Kadal Bridge",
+"lat": 34.093784,
+"lon": 74.806495,
+"kind": "bridge"
+},
+{
+"name": "Oont Kadal",
+"lat": 34.122651,
+"lon": 74.871572,
+"kind": "landmark"
+},
+{
+"name": "Orange International Preparatory School",
+"lat": 34.153245,
+"lon": 74.80855,
+"kind": "school"
+},
+{
+"name": "Orania",
+"lat": 34.139363,
+"lon": 74.884194,
+"kind": "landmark"
+},
+{
+"name": "Orbit Girls School",
+"lat": 34.02681,
+"lon": 74.776392,
+"kind": "school"
+},
+{
+"name": "Ortho Plus Physiotherapy and Sports Injury Clinic",
+"lat": 34.138919,
+"lon": 74.802002,
+"kind": "hospital"
+},
+{
+"name": "Overhead Footbridge JVC",
+"lat": 34.085674,
+"lon": 74.76293,
+"kind": "bridge"
+},
+{
+"name": "Owais Park",
+"lat": 34.076203,
+"lon": 74.772485,
+"kind": "park"
+},
+{
+"name": "OYO German Residency",
+"lat": 34.084488,
+"lon": 74.819543,
+"kind": "landmark"
+},
+{
+"name": "OYO Hotel Azad",
+"lat": 34.084994,
+"lon": 74.819663,
+"kind": "landmark"
+},
+{
+"name": "OYO Hotel Essar",
+"lat": 34.065267,
+"lon": 74.803277,
+"kind": "landmark"
+},
+{
+"name": "Palpora",
+"lat": 34.11513,
+"lon": 74.756446,
+"kind": "area"
+},
+{
+"name": "Pampore",
+"lat": 34.01092,
+"lon": 74.91303,
+"kind": "area"
+},
+{
+"name": "Pampore",
+"lat": 34.012051,
+"lon": 74.917707,
+"kind": "area"
+},
+{
+"name": "Pamposh colony",
+"lat": 34.042923,
+"lon": 74.813059,
+"kind": "area"
+},
+{
+"name": "Pampur",
+"lat": 33.998857,
+"lon": 74.894922,
+"kind": "station"
+},
+{
+"name": "Pandrethan Park",
+"lat": 34.045307,
+"lon": 74.872181,
+"kind": "park"
+},
+{
+"name": "Pandrethan Shiva temple",
+"lat": 34.056483,
+"lon": 74.86086,
+"kind": "religious"
+},
+{
+"name": "Pandrethan-Vethpara Bridge",
+"lat": 34.054373,
+"lon": 74.859525,
+"kind": "bridge"
+},
+{
+"name": "Panzinara",
+"lat": 34.150795,
+"lon": 74.700246,
+"kind": "area"
+},
+{
+"name": "Paradise Gateway",
+"lat": 34.133473,
+"lon": 74.876595,
+"kind": "landmark"
+},
+{
+"name": "Paramount Polyclinic and Diagnostic Centre",
+"lat": 34.114421,
+"lon": 74.806806,
+"kind": "hospital"
+},
+{
+"name": "Paras Health",
+"lat": 34.07454,
+"lon": 74.831747,
+"kind": "hospital"
+},
+{
+"name": "Parimahal",
+"lat": 34.080948,
+"lon": 74.876819,
+"kind": "landmark"
+},
+{
+"name": "Parimahal",
+"lat": 34.080993,
+"lon": 74.830577,
+"kind": "landmark"
+},
+{
+"name": "Park & Playground Jenab Sahib",
+"lat": 34.142015,
+"lon": 74.79759,
+"kind": "park"
+},
+{
+"name": "park 01",
+"lat": 34.13538,
+"lon": 74.836827,
+"kind": "park"
+},
+{
+"name": "park 02",
+"lat": 34.134866,
+"lon": 74.836872,
+"kind": "park"
+},
+{
+"name": "Park Govt Housing Colony Illahi Bagh",
+"lat": 34.149634,
+"lon": 74.811833,
+"kind": "park"
+},
+{
+"name": "Parvaiz Medicate",
+"lat": 34.133573,
+"lon": 74.809246,
+"kind": "hospital"
+},
+{
+"name": "Passenger Bus Stop Humhaama Chowk",
+"lat": 34.021691,
+"lon": 74.770376,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.027002,
+"lon": 74.797308,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.099075,
+"lon": 74.802397,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.095391,
+"lon": 74.790707,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.083687,
+"lon": 74.800652,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.125405,
+"lon": 74.837497,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.123079,
+"lon": 74.816592,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.128827,
+"lon": 74.818991,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.140628,
+"lon": 74.838714,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.098723,
+"lon": 74.822668,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.132147,
+"lon": 74.87793,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.10159,
+"lon": 74.822056,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.131373,
+"lon": 74.841129,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.123451,
+"lon": 74.878808,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed",
+"lat": 34.132265,
+"lon": 74.830205,
+"kind": "bus_stop"
+},
+{
+"name": "Passenger Shed Police Post",
+"lat": 34.095905,
+"lon": 74.785503,
+"kind": "bus_stop"
+},
+{
+"name": "Pathan colony",
+"lat": 34.171227,
+"lon": 74.823362,
+"kind": "area"
+},
+{
+"name": "Pathar masjid",
+"lat": 34.091882,
+"lon": 74.805838,
+"kind": "religious"
+},
+{
+"name": "Pathar Masjid Nawab Bazar",
+"lat": 34.089693,
+"lon": 74.801126,
+"kind": "religious"
+},
+{
+"name": "Peerbagh",
+"lat": 34.027589,
+"lon": 74.779429,
+"kind": "area"
+},
+{
+"name": "Peerbagh Bridge",
+"lat": 34.02601,
+"lon": 74.776547,
+"kind": "bridge"
+},
+{
+"name": "Pentagon park",
+"lat": 34.061897,
+"lon": 74.817848,
+"kind": "park"
+},
+{
+"name": "Petrol Pump",
+"lat": 33.99499,
+"lon": 74.903313,
+"kind": "fuel"
+},
+{
+"name": "PHC Chundina",
+"lat": 34.173794,
+"lon": 74.72405,
+"kind": "hospital"
+},
+{
+"name": "PHC Ichgam",
+"lat": 33.992514,
+"lon": 74.756792,
+"kind": "hospital"
+},
+{
+"name": "PHC Kachan",
+"lat": 34.187613,
+"lon": 74.749207,
+"kind": "hospital"
+},
+{
+"name": "Physio 2 Fitness",
+"lat": 34.100674,
+"lon": 74.809721,
+"kind": "hospital"
+},
+{
+"name": "Physio Care Physiotherapy Clinic",
+"lat": 34.075637,
+"lon": 74.829635,
+"kind": "hospital"
+},
+{
+"name": "Physio Solutions Dr. Shadman Pandit",
+"lat": 34.06776,
+"lon": 74.774434,
+"kind": "hospital"
+},
+{
+"name": "Physiotherapy Centre",
+"lat": 34.123343,
+"lon": 74.839994,
+"kind": "hospital"
+},
+{
+"name": "Physiotherapy Clinic",
+"lat": 34.018558,
+"lon": 74.828678,
+"kind": "hospital"
+},
+{
+"name": "Physiotherapy Clinic",
+"lat": 34.13906,
+"lon": 74.801984,
+"kind": "hospital"
+},
+{
+"name": "Pirson Chemists and Druggists",
+"lat": 34.079328,
+"lon": 74.799683,
+"kind": "hospital"
+},
+{
+"name": "Plaza Market",
+"lat": 34.080337,
+"lon": 74.794792,
+"kind": "market"
+},
+{
+"name": "Pleasure",
+"lat": 34.083584,
+"lon": 74.82437,
+"kind": "landmark"
+},
+{
+"name": "Pol. Science Department Park",
+"lat": 34.134024,
+"lon": 74.83908,
+"kind": "park"
+},
+{
+"name": "Police Building",
+"lat": 34.077235,
+"lon": 74.79903,
+"kind": "police"
+},
+{
+"name": "Police Choki Chanapora",
+"lat": 34.034315,
+"lon": 74.809293,
+"kind": "police"
+},
+{
+"name": "Police control room",
+"lat": 34.070775,
+"lon": 74.799227,
+"kind": "police"
+},
+{
+"name": "Police Post Humhama Diatrict Budgam",
+"lat": 34.016736,
+"lon": 74.767817,
+"kind": "police"
+},
+{
+"name": "Police Post Noorbagh",
+"lat": 34.09617,
+"lon": 74.78546,
+"kind": "police"
+},
+{
+"name": "Police Station Baghat",
+"lat": 34.044574,
+"lon": 74.801795,
+"kind": "police"
+},
+{
+"name": "Police Station Fateh Kadal",
+"lat": 34.087711,
+"lon": 74.807594,
+"kind": "police"
+},
+{
+"name": "Police Station Kothibagh",
+"lat": 34.072891,
+"lon": 74.818018,
+"kind": "police"
+},
+{
+"name": "Police Station Kral Khud",
+"lat": 34.078055,
+"lon": 74.810345,
+"kind": "police"
+},
+{
+"name": "Police Station Maharaj Gunj",
+"lat": 34.092931,
+"lon": 74.805735,
+"kind": "police"
+},
+{
+"name": "Police Station Nehru Park Boulevard",
+"lat": 34.089231,
+"lon": 74.845958,
+"kind": "police"
+},
+{
+"name": "Police Station Nowhatta",
+"lat": 34.099083,
+"lon": 74.815063,
+"kind": "police"
+},
+{
+"name": "Police Station Parimpora",
+"lat": 34.105685,
+"lon": 74.757308,
+"kind": "police"
+},
+{
+"name": "Police Station Rajbagh",
+"lat": 34.06572,
+"lon": 74.821457,
+"kind": "police"
+},
+{
+"name": "Police Station Ram Munshi Bagh",
+"lat": 34.072982,
+"lon": 74.835811,
+"kind": "police"
+},
+{
+"name": "Police Station Rangreth",
+"lat": 33.998331,
+"lon": 74.79132,
+"kind": "police"
+},
+{
+"name": "Police Station Sadder",
+"lat": 34.044471,
+"lon": 74.801771,
+"kind": "police"
+},
+{
+"name": "Police Station Safakadal",
+"lat": 34.093965,
+"lon": 74.79245,
+"kind": "police"
+},
+{
+"name": "police station shaheed Gunj",
+"lat": 34.075393,
+"lon": 74.803886,
+"kind": "police"
+},
+{
+"name": "Polo View Market",
+"lat": 34.073581,
+"lon": 74.820129,
+"kind": "market"
+},
+{
+"name": "Posh park",
+"lat": 34.060589,
+"lon": 74.814425,
+"kind": "park"
+},
+{
+"name": "Post Office",
+"lat": 34.047947,
+"lon": 74.867596,
+"kind": "public"
+},
+{
+"name": "post office",
+"lat": 34.134996,
+"lon": 74.837286,
+"kind": "public"
+},
+{
+"name": "Post Office Fateh Kadal",
+"lat": 34.089489,
+"lon": 74.806061,
+"kind": "public"
+},
+{
+"name": "Post Office S.R.Gunj",
+"lat": 34.097011,
+"lon": 74.805086,
+"kind": "public"
+},
+{
+"name": "Pratap Park",
+"lat": 34.072584,
+"lon": 74.813643,
+"kind": "park"
+},
+{
+"name": "Pratapishwara Temple",
+"lat": 34.08323,
+"lon": 74.824485,
+"kind": "religious"
+},
+{
+"name": "Presentaion Convent",
+"lat": 34.069408,
+"lon": 74.822711,
+"kind": "school"
+},
+{
+"name": "Presentation Convent School",
+"lat": 34.069695,
+"lon": 74.821622,
+"kind": "school"
+},
+{
+"name": "Pride Continental",
+"lat": 34.081777,
+"lon": 74.832105,
+"kind": "landmark"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.029174,
+"lon": 74.736537,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.123257,
+"lon": 74.83967,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.040409,
+"lon": 74.868389,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.09448,
+"lon": 74.794592,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.022273,
+"lon": 74.738267,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 33.989884,
+"lon": 74.729298,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.027153,
+"lon": 74.744459,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre",
+"lat": 34.072821,
+"lon": 74.793064,
+"kind": "hospital"
+},
+{
+"name": "Primary Health Centre Zadibal",
+"lat": 34.113478,
+"lon": 74.806442,
+"kind": "hospital"
+},
+{
+"name": "Prime Public School",
+"lat": 34.041851,
+"lon": 74.800329,
+"kind": "school"
+},
+{
+"name": "Prof. Dr Nazir Ahamd Wani",
+"lat": 34.04835,
+"lon": 74.807833,
+"kind": "hospital"
+},
+{
+"name": "Professor Masjid",
+"lat": 34.126809,
+"lon": 74.843607,
+"kind": "religious"
+},
+{
+"name": "Puhar chowk",
+"lat": 34.028181,
+"lon": 74.83035,
+"kind": "bus_stop"
+},
+{
+"name": "Pulse Imaging and Diagnostic Centre",
+"lat": 34.085531,
+"lon": 74.796795,
+"kind": "hospital"
+},
+{
+"name": "Punjab and Sindh Bank",
+"lat": 34.072002,
+"lon": 74.804808,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank",
+"lat": 34.098546,
+"lon": 74.770639,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank",
+"lat": 34.048069,
+"lon": 74.808098,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank",
+"lat": 34.081351,
+"lon": 74.831088,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank and Atm",
+"lat": 34.071747,
+"lon": 74.805012,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank and Atm",
+"lat": 34.072976,
+"lon": 74.819996,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank and Atm",
+"lat": 34.074875,
+"lon": 74.796935,
+"kind": "public"
+},
+{
+"name": "Punjab National Bank and Atm",
+"lat": 34.01887,
+"lon": 74.913845,
+"kind": "public"
+},
+{
+"name": "Punjab Nationql Bank and Atm",
+"lat": 34.065247,
+"lon": 74.846773,
+"kind": "public"
+},
+{
+"name": "Purushyar temple",
+"lat": 34.082096,
+"lon": 74.80557,
+"kind": "religious"
+},
+{
+"name": "Pymus",
+"lat": 34.059072,
+"lon": 74.692079,
+"kind": "area"
+},
+{
+"name": "Qadeem Jamia Masjid, Kralpora",
+"lat": 33.996342,
+"lon": 74.811219,
+"kind": "religious"
+},
+{
+"name": "Qamarwari",
+"lat": 34.094893,
+"lon": 74.766525,
+"kind": "area"
+},
+{
+"name": "Qammarwari Bus Stop",
+"lat": 34.091081,
+"lon": 74.777514,
+"kind": "bus_stop"
+},
+{
+"name": "Qazi Masjid",
+"lat": 34.085591,
+"lon": 74.804199,
+"kind": "religious"
+},
+{
+"name": "Qazi Masjid",
+"lat": 34.099904,
+"lon": 74.809576,
+"kind": "religious"
+},
+{
+"name": "Quebec Houseboat",
+"lat": 34.087378,
+"lon": 74.835998,
+"kind": "landmark"
+},
+{
+"name": "Rabtar Gundi Roshan",
+"lat": 34.171582,
+"lon": 74.696615,
+"kind": "area"
+},
+{
+"name": "Rachna",
+"lat": 34.087451,
+"lon": 74.844436,
+"kind": "landmark"
+},
+{
+"name": "Raghunath Mandir",
+"lat": 34.085665,
+"lon": 74.805414,
+"kind": "religious"
+},
+{
+"name": "Ragunath Garden",
+"lat": 34.1454,
+"lon": 74.841907,
+"kind": "landmark"
+},
+{
+"name": "Rahat Physiocare and Rehabilitation Centre",
+"lat": 34.13419,
+"lon": 74.803865,
+"kind": "hospital"
+},
+{
+"name": "Rahimi A&U Laboratories",
+"lat": 34.002135,
+"lon": 74.795667,
+"kind": "hospital"
+},
+{
+"name": "Rainawari",
+"lat": 34.096069,
+"lon": 74.82552,
+"kind": "area"
+},
+{
+"name": "Rainawari Petrol Pump",
+"lat": 34.095476,
+"lon": 74.821299,
+"kind": "fuel"
+},
+{
+"name": "Rainawari Post Office",
+"lat": 34.098072,
+"lon": 74.828913,
+"kind": "public"
+},
+{
+"name": "Rainbow international school",
+"lat": 34.00513,
+"lon": 74.782781,
+"kind": "school"
+},
+{
+"name": "Raj Bagh",
+"lat": 34.068656,
+"lon": 74.828116,
+"kind": "park"
+},
+{
+"name": "Rajbagh",
+"lat": 34.065992,
+"lon": 74.827902,
+"kind": "area"
+},
+{
+"name": "Rakh Harran",
+"lat": 34.171236,
+"lon": 74.780228,
+"kind": "area"
+},
+{
+"name": "Rakh Shalina",
+"lat": 34.026147,
+"lon": 74.896385,
+"kind": "area"
+},
+{
+"name": "Ram Bagh Bridge",
+"lat": 34.054421,
+"lon": 74.804428,
+"kind": "bridge"
+},
+{
+"name": "Ram Temple",
+"lat": 34.076626,
+"lon": 74.813206,
+"kind": "religious"
+},
+{
+"name": "Rama Koul Temple",
+"lat": 34.095563,
+"lon": 74.804345,
+"kind": "religious"
+},
+{
+"name": "Ramazan College of Education",
+"lat": 34.023946,
+"lon": 74.820021,
+"kind": "school"
+},
+{
+"name": "Rambagh",
+"lat": 34.048613,
+"lon": 74.810911,
+"kind": "area"
+},
+{
+"name": "Rambagh",
+"lat": 34.050168,
+"lon": 74.802879,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.05255,
+"lon": 74.804731,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.071098,
+"lon": 74.803863,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.066581,
+"lon": 74.803759,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.063883,
+"lon": 74.803061,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.058694,
+"lon": 74.803267,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover",
+"lat": 34.055648,
+"lon": 74.80367,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover Ramp",
+"lat": 34.05162,
+"lon": 74.805212,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover Ramp",
+"lat": 34.061657,
+"lon": 74.803389,
+"kind": "bridge"
+},
+{
+"name": "Rambagh Flyover Ramp",
+"lat": 34.070812,
+"lon": 74.803774,
+"kind": "bridge"
+},
+{
+"name": "Ramzan Hospital",
+"lat": 34.061116,
+"lon": 74.809824,
+"kind": "hospital"
+},
+{
+"name": "Ramzan Memorial Educational Institute",
+"lat": 34.140122,
+"lon": 74.802159,
+"kind": "school"
+},
+{
+"name": "Ranbeergarh",
+"lat": 34.138009,
+"lon": 74.688984,
+"kind": "area"
+},
+{
+"name": "Rangar Masjid",
+"lat": 34.094277,
+"lon": 74.810145,
+"kind": "religious"
+},
+{
+"name": "Rangpura",
+"lat": 34.162189,
+"lon": 74.81791,
+"kind": "area"
+},
+{
+"name": "Rangreth",
+"lat": 34.003333,
+"lon": 74.792806,
+"kind": "area"
+},
+{
+"name": "Rawalpora",
+"lat": 34.019599,
+"lon": 74.799384,
+"kind": "area"
+},
+{
+"name": "Rawalpora bridge",
+"lat": 34.01661,
+"lon": 74.798915,
+"kind": "bridge"
+},
+{
+"name": "Rinchan Shah's Cenotaph",
+"lat": 34.095895,
+"lon": 74.80032,
+"kind": "landmark"
+},
+{
+"name": "River bank park",
+"lat": 34.046481,
+"lon": 74.869333,
+"kind": "park"
+},
+{
+"name": "Rose Petal Srinagar",
+"lat": 34.067424,
+"lon": 74.822372,
+"kind": "landmark"
+},
+{
+"name": "Rotunda Hygeia IVF-ICSI Centre",
+"lat": 34.024851,
+"lon": 74.814702,
+"kind": "hospital"
+},
+{
+"name": "Royal Batoo",
+"lat": 34.084138,
+"lon": 74.82373,
+"kind": "landmark"
+},
+{
+"name": "Royal Boulevard",
+"lat": 34.082949,
+"lon": 74.837486,
+"kind": "landmark"
+},
+{
+"name": "Royal Comfort Regency",
+"lat": 34.088162,
+"lon": 74.843509,
+"kind": "landmark"
+},
+{
+"name": "Royal Infertility Clinic",
+"lat": 34.067804,
+"lon": 74.825398,
+"kind": "hospital"
+},
+{
+"name": "Rozabal Park",
+"lat": 34.093736,
+"lon": 74.816194,
+"kind": "park"
+},
+{
+"name": "RP School Boys",
+"lat": 34.141623,
+"lon": 74.819129,
+"kind": "school"
+},
+{
+"name": "RP School Girls Mallabagh",
+"lat": 34.145789,
+"lon": 74.824573,
+"kind": "school"
+},
+{
+"name": "Ruby Hotel",
+"lat": 34.071917,
+"lon": 74.816872,
+"kind": "landmark"
+},
+{
+"name": "S-Mat Medical Diagnostics & Consultations",
+"lat": 34.082111,
+"lon": 74.797953,
+"kind": "hospital"
+},
+{
+"name": "S.M Health Clinic",
+"lat": 34.108933,
+"lon": 74.743045,
+"kind": "hospital"
+},
+{
+"name": "S.M. Iqbal Business School",
+"lat": 34.003172,
+"lon": 74.780932,
+"kind": "school"
+},
+{
+"name": "Sadda Bahar Indian Oil Petrol Pump",
+"lat": 34.028992,
+"lon": 74.83177,
+"kind": "fuel"
+},
+{
+"name": "Sadrebal",
+"lat": 34.129957,
+"lon": 74.831053,
+"kind": "area"
+},
+{
+"name": "Safa Kadal",
+"lat": 34.091043,
+"lon": 74.792532,
+"kind": "bridge"
+},
+{
+"name": "Safa kadel",
+"lat": 34.092483,
+"lon": 74.792288,
+"kind": "area"
+},
+{
+"name": "Safa Marwah Hospital",
+"lat": 34.143735,
+"lon": 74.808833,
+"kind": "hospital"
+},
+{
+"name": "Saffron Filling Station",
+"lat": 33.993156,
+"lon": 74.910478,
+"kind": "fuel"
+},
+{
+"name": "Saffron Shopping Complex",
+"lat": 34.020829,
+"lon": 74.91786,
+"kind": "market"
+},
+{
+"name": "Sahl",
+"lat": 34.075691,
+"lon": 74.771902,
+"kind": "hospital"
+},
+{
+"name": "Said pora",
+"lat": 34.11395,
+"lon": 74.792219,
+"kind": "area"
+},
+{
+"name": "Saida Kadal",
+"lat": 34.104535,
+"lon": 74.830772,
+"kind": "bridge"
+},
+{
+"name": "Saifco Shopping Complex Airport Market",
+"lat": 34.014675,
+"lon": 74.76163,
+"kind": "market"
+},
+{
+"name": "Saint Luke's Church",
+"lat": 34.077644,
+"lon": 74.831673,
+"kind": "religious"
+},
+{
+"name": "Salmania Park",
+"lat": 34.139839,
+"lon": 74.812727,
+"kind": "park"
+},
+{
+"name": "Samanbal Marriage Hall and Community Centre",
+"lat": 34.102636,
+"lon": 74.823886,
+"kind": "public"
+},
+{
+"name": "Samandar Bagh Masjid",
+"lat": 34.074705,
+"lon": 74.814915,
+"kind": "religious"
+},
+{
+"name": "Samci Riveria",
+"lat": 34.068483,
+"lon": 74.825017,
+"kind": "market"
+},
+{
+"name": "Sangam",
+"lat": 34.136555,
+"lon": 74.770297,
+"kind": "area"
+},
+{
+"name": "Sangeen Darwaza",
+"lat": 34.109324,
+"lon": 74.811831,
+"kind": "landmark"
+},
+{
+"name": "Sarfaraz colony",
+"lat": 34.168771,
+"lon": 74.825221,
+"kind": "area"
+},
+{
+"name": "SBI Bank",
+"lat": 34.0963,
+"lon": 74.807246,
+"kind": "public"
+},
+{
+"name": "SBI Bank",
+"lat": 34.084406,
+"lon": 74.796556,
+"kind": "public"
+},
+{
+"name": "SBI Bank amd Atm",
+"lat": 34.131907,
+"lon": 74.821589,
+"kind": "public"
+},
+{
+"name": "SBI Bank and Atm",
+"lat": 34.138579,
+"lon": 74.80188,
+"kind": "public"
+},
+{
+"name": "Sbi Bank And Cash Deposit Machine and Atm Services",
+"lat": 34.030916,
+"lon": 74.808792,
+"kind": "public"
+},
+{
+"name": "SBI STATE BANK OF INDIA SHALTENG with ATM",
+"lat": 34.109637,
+"lon": 74.740056,
+"kind": "public"
+},
+{
+"name": "Scholars' School",
+"lat": 34.04321,
+"lon": 74.819177,
+"kind": "school"
+},
+{
+"name": "Sebdan",
+"lat": 34.059435,
+"lon": 74.699888,
+"kind": "area"
+},
+{
+"name": "Secretariat Park",
+"lat": 34.073791,
+"lon": 74.800713,
+"kind": "park"
+},
+{
+"name": "Seh Pora",
+"lat": 34.191051,
+"lon": 74.737114,
+"kind": "area"
+},
+{
+"name": "Sempora Srinagar",
+"lat": 34.035434,
+"lon": 74.899953,
+"kind": "area"
+},
+{
+"name": "Shadipora",
+"lat": 34.188473,
+"lon": 74.66846,
+"kind": "area"
+},
+{
+"name": "Shafaaf Plaza",
+"lat": 34.143287,
+"lon": 74.874774,
+"kind": "landmark"
+},
+{
+"name": "Shafaqat Rehabilation Centre",
+"lat": 34.088996,
+"lon": 74.76048,
+"kind": "hospital"
+},
+{
+"name": "Shah Faisal Colony",
+"lat": 34.147379,
+"lon": 74.812669,
+"kind": "area"
+},
+{
+"name": "Shah Kadal",
+"lat": 34.091043,
+"lon": 74.794755,
+"kind": "bridge"
+},
+{
+"name": "Shah Mohalla Bridge",
+"lat": 34.088178,
+"lon": 74.799068,
+"kind": "bridge"
+},
+{
+"name": "Shah Mohalla Footbridge",
+"lat": 34.088176,
+"lon": 74.799004,
+"kind": "bridge"
+},
+{
+"name": "Shah-e-Hamdan Mosque",
+"lat": 34.091119,
+"lon": 74.80762,
+"kind": "religious"
+},
+{
+"name": "Shah-i-Hamdan Masjid",
+"lat": 34.03531,
+"lon": 74.817181,
+"kind": "religious"
+},
+{
+"name": "Shah-i-Hamdan Masjid",
+"lat": 34.091302,
+"lon": 74.807924,
+"kind": "religious"
+},
+{
+"name": "Shaheen Public School",
+"lat": 34.095733,
+"lon": 74.789718,
+"kind": "school"
+},
+{
+"name": "Shahenshak Palace",
+"lat": 34.080956,
+"lon": 74.830516,
+"kind": "landmark"
+},
+{
+"name": "Shahi Masjid",
+"lat": 34.133085,
+"lon": 74.808486,
+"kind": "religious"
+},
+{
+"name": "Shahi Mohalla",
+"lat": 34.143181,
+"lon": 74.809912,
+"kind": "area"
+},
+{
+"name": "Shalimar Bagh",
+"lat": 34.148551,
+"lon": 74.871632,
+"kind": "landmark"
+},
+{
+"name": "shalimar bagh shared taxi",
+"lat": 34.080582,
+"lon": 74.829557,
+"kind": "bus_stop"
+},
+{
+"name": "Shalimar Bus Stop",
+"lat": 34.150005,
+"lon": 74.87114,
+"kind": "bus_stop"
+},
+{
+"name": "Shalimar Market",
+"lat": 34.147229,
+"lon": 74.870197,
+"kind": "market"
+},
+{
+"name": "Shalla kadel",
+"lat": 34.082608,
+"lon": 74.802988,
+"kind": "area"
+},
+{
+"name": "Shallabugh",
+"lat": 34.167035,
+"lon": 74.736465,
+"kind": "area"
+},
+{
+"name": "Shalteng",
+"lat": 34.111213,
+"lon": 74.747811,
+"kind": "area"
+},
+{
+"name": "Shalteng Bridge",
+"lat": 34.111151,
+"lon": 74.751388,
+"kind": "bridge"
+},
+{
+"name": "Shaneel Residency",
+"lat": 34.083653,
+"lon": 74.824313,
+"kind": "landmark"
+},
+{
+"name": "Shankaracharya Reserved Forest",
+"lat": 34.079531,
+"lon": 74.843738,
+"kind": "landmark"
+},
+{
+"name": "Shankaracharya Temple",
+"lat": 34.078953,
+"lon": 74.843597,
+"kind": "religious"
+},
+{
+"name": "Sharafabad Bridge",
+"lat": 34.089354,
+"lon": 74.739561,
+"kind": "bridge"
+},
+{
+"name": "Sharjah",
+"lat": 34.084727,
+"lon": 74.822772,
+"kind": "landmark"
+},
+{
+"name": "Sharp Sight Eye Hospital",
+"lat": 34.045209,
+"lon": 74.802342,
+"kind": "hospital"
+},
+{
+"name": "shehjar",
+"lat": 34.169788,
+"lon": 74.860237,
+"kind": "school"
+},
+{
+"name": "Shehjar Park",
+"lat": 34.127524,
+"lon": 74.810234,
+"kind": "park"
+},
+{
+"name": "Sheikh Abdullah's grave",
+"lat": 34.137982,
+"lon": 74.840415,
+"kind": "landmark"
+},
+{
+"name": "Sheikh Complex Shiraz Chowk",
+"lat": 34.091465,
+"lon": 74.81944,
+"kind": "market"
+},
+{
+"name": "Sheikh Ul Alam Hospital",
+"lat": 34.080562,
+"lon": 74.801492,
+"kind": "hospital"
+},
+{
+"name": "Sheikh ul Alam Jamia Masjid Rawalpora",
+"lat": 34.011382,
+"lon": 74.799794,
+"kind": "religious"
+},
+{
+"name": "Sheikh ul Alam Masjid",
+"lat": 34.126195,
+"lon": 74.802299,
+"kind": "religious"
+},
+{
+"name": "Sheikh ul-Alam International Airport",
+"lat": 33.991657,
+"lon": 74.781268,
+"kind": "airport"
+},
+{
+"name": "Sher Garhi Palace",
+"lat": 34.073217,
+"lon": 74.805757,
+"kind": "landmark"
+},
+{
+"name": "Sher-e-Kashmir Park",
+"lat": 34.072535,
+"lon": 74.824795,
+"kind": "park"
+},
+{
+"name": "Sher-e-Kashmir University of Agricultural Sciences & Technology of Kashmir",
+"lat": 34.146138,
+"lon": 74.880744,
+"kind": "school"
+},
+{
+"name": "Sher-i-Kashmir Cricket Stadium",
+"lat": 34.072003,
+"lon": 74.834729,
+"kind": "park"
+},
+{
+"name": "Sher-i-Kashmir Institute of Medical Sciences",
+"lat": 34.135503,
+"lon": 74.800554,
+"kind": "hospital"
+},
+{
+"name": "Sher-i-Kashmir Masjid",
+"lat": 34.100741,
+"lon": 74.808992,
+"kind": "religious"
+},
+{
+"name": "Sheshgari mohalla",
+"lat": 34.091071,
+"lon": 74.815392,
+"kind": "area"
+},
+{
+"name": "Sheshyar temple",
+"lat": 34.083376,
+"lon": 74.806366,
+"kind": "religious"
+},
+{
+"name": "Shifa Medical Center",
+"lat": 34.069956,
+"lon": 74.800989,
+"kind": "hospital"
+},
+{
+"name": "Shifa Medical Centre",
+"lat": 34.069964,
+"lon": 74.800995,
+"kind": "hospital"
+},
+{
+"name": "Shifa Medicare and Chemists",
+"lat": 34.124695,
+"lon": 74.817093,
+"kind": "hospital"
+},
+{
+"name": "Shifa Physiotherapy Clinic",
+"lat": 34.03399,
+"lon": 74.790799,
+"kind": "hospital"
+},
+{
+"name": "Shining Star School",
+"lat": 34.013415,
+"lon": 74.814585,
+"kind": "school"
+},
+{
+"name": "Shireen Bagh Bridge",
+"lat": 34.088893,
+"lon": 74.796533,
+"kind": "bridge"
+},
+{
+"name": "Shiv Mandir",
+"lat": 34.028309,
+"lon": 74.77894,
+"kind": "religious"
+},
+{
+"name": "Shiv Pora",
+"lat": 34.06042,
+"lon": 74.838503,
+"kind": "area"
+},
+{
+"name": "Shiv Temple",
+"lat": 34.070753,
+"lon": 74.815039,
+"kind": "religious"
+},
+{
+"name": "Shiva Temple",
+"lat": 34.095934,
+"lon": 74.806505,
+"kind": "religious"
+},
+{
+"name": "Shokhi Masjid",
+"lat": 34.087627,
+"lon": 74.802779,
+"kind": "religious"
+},
+{
+"name": "Shopping Centre",
+"lat": 34.098017,
+"lon": 74.806887,
+"kind": "market"
+},
+{
+"name": "Shopping Complex",
+"lat": 34.098009,
+"lon": 74.822621,
+"kind": "market"
+},
+{
+"name": "Shri Pratap College",
+"lat": 34.076867,
+"lon": 74.81563,
+"kind": "school"
+},
+{
+"name": "Shri Pratap Higher Secondary School",
+"lat": 34.075816,
+"lon": 74.818237,
+"kind": "school"
+},
+{
+"name": "Shuhama",
+"lat": 34.18977,
+"lon": 74.826739,
+"kind": "area"
+},
+{
+"name": "Sikh Bagh",
+"lat": 34.131146,
+"lon": 74.813855,
+"kind": "area"
+},
+{
+"name": "Sikh Bagh Marriage hall",
+"lat": 34.13051,
+"lon": 74.8135,
+"kind": "public"
+},
+{
+"name": "Simin Rose Garden Montessori School",
+"lat": 34.039288,
+"lon": 74.80238,
+"kind": "school"
+},
+{
+"name": "Skewed Bridge",
+"lat": 34.070969,
+"lon": 74.821963,
+"kind": "bridge"
+},
+{
+"name": "SKIMS Masjid",
+"lat": 34.136036,
+"lon": 74.799517,
+"kind": "religious"
+},
+{
+"name": "SKIMS Medical College",
+"lat": 34.08704,
+"lon": 74.761413,
+"kind": "school"
+},
+{
+"name": "Skin, Laser & Hair Clinic",
+"lat": 34.066436,
+"lon": 74.809517,
+"kind": "hospital"
+},
+{
+"name": "SKUAST Mosque",
+"lat": 34.14859,
+"lon": 74.879137,
+"kind": "religious"
+},
+{
+"name": "Sky Light Higher Secondary School",
+"lat": 34.008188,
+"lon": 74.908573,
+"kind": "school"
+},
+{
+"name": "SMD Healthcare And Diagnostics",
+"lat": 34.08333,
+"lon": 74.819349,
+"kind": "hospital"
+},
+{
+"name": "SMHS Blood Bank",
+"lat": 34.087014,
+"lon": 74.799086,
+"kind": "hospital"
+},
+{
+"name": "SMHS Hospital",
+"lat": 34.086481,
+"lon": 74.798423,
+"kind": "hospital"
+},
+{
+"name": "Soibugh",
+"lat": 34.059838,
+"lon": 74.712148,
+"kind": "area"
+},
+{
+"name": "Soibugh",
+"lat": 34.070341,
+"lon": 74.710379,
+"kind": "area"
+},
+{
+"name": "Soibugh",
+"lat": 34.074872,
+"lon": 74.704114,
+"kind": "area"
+},
+{
+"name": "Sona Masjid",
+"lat": 34.086053,
+"lon": 74.804555,
+"kind": "religious"
+},
+{
+"name": "Sonwar Bagh",
+"lat": 34.073137,
+"lon": 74.839039,
+"kind": "area"
+},
+{
+"name": "Sonwar Foorbridge",
+"lat": 34.069739,
+"lon": 74.839024,
+"kind": "bridge"
+},
+{
+"name": "Sound Scan",
+"lat": 34.140606,
+"lon": 74.839205,
+"kind": "hospital"
+},
+{
+"name": "Soura",
+"lat": 34.137833,
+"lon": 74.80211,
+"kind": "area"
+},
+{
+"name": "Soura Bus Stand",
+"lat": 34.138432,
+"lon": 74.802523,
+"kind": "station"
+},
+{
+"name": "Soura Police Station",
+"lat": 34.135513,
+"lon": 74.803647,
+"kind": "police"
+},
+{
+"name": "Sozeith",
+"lat": 34.114208,
+"lon": 74.684479,
+"kind": "area"
+},
+{
+"name": "SP College Library",
+"lat": 34.076086,
+"lon": 74.81626,
+"kind": "public"
+},
+{
+"name": "SP College Masjid",
+"lat": 34.076915,
+"lon": 74.815297,
+"kind": "religious"
+},
+{
+"name": "SPORTS GROUND",
+"lat": 34.075421,
+"lon": 74.815948,
+"kind": "park"
+},
+{
+"name": "Spring Healthcare Multispeciality Clinic",
+"lat": 34.152693,
+"lon": 74.808575,
+"kind": "hospital"
+},
+{
+"name": "SPS Library",
+"lat": 34.073478,
+"lon": 74.814214,
+"kind": "public"
+},
+{
+"name": "SPS Museum",
+"lat": 34.066836,
+"lon": 74.813087,
+"kind": "landmark"
+},
+{
+"name": "Srinagar British School",
+"lat": 34.033961,
+"lon": 74.850384,
+"kind": "school"
+},
+{
+"name": "Srinagar Railway Station",
+"lat": 34.023809,
+"lon": 74.847251,
+"kind": "station"
+},
+{
+"name": "Srl Diagnostics",
+"lat": 34.136082,
+"lon": 74.805026,
+"kind": "hospital"
+},
+{
+"name": "Srl Diagnostoc Centre",
+"lat": 34.075742,
+"lon": 74.830955,
+"kind": "hospital"
+},
+{
+"name": "SSP Office Srinagar",
+"lat": 34.06346,
+"lon": 74.802178,
+"kind": "police"
+},
+{
+"name": "Standard Public High School",
+"lat": 34.146284,
+"lon": 74.802318,
+"kind": "school"
+},
+{
+"name": "Star Hospitals",
+"lat": 34.028918,
+"lon": 74.800287,
+"kind": "hospital"
+},
+{
+"name": "State Bank of India",
+"lat": 34.072612,
+"lon": 74.817602,
+"kind": "public"
+},
+{
+"name": "State Bank of India",
+"lat": 34.097416,
+"lon": 74.822213,
+"kind": "public"
+},
+{
+"name": "State Bank of India",
+"lat": 34.143971,
+"lon": 74.802148,
+"kind": "public"
+},
+{
+"name": "State Bank of India and Atm",
+"lat": 34.026822,
+"lon": 74.823925,
+"kind": "public"
+},
+{
+"name": "State Bank of India and Atm",
+"lat": 34.075851,
+"lon": 74.775555,
+"kind": "public"
+},
+{
+"name": "State Bank of India and Atm",
+"lat": 34.018497,
+"lon": 74.914729,
+"kind": "public"
+},
+{
+"name": "Study Lounge 24x7 Library Reading Room",
+"lat": 34.075097,
+"lon": 74.791487,
+"kind": "public"
+},
+{
+"name": "Sub Centre, Razwan",
+"lat": 34.002054,
+"lon": 74.722021,
+"kind": "hospital"
+},
+{
+"name": "Sub Health Center, Hazratbal",
+"lat": 34.131049,
+"lon": 74.842526,
+"kind": "hospital"
+},
+{
+"name": "Sub-Centre ,Dhar Bagh",
+"lat": 34.166778,
+"lon": 74.90095,
+"kind": "hospital"
+},
+{
+"name": "Sub-Centre ,New Theed",
+"lat": 34.164064,
+"lon": 74.908497,
+"kind": "hospital"
+},
+{
+"name": "Sub-Centre ,Shahanpora",
+"lat": 34.151153,
+"lon": 74.851579,
+"kind": "hospital"
+},
+{
+"name": "Sub-Centre ,Syed Pora",
+"lat": 34.174466,
+"lon": 74.89265,
+"kind": "hospital"
+},
+{
+"name": "Sub-District Hospital Pampore",
+"lat": 34.011666,
+"lon": 74.916075,
+"kind": "hospital"
+},
+{
+"name": "SubCentre, Bun Pora",
+"lat": 34.008709,
+"lon": 74.673599,
+"kind": "hospital"
+},
+{
+"name": "SubCentre, Choon",
+"lat": 33.986268,
+"lon": 74.729449,
+"kind": "hospital"
+},
+{
+"name": "SubCentre, Ichkoot",
+"lat": 33.976032,
+"lon": 74.747755,
+"kind": "hospital"
+},
+{
+"name": "Sulaiman Masjid",
+"lat": 34.0761,
+"lon": 74.832751,
+"kind": "religious"
+},
+{
+"name": "Sultan Residence",
+"lat": 34.113481,
+"lon": 74.836959,
+"kind": "landmark"
+},
+{
+"name": "Sultan-ul-Arifeen Mosque",
+"lat": 34.124395,
+"lon": 74.802256,
+"kind": "religious"
+},
+{
+"name": "Sun n Sun",
+"lat": 34.08335,
+"lon": 74.835227,
+"kind": "landmark"
+},
+{
+"name": "Sunday Market",
+"lat": 34.072715,
+"lon": 74.823037,
+"kind": "market"
+},
+{
+"name": "Sure Health Clinic and Pharmacy",
+"lat": 34.097938,
+"lon": 74.823277,
+"kind": "hospital"
+},
+{
+"name": "Swiss Hotel",
+"lat": 34.086828,
+"lon": 74.844503,
+"kind": "landmark"
+},
+{
+"name": "Syed Ali Syed Wali Syed Nabi Astaan",
+"lat": 34.093509,
+"lon": 74.821669,
+"kind": "religious"
+},
+{
+"name": "Syed Haider Simnaani (RH) Hyderpora",
+"lat": 34.03857,
+"lon": 74.786605,
+"kind": "religious"
+},
+{
+"name": "Syed Hamid Sahib Masjid",
+"lat": 34.091111,
+"lon": 74.802374,
+"kind": "religious"
+},
+{
+"name": "Syed Jafar Memorial School",
+"lat": 34.013214,
+"lon": 74.799525,
+"kind": "school"
+},
+{
+"name": "Syed Jaffer Memorial Institute",
+"lat": 34.013266,
+"lon": 74.79945,
+"kind": "school"
+},
+{
+"name": "Syed Mansoor Bridge",
+"lat": 34.08506,
+"lon": 74.801133,
+"kind": "bridge"
+},
+{
+"name": "Syed Medicos Health Clinic",
+"lat": 34.08699,
+"lon": 74.763146,
+"kind": "hospital"
+},
+{
+"name": "Syed Shabuddin Masjid",
+"lat": 34.099929,
+"lon": 74.815614,
+"kind": "religious"
+},
+{
+"name": "SyedPora",
+"lat": 34.095437,
+"lon": 74.672942,
+"kind": "area"
+},
+{
+"name": "Syndicate Clinical Laboratory",
+"lat": 34.138743,
+"lon": 74.802026,
+"kind": "hospital"
+},
+{
+"name": "T.K. Hospital",
+"lat": 34.066592,
+"lon": 74.803281,
+"kind": "hospital"
+},
+{
+"name": "Taar Bagh",
+"lat": 34.162037,
+"lon": 74.819745,
+"kind": "park"
+},
+{
+"name": "Tahira Khanams Hospital and Nursing Home",
+"lat": 34.067507,
+"lon": 74.802782,
+"kind": "hospital"
+},
+{
+"name": "Tailbal(Habak Shanpora)",
+"lat": 34.151319,
+"lon": 74.859663,
+"kind": "area"
+},
+{
+"name": "Tajdar colony",
+"lat": 34.15183,
+"lon": 74.83445,
+"kind": "area"
+},
+{
+"name": "Tankipora Bridge",
+"lat": 34.075382,
+"lon": 74.805043,
+"kind": "bridge"
+},
+{
+"name": "Taqdeer Park",
+"lat": 34.135147,
+"lon": 74.841044,
+"kind": "park"
+},
+{
+"name": "Taqwa Complex",
+"lat": 34.139844,
+"lon": 74.802892,
+"kind": "hospital"
+},
+{
+"name": "Tawheed Abad",
+"lat": 34.132196,
+"lon": 74.809577,
+"kind": "area"
+},
+{
+"name": "Tawheed Masjid",
+"lat": 34.133178,
+"lon": 74.812596,
+"kind": "religious"
+},
+{
+"name": "Tawheed Masjid",
+"lat": 34.083542,
+"lon": 74.769522,
+"kind": "religious"
+},
+{
+"name": "TCT Clinical Lab",
+"lat": 34.134894,
+"lon": 74.803768,
+"kind": "hospital"
+},
+{
+"name": "Tehfeem Clinical Lab",
+"lat": 34.012197,
+"lon": 74.79926,
+"kind": "hospital"
+},
+{
+"name": "Tehqeeq Diagnostic and Dialysis Centre",
+"lat": 34.085061,
+"lon": 74.796194,
+"kind": "hospital"
+},
+{
+"name": "Teingan",
+"lat": 34.014448,
+"lon": 74.883223,
+"kind": "area"
+},
+{
+"name": "Tengpora",
+"lat": 34.059855,
+"lon": 74.787431,
+"kind": "area"
+},
+{
+"name": "Tengpora Bridge",
+"lat": 34.056951,
+"lon": 74.786514,
+"kind": "bridge"
+},
+{
+"name": "The Countryside Resots",
+"lat": 34.035464,
+"lon": 74.864008,
+"kind": "landmark"
+},
+{
+"name": "The J&K Bank and Atm",
+"lat": 34.10616,
+"lon": 74.808878,
+"kind": "public"
+},
+{
+"name": "The J&K State Cooperative Bank Ltd",
+"lat": 34.029532,
+"lon": 74.808672,
+"kind": "public"
+},
+{
+"name": "The J&K State Cooperative Bank Ltd",
+"lat": 34.12787,
+"lon": 74.818255,
+"kind": "public"
+},
+{
+"name": "The Kashmir Valley School",
+"lat": 34.013371,
+"lon": 74.767702,
+"kind": "school"
+},
+{
+"name": "The Kausar Hotel and Restaurant",
+"lat": 34.061008,
+"lon": 74.817632,
+"kind": "landmark"
+},
+{
+"name": "The Lalit Grand Palace Srinagar",
+"lat": 34.080147,
+"lon": 74.864757,
+"kind": "landmark"
+},
+{
+"name": "The Little Legends Schools",
+"lat": 34.141002,
+"lon": 74.830151,
+"kind": "school"
+},
+{
+"name": "The New City Hospital",
+"lat": 34.061213,
+"lon": 74.784254,
+"kind": "hospital"
+},
+{
+"name": "The Shehanshah Palace",
+"lat": 34.081127,
+"lon": 74.830857,
+"kind": "landmark"
+},
+{
+"name": "The Valley View Hotel",
+"lat": 34.08266,
+"lon": 74.797485,
+"kind": "landmark"
+},
+{
+"name": "Tibetan Public School",
+"lat": 34.110154,
+"lon": 74.815382,
+"kind": "school"
+},
+{
+"name": "Tikoni Park",
+"lat": 33.999286,
+"lon": 74.797782,
+"kind": "park"
+},
+{
+"name": "Tiny Harts School",
+"lat": 34.063072,
+"lon": 74.782829,
+"kind": "school"
+},
+{
+"name": "Tomb of Ali Muhammad Gilkar",
+"lat": 34.100643,
+"lon": 74.814793,
+"kind": "landmark"
+},
+{
+"name": "Traditional Market",
+"lat": 34.079367,
+"lon": 74.829652,
+"kind": "market"
+},
+{
+"name": "Traffic Police Head Quarter",
+"lat": 34.072726,
+"lon": 74.822262,
+"kind": "police"
+},
+{
+"name": "Tramboo Continental",
+"lat": 34.080548,
+"lon": 74.829947,
+"kind": "landmark"
+},
+{
+"name": "Trauma Hospital",
+"lat": 34.117253,
+"lon": 74.699257,
+"kind": "hospital"
+},
+{
+"name": "TRC bus stand",
+"lat": 34.074581,
+"lon": 74.828788,
+"kind": "station"
+},
+{
+"name": "TRC Flyover",
+"lat": 34.073796,
+"lon": 74.82883,
+"kind": "bridge"
+},
+{
+"name": "TRC Masjid",
+"lat": 34.07419,
+"lon": 74.828204,
+"kind": "religious"
+},
+{
+"name": "TRC Park",
+"lat": 34.074755,
+"lon": 74.82447,
+"kind": "park"
+},
+{
+"name": "TRC Polo Synthetic Turf Ground",
+"lat": 34.074213,
+"lon": 74.827579,
+"kind": "park"
+},
+{
+"name": "Triangular Park",
+"lat": 34.062674,
+"lon": 74.817664,
+"kind": "park"
+},
+{
+"name": "Triden Kashmir Resort",
+"lat": 34.145213,
+"lon": 74.837468,
+"kind": "landmark"
+},
+{
+"name": "Tripa A Complex",
+"lat": 34.036187,
+"lon": 74.818064,
+"kind": "market"
+},
+{
+"name": "Trison City",
+"lat": 34.122061,
+"lon": 74.681888,
+"kind": "area"
+},
+{
+"name": "Trust Clinical Laboratory",
+"lat": 34.139598,
+"lon": 74.801817,
+"kind": "hospital"
+},
+{
+"name": "Trust Imaging And Diagnostic Centre",
+"lat": 34.085401,
+"lon": 74.796086,
+"kind": "hospital"
+},
+{
+"name": "Tyndale Biscoe and Mallinson School",
+"lat": 34.070868,
+"lon": 74.81197,
+"kind": "school"
+},
+{
+"name": "UCO Bank Lal Chowk Branch",
+"lat": 34.0718,
+"lon": 74.810027,
+"kind": "public"
+},
+{
+"name": "Ujala Cygnus Hospital",
+"lat": 34.0291,
+"lon": 74.831249,
+"kind": "hospital"
+},
+{
+"name": "Umer Masjid",
+"lat": 34.08468,
+"lon": 74.770651,
+"kind": "religious"
+},
+{
+"name": "Umrabad",
+"lat": 34.111339,
+"lon": 74.728265,
+"kind": "area"
+},
+{
+"name": "Unani & Ayurvedic Clinic",
+"lat": 34.116405,
+"lon": 74.80619,
+"kind": "hospital"
+},
+{
+"name": "Unani amd Panchkarma Hospital",
+"lat": 34.038094,
+"lon": 74.819656,
+"kind": "hospital"
+},
+{
+"name": "Unani and Panchkarma Hospital",
+"lat": 34.095918,
+"lon": 74.79223,
+"kind": "hospital"
+},
+{
+"name": "Unani Hospital",
+"lat": 34.140298,
+"lon": 74.838097,
+"kind": "hospital"
+},
+{
+"name": "University Health Centre",
+"lat": 34.129007,
+"lon": 74.835341,
+"kind": "hospital"
+},
+{
+"name": "University Masjid",
+"lat": 34.130049,
+"lon": 74.835413,
+"kind": "religious"
+},
+{
+"name": "University of Kashmir",
+"lat": 34.132546,
+"lon": 74.838614,
+"kind": "school"
+},
+{
+"name": "University of Kashmir Sir Syed Gate",
+"lat": 34.127804,
+"lon": 74.836567,
+"kind": "school"
+},
+{
+"name": "University Park",
+"lat": 34.132447,
+"lon": 74.837009,
+"kind": "park"
+},
+{
+"name": "Upper Soura",
+"lat": 34.146504,
+"lon": 74.801756,
+"kind": "area"
+},
+{
+"name": "Urban Diagnostic and Imaging",
+"lat": 34.097488,
+"lon": 74.822353,
+"kind": "hospital"
+},
+{
+"name": "Urban Health Centre",
+"lat": 34.164003,
+"lon": 74.829011,
+"kind": "hospital"
+},
+{
+"name": "Urban Health Centre",
+"lat": 34.054004,
+"lon": 74.816998,
+"kind": "hospital"
+},
+{
+"name": "Urology Clinic Dr. Imran Mir",
+"lat": 34.12822,
+"lon": 74.805953,
+"kind": "hospital"
+},
+{
+"name": "Usman abad",
+"lat": 34.160377,
+"lon": 74.806248,
+"kind": "area"
+},
+{
+"name": "Usman Masjid",
+"lat": 34.12129,
+"lon": 74.814672,
+"kind": "religious"
+},
+{
+"name": "Usmania Model High School",
+"lat": 34.152636,
+"lon": 74.804104,
+"kind": "school"
+},
+{
+"name": "Veer Park Chattabal",
+"lat": 34.089532,
+"lon": 74.785055,
+"kind": "park"
+},
+{
+"name": "Vicharnag",
+"lat": 34.133899,
+"lon": 74.804967,
+"kind": "area"
+},
+{
+"name": "Victoria Palace",
+"lat": 34.086633,
+"lon": 74.842678,
+"kind": "landmark"
+},
+{
+"name": "Vision Public School",
+"lat": 34.021296,
+"lon": 74.772145,
+"kind": "school"
+},
+{
+"name": "Vivanta by Taj",
+"lat": 34.102307,
+"lon": 74.88162,
+"kind": "landmark"
+},
+{
+"name": "Voluntary Medicare Society",
+"lat": 34.088473,
+"lon": 74.760528,
+"kind": "hospital"
+},
+{
+"name": "Wadwan",
+"lat": 34.077242,
+"lon": 74.677385,
+"kind": "area"
+},
+{
+"name": "Wasi Diagnostic Centre",
+"lat": 34.122765,
+"lon": 74.817757,
+"kind": "hospital"
+},
+{
+"name": "Watal Kadal",
+"lat": 34.090072,
+"lon": 74.798508,
+"kind": "bridge"
+},
+{
+"name": "Welcome Hotel",
+"lat": 34.083385,
+"lon": 74.835297,
+"kind": "landmark"
+},
+{
+"name": "Welcome Reaidency",
+"lat": 34.062861,
+"lon": 74.845775,
+"kind": "landmark"
+},
+{
+"name": "Well Care Pharmacy",
+"lat": 34.134287,
+"lon": 74.803831,
+"kind": "hospital"
+},
+{
+"name": "Western Highway Park & Green Space-II",
+"lat": 34.074314,
+"lon": 74.767254,
+"kind": "park"
+},
+{
+"name": "Womans College",
+"lat": 34.07452,
+"lon": 74.816519,
+"kind": "school"
+},
+{
+"name": "Women Industrial Training Institute",
+"lat": 34.07847,
+"lon": 74.764143,
+"kind": "school"
+},
+{
+"name": "Women's College Zakura",
+"lat": 34.15565,
+"lon": 74.842168,
+"kind": "school"
+},
+{
+"name": "Workshop Park",
+"lat": 34.126225,
+"lon": 74.839561,
+"kind": "park"
+},
+{
+"name": "X ray clinic",
+"lat": 34.151952,
+"lon": 74.802281,
+"kind": "hospital"
+},
+{
+"name": "Yasmin Resort",
+"lat": 34.02069,
+"lon": 74.798383,
+"kind": "landmark"
+},
+{
+"name": "Zaari Mohalla",
+"lat": 34.125553,
+"lon": 74.812048,
+"kind": "area"
+},
+{
+"name": "Zabarwan Highway Care",
+"lat": 34.021047,
+"lon": 74.883724,
+"kind": "fuel"
+},
+{
+"name": "Zabarwan Park",
+"lat": 34.086699,
+"lon": 74.849572,
+"kind": "park"
+},
+{
+"name": "Zadibal",
+"lat": 34.11256,
+"lon": 74.805324,
+"kind": "area"
+},
+{
+"name": "Zain-Ul-Abedin Budshah Gate University of Kashmir",
+"lat": 34.137885,
+"lon": 74.839791,
+"kind": "school"
+},
+{
+"name": "Zakir Masjid",
+"lat": 34.103668,
+"lon": 74.815262,
+"kind": "religious"
+},
+{
+"name": "Zakura",
+"lat": 34.152675,
+"lon": 74.836578,
+"kind": "area"
+},
+{
+"name": "Zakura Campus University of Kashmir",
+"lat": 34.149673,
+"lon": 74.83186,
+"kind": "school"
+},
+{
+"name": "Zaladager Bridge",
+"lat": 34.087151,
+"lon": 74.802502,
+"kind": "bridge"
+},
+{
+"name": "Zaldagar Bridge",
+"lat": 34.087152,
+"lon": 74.802546,
+"kind": "bridge"
+},
+{
+"name": "Zarab Khana Masjid",
+"lat": 34.095373,
+"lon": 74.806902,
+"kind": "religious"
+},
+{
+"name": "Zargar Park",
+"lat": 34.062651,
+"lon": 74.816622,
+"kind": "park"
+},
+{
+"name": "Zeashtha Devi temple",
+"lat": 34.07806,
+"lon": 74.87251,
+"kind": "religious"
+},
+{
+"name": "Zero Bridge",
+"lat": 34.069902,
+"lon": 74.830057,
+"kind": "bridge"
+},
+{
+"name": "Ziarat",
+"lat": 34.184696,
+"lon": 74.904695,
+"kind": "area"
+},
+{
+"name": "Zindshah Masjid",
+"lat": 34.099701,
+"lon": 74.822564,
+"kind": "religious"
+},
+{
+"name": "Ziyarat Khwaja Masood",
+"lat": 34.015812,
+"lon": 74.916925,
+"kind": "landmark"
+},
+{
+"name": "Ziyarat Qutub-ul-Alam",
+"lat": 34.087026,
+"lon": 74.803073,
+"kind": "landmark"
+},
+{
+"name": "Zukura stop",
+"lat": 34.150298,
+"lon": 74.836465,
+"kind": "bus_stop"
+},
+{
+"name": "Zulfikar Memorial Educational Institute",
+"lat": 34.146254,
+"lon": 74.802636,
+"kind": "school"
+},
+{
+"name": "Zunimar",
+"lat": 34.122961,
+"lon": 74.799422,
+"kind": "area"
+},
+{
+"name": "شری پرتاپ کالج",
+"lat": 34.074145,
+"lon": 74.816473,
+"kind": "school"
+},
+{
+"name": "لال چوک",
+"lat": 34.071275,
+"lon": 74.810609,
+"kind": "square"
+},
+{
+"name": "مسجد نعمان",
+"lat": 34.034699,
+"lon": 74.82443,
+"kind": "religious"
+},
+{
+"name": "مسجد نور",
+"lat": 34.032786,
+"lon": 74.815894,
+"kind": "religious"
+}
+]

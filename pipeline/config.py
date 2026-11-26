@@ -21,8 +21,13 @@ OSM_EXTRACT_URL = "https://download.openstreetmap.fr/extracts/asia/india/jammu_a
 
 # ---------------------------------------------------------------- convoy parameters
 CONVOY_SPEED_KMPH = 30             # average convoy speed used for ETA / exposure time
-THREAT_ZONE_RADIUS_M = 300         # default radius of a live threat zone
-HARD_BLOCK_IMPACT = 90             # impact >= this -> road closed to convoy (infinite cost)
+# Live-threat defaults come from threat_types.json (shared with the frontend + SITREP resolver)
+import json as _json
+_TT = _json.loads((Path(__file__).resolve().parent.parent / "threat_types.json").read_text(encoding="utf-8"))
+THREAT_DEFAULT_RADIUS_M = {k: v["radius_m"] for k, v in _TT["types"].items()}
+THREAT_DEFAULT_IMPACT = {k: v["impact"] for k, v in _TT["types"].items()}
+THREAT_RADIUS_RANGE_M = (_TT["radius_min_m"], _TT["radius_max_m"])
+HARD_BLOCK_IMPACT = _TT["hard_block_impact"]  # impact >= this -> road closed (infinite cost)
 HIGH_RISK_WEIGHT = 60              # edge weight >= this counts as "high-risk" exposure
 CHOKEPOINT_TOP_PCT = 5             # top-N% edge betweenness flagged as chokepoints
 
@@ -50,6 +55,7 @@ GRAPHML_CACHE = CACHE_DIR / "graph.graphml"
 INCIDENTS_CSV = DATA_DIR / "incidents.csv"
 LIVE_THREATS_JSON = DATA_DIR / "live_threats.json"
 REGION_JSON = DATA_DIR / "region.json"      # tells the frontend where to centre the map
+LANDMARKS_JSON = DATA_DIR / "landmarks.json"  # named OSM places for SITREP resolution
 
 ROUTING_GRAPH_JSON = ROOT / "routing_graph.json"
 ROUTING_EDGES_GEOJSON = ROOT / "routing_edges.geojson"

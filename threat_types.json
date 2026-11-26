@@ -1,0 +1,15 @@
+{
+  "_comment": "Single source of truth for live-threat defaults. Read by app.js, sitrep_resolver.py, server.js and pipeline/config.py. ttl_min = null means 'until cleared'.",
+  "hard_block_impact": 90,
+  "radius_min_m": 25,
+  "radius_max_m": 500,
+  "radius_step_m": 25,
+  "types": {
+    "IED":           {"label": "IED / suspicious object", "short": "IED/SUSPICIOUS OBJECT", "emoji": "💣", "impact": 92, "radius_m": 100, "ttl_min": null},
+    "ambush":        {"label": "Ambush risk",             "short": "AMBUSH RISK",           "emoji": "🎯", "impact": 80, "radius_m": 150, "ttl_min": 360},
+    "stone_pelting": {"label": "Stone pelting",           "short": "STONE PELTING",         "emoji": "🪨", "impact": 60, "radius_m": 100, "ttl_min": 240},
+    "road_blockade": {"label": "Road blockade",           "short": "ROAD BLOCKADE",         "emoji": "🚧", "impact": 70, "radius_m": 50,  "ttl_min": 480},
+    "landslide":     {"label": "Landslide (road closed)", "short": "LANDSLIDE",             "emoji": "⛰️", "impact": 95, "radius_m": 50,  "ttl_min": null},
+    "accident":      {"label": "Accident / obstruction",  "short": "ACCIDENT/OBSTRUCTION",  "emoji": "💥", "impact": 45, "radius_m": 30,  "ttl_min": 120}
+  }
+}

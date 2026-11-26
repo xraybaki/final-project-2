@@ -13,7 +13,8 @@ import traceback
 import numpy as np
 
 from . import config as C
-from .build_graph import build_graph
+from .build_graph import build_graph, _bbox
+from .landmarks import build_landmarks
 from .export_graph import export
 from .features import road_features
 from .spatial import EdgeIndex, projector_for
@@ -42,6 +43,8 @@ def main():
         scored = train_model.hand_tuned_scores(road_df, incidents, eidx)
 
     export(G, eidx, road_df, scored, region, metrics)           # M4
+    if "FALLBACK" not in region["name"]:
+        build_landmarks(G, _bbox())                             # M9 gazetteer
 
     w = scored["weight"].values
     print("-" * 72)

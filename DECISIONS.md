@@ -88,6 +88,54 @@
     `p_traverse`, `chokepoint`, `travel_time_s`, `bridge`, `tunnel`, `category`, `features`.
     No existing field was renamed or removed.
 
+## M9: precise point threats + SITREP resolver
+33. **Windows UTF-8 fix:** every `open` / `read_text` / `write_text` / `to_csv` in `pipeline/`,
+    `gemini_api.py` and the tests passes `encoding="utf-8"` (the CSV also `newline=""`). The server
+    spawns Python with `PYTHONIOENCODING=utf-8` and reads/writes stdin/stdout as UTF-8.
+34. **One table for threat defaults:** `threat_types.json` (impact, radius, TTL, labels) is read by
+    the frontend, `sitrep_resolver.py`, the server and `pipeline/config.py`
+    (`THREAT_DEFAULT_RADIUS_M`). The global 300 m radius is gone. Defaults: IED 92 / 100 m,
+    ambush 80 / 150 m, stone pelting 60 / 100 m, blockade 70 / 50 m, landslide 95 / 50 m,
+    accident 45 / 30 m. Radius slider is 25–500 m in steps of 25. The drawn circle and the
+    routing radius are the same value (`threat.radius_m`).
+35. **Fractional soft penalty:** `f_in` = length of the edge inside the circle ÷ edge length
+    (exact circle–segment intersection in local metres). `w_eff = w(1 − f_in) + w_threat·f_in`,
+    with `w_threat = max(w, impact)·(1 + 3·impact/100)`. Overlapping threats: highest impact first,
+    fractions capped at 1 in total. Probability: `1 − (1−p)·Π(1 − 0.5·impact/100·f_in)`.
+    **Hard block** (impact ≥ 90): any intersection closes the whole edge, because a convoy must
+    drive the link end to end between two junctions.
+36. **Display:** only the clipped part of each road inside a circle is painted (thick red, or
+    magenta for closed). Hard-blocked links also get a thin dashed full-length line so the
+    operator can see which junction-to-junction link is shut.
+37. **Snapping:** map clicks and drags project perpendicularly onto the nearest road within
+    150 m, using a 250 m spatial grid over edge geometries (no full scan of 29k edges). A
+    dashed line shows the snap when it is more than 10 m. Beyond 150 m the operator must
+    confirm an off-road threat (confidence "low").
+38. **Landmark gazetteer** (`pipeline/landmarks.py` → `data/landmarks.json`, 1,806 entries): named
+    OSM nodes and ways (bridges, junctions, squares, police, hospitals, markets, religious
+    sites, schools, stations, tourism / historic, neighbourhoods) from the same PBF / Overpass
+    source, plus named bridge segments of the road graph. Names ending in Road / Street /
+    Marg / Bypass are excluded (they are roads, not points). Same-name features within 250 m
+    are merged.
+39. **Resolver order** (`sitrep_resolver.py`): coordinates (decimal, DMS, **MGRS**: implemented
+    with a dependency-free UTM conversion and tested by round-trip) → junction of two named
+    roads → landmark (+ offset walked **along road geometry**, choosing at each junction the
+    branch best aligned with the stated direction) → road only = `needs_pin` → error listing
+    accepted formats.
+40. **Junction tolerance:** if two named roads share no node, the nearest node pair within
+    120 m is used at *medium* confidence. OSM often has a short unnamed link at a real junction
+    (for example Nalahmar Rd / Maharaj Ganj Rd are joined by a 67 m unnamed segment).
+41. **Never guess:** a road name alone, or an area name (suburb / neighbourhood) alone, never
+    produces a point. Area + road highlights only the part of the road within 1.2 km of the
+    area. Ambiguous landmark names (the same name more than 500 m apart) return an error
+    listing the candidates, unless a named road disambiguates them.
+42. **Gemini** only extracts fields (type, impact, radius, street, junction_with, landmark,
+    offset, direction). The offline gazetteer always resolves the location, and AI coordinates
+    are ignored.
+43. Named bridges stored as road segments (for example "Nawa Kadal") are treated as landmarks,
+    not as roads, so "near Nawa Kadal" resolves to a point instead of asking for a pin.
+44. Threat ids look like `THR-YYYYMMDD-HHMMSS-nnn` (client-generated until M11 adds the server store).
+
 ---
 
 ## Summary

@@ -137,13 +137,34 @@ Other metrics per route: distance, ETA at 30 km/h, mean and max segment risk, nu
 high-risk segments, **exposure time** on segments with weight ≥ 60, chokepoints crossed,
 and threat-zone segments.
 
-### 4.5 Live threats and re-routing (M6)
-* A threat is a 300 m zone. Every edge within 300 m of it, measured to the edge's real
-  geometry, gets weight `max(w, impact) × (1 + 3·impact/100)`.
-* **Impact ≥ 90 is a hard block** (infinite cost), so no route ever crosses it.
-* After any threat is added or removed, the routes are recomputed and the panel shows e.g.
-  *"Re-routed: +1.18 km, previous route BLOCKED"* or *"+X km, risk −Y%"*. The previous route is
-  re-evaluated under the new threat picture to produce that comparison.
+### 4.5 Live threats and re-routing (M6, refined in M9)
+* A threat is a **point with a small radius**. Default impact and radius depend on the type
+  (`threat_types.json`: IED 100 m, ambush 150 m, stone pelting 100 m, blockade 50 m,
+  landslide 50 m, accident 30 m). The operator can change the radius (25–500 m), the impact
+  and the type at any time in the threat popup, and drag the marker to move it.
+* Map clicks **snap to the nearest road**. A dashed line shows the snap when it is more than 10 m.
+* **Only the part of a road inside the circle is affected.** Soft threats (impact < 90) scale the
+  penalty by the fraction of the edge inside the circle:
+  `w_eff = w(1 − f_in) + max(w, impact)(1 + 3·impact/100)·f_in`. **Impact ≥ 90 is a hard block:**
+  if the circle touches a link, the link is closed and no route uses it.
+* After any threat is added, edited or removed, the routes are recomputed and the panel shows e.g.
+  *"Re-routed: +1.18 km, previous route BLOCKED"* or *"+X km, risk −Y%"*.
+
+### 4.6 SITREP → threat (M9)
+`POST /parse-sitrep` resolves the location offline against OSM roads and `data/landmarks.json`.
+The first rule that matches wins, and the result carries a `resolution` and a `confidence`:
+
+| Rule | Example | Result |
+|---|---|---|
+| Coordinates | `34.0812, 74.7956` · `34°05'01"N 74°47'50"E` · `43S DT 81299 71455` (MGRS) | exact point, high |
+| Junction | `IED at junction of Nalahmar Road and Maharaj Ganj Road` | shared node, high (medium if OSM has a gap) |
+| Landmark | `Road blockade near Lal Chowk` · `near Nawa Kadal` | landmark snapped to road |
+| Landmark + offset | `Ambush risk 300 m east of Nawa Kadal on Nalahmar Road` | walked 300 m **along** the road |
+| Road only | `IED on Nalahmar Road` | **no point**: the road pulses cyan and the operator clicks the exact spot (pin mode, Esc cancels) |
+| Nothing | — | error listing the accepted formats |
+
+A parsed SITREP first appears as a **preview card** (type, impact, radius, location, method,
+confidence) with a dashed draggable marker. Click **Confirm** to add it, or **Adjust** to drag it first.
 
 ## 5. Results (`reports/metrics.json`)
 

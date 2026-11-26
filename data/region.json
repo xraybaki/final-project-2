@@ -20,7 +20,6 @@
     ]
   },
   "convoy_speed_kmph": 30,
-  "threat_zone_radius_m": 300,
   "hard_block_impact": 90,
   "high_risk_weight": 60,
   "L_ref": 65.2,

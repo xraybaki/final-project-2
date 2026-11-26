@@ -182,7 +182,7 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
     metrics["scoring"] = {"window_months": f"{T - F + 1}-{T}", "weight_scale_q99": float(q),
                           "incident_active_hours": INCIDENT_ACTIVE_HOURS,
                           "pct_high_risk_ge60": float((weight >= C.HIGH_RISK_WEIGHT).mean())}
-    (C.REPORTS_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2))
+    (C.REPORTS_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     print(f"  [M3] model -> models/risk_model.joblib ; metrics -> reports/metrics.json")
     return scored, metrics
 

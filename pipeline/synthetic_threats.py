@@ -180,8 +180,9 @@ def generate_live_threats(G: nx.Graph, eidx: EdgeIndex, road: pd.DataFrame,
         xy = point_along(eidx.edge_xy[e], 0.5)
         lat, lon = eidx.proj.latlon(xy[0], xy[1])
         loc = str(names[e])
-        events.append({"lat": round(float(lat), 6), "lon": round(float(lon), 6), "type": itype,
-                       "impact": impact, "location": loc,
+        events.append({"id": f"INTEL-{len(events) + 1:03d}", "lat": round(float(lat), 6), "lon": round(float(lon), 6),
+                       "type": itype, "impact": impact, "radius_m": C.THREAT_DEFAULT_RADIUS_M[itype],
+                       "location": loc, "location_label": loc,
                        "description": DESCRIPTIONS[itype].format(loc=loc)})
         chosen.append(e)
         used_names.add(names[e])
@@ -192,9 +193,9 @@ def generate_live_threats(G: nx.Graph, eidx: EdgeIndex, road: pd.DataFrame,
 
 def run(G, eidx, road):
     inc = generate_incidents(G, eidx, road)
-    inc.to_csv(C.INCIDENTS_CSV, index=False)
+    inc.to_csv(C.INCIDENTS_CSV, index=False, encoding="utf-8")
     live = generate_live_threats(G, eidx, road, inc)
-    C.LIVE_THREATS_JSON.write_text(json.dumps(live, indent=2))
+    C.LIVE_THREATS_JSON.write_text(json.dumps(live, indent=2), encoding="utf-8")
     counts = inc["type"].value_counts().to_dict()
     print(f"  [M2] {len(inc):,} SYNTHETIC incidents -> {C.INCIDENTS_CSV.relative_to(C.ROOT)} {counts}")
     print(f"  [M2] {len(live['events'])} live threats -> {C.LIVE_THREATS_JSON.relative_to(C.ROOT)}")

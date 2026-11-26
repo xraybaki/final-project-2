@@ -60,6 +60,10 @@ def export(G, eidx, road_df: pd.DataFrame, scored: pd.DataFrame, region: dict, m
         adj[str(u)].append(a)
         adj[str(v)].append({**a, "target": int(u)})
         geom = [[round(x, 6), round(y, 6)] for x, y in d["geometry"]]
+        # orient geometry source -> target so consumers can walk along roads
+        ux, uy = G.nodes[u]["lon"], G.nodes[u]["lat"]
+        if (geom[0][0] - ux) ** 2 + (geom[0][1] - uy) ** 2 > (geom[-1][0] - ux) ** 2 + (geom[-1][1] - uy) ** 2:
+            geom.reverse()
         feats.append({"type": "Feature", "geometry": {"type": "LineString", "coordinates": geom},
                       "properties": props})
 
@@ -68,7 +72,6 @@ def export(G, eidx, road_df: pd.DataFrame, scored: pd.DataFrame, region: dict, m
         "data_label": C.SYNTHETIC_LABEL,
         "region": region,
         "convoy_speed_kmph": C.CONVOY_SPEED_KMPH,
-        "threat_zone_radius_m": C.THREAT_ZONE_RADIUS_M,
         "hard_block_impact": C.HARD_BLOCK_IMPACT,
         "high_risk_weight": C.HIGH_RISK_WEIGHT,
         "L_ref": round(float(np.median(lengths)), 2),
@@ -78,14 +81,14 @@ def export(G, eidx, road_df: pd.DataFrame, scored: pd.DataFrame, region: dict, m
         "baseline_roc_auc_spatial_cv": (metrics or {}).get("spatial_block_cv", {}).get("baseline_roc_auc_mean"),
     }
     graph = {"meta": meta, "nodes": nodes, "edges": edges, "adjacency_list": adj}
-    C.ROUTING_GRAPH_JSON.write_text(json.dumps(graph, separators=(",", ":")))
+    C.ROUTING_GRAPH_JSON.write_text(json.dumps(graph, separators=(",", ":")), encoding="utf-8")
     C.ROUTING_EDGES_GEOJSON.write_text(json.dumps(
         {"type": "FeatureCollection", "name": "routing_edges", "data_label": C.SYNTHETIC_LABEL,
-         "features": feats}, separators=(",", ":")))
-    C.REGION_JSON.write_text(json.dumps(meta, indent=2))
+         "features": feats}, separators=(",", ":")), encoding="utf-8")
+    C.REGION_JSON.write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
     flat_cols = [k for k in edges[0] if k != "features"]
-    with open(C.ROUTING_EDGES_CSV, "w", newline="") as fh:
+    with open(C.ROUTING_EDGES_CSV, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=flat_cols + list(edges[0]["features"].keys()))
         w.writeheader()
         for e in edges:

@@ -222,7 +222,7 @@ def _toronto_fallback() -> tuple[nx.Graph, dict]:
     path = C.LEGACY_DIR / "downtown_streets.geojson"
     print(f"  [M1] !!! WARNING: OSM download failed - FALLING BACK to legacy Toronto streets "
           f"({path.relative_to(C.ROOT)}). The demo will run on Toronto, not {C.REGION_NAME}.")
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     lines = []
     for f in data["features"]:
         p = f.get("properties", {})

@@ -30,7 +30,7 @@ function sendJSON(res, status, obj) {
 
 // Run a python script with JSON on stdin; falls back from python3 -> python if not found
 function runPython(script, input, cb, exe = PYTHON) {
-    const py = spawn(exe, [path.join(ROOT, script)], { cwd: ROOT });
+    const py = spawn(exe, [path.join(ROOT, script)], { cwd: ROOT, env: { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' } });
     let out = '', err = '';
     let done = false;
     const timer = setTimeout(() => { if (!done) { py.kill(); } }, 30000);
@@ -41,8 +41,8 @@ function runPython(script, input, cb, exe = PYTHON) {
         if (e.code === 'ENOENT' && exe !== 'python') return runPython(script, input, cb, 'python');
         cb(e);
     });
-    py.stdout.on('data', d => out += d.toString());
-    py.stderr.on('data', d => err += d.toString());
+    py.stdout.on('data', d => out += d.toString('utf8'));
+    py.stderr.on('data', d => err += d.toString('utf8'));
     py.on('close', (code) => {
         if (done) return;
         done = true;
@@ -51,7 +51,7 @@ function runPython(script, input, cb, exe = PYTHON) {
         if (code !== 0) return cb(new Error(`exit ${code}`));
         cb(null, out);
     });
-    py.stdin.write(input);
+    py.stdin.write(Buffer.from(input, 'utf8'));
     py.stdin.end();
 }
 
@@ -86,10 +86,10 @@ const server = http.createServer((req, res) => {
     if (url === '/parse-sitrep' && req.method === 'POST') {
         readBody(req, (body) => {
             runPython('gemini_api.py', body, (err, out) => {
-                if (err) return sendJSON(res, 500, { error: `SITREP parser failed (${err.message})` });
+                if (err) return sendJSON(res, 500, { status: 'error', message: `SITREP parser failed (${err.message})` });
                 try {
                     const parsed = JSON.parse(out.trim().split('\n').pop());
-                    sendJSON(res, parsed.error ? 422 : 200, parsed);
+                    sendJSON(res, parsed.status === 'error' ? 422 : 200, parsed);
                 } catch (e) {
                     sendJSON(res, 500, { error: 'SITREP parser returned invalid JSON' });
                 }

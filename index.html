@@ -30,48 +30,31 @@
             2️⃣ Second click = Destination (B)
         </div>
 
-        <!-- Report Threat Mode -->
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <button id="report-crime-btn" onclick="toggleReportThreatMode()" style="width: 100%; padding: 10px; background: rgba(255,68,68,0.2); border: 1px solid #ff4444; color: #ff4444; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
-                🚨 Report Threat
-            </button>
-        </div>
-
-        <div id="report-crime-panel" style="display:none; margin-top: 10px; padding: 12px; background: rgba(255,68,68,0.1); border-radius: 8px; border: 1px solid #ff4444;">
-            <div style="font-size: 12px; color: #ff4444; margin-bottom: 8px; font-weight: bold;">📍 Click on map to place threat</div>
-            <label style="display: block; font-size: 11px; color: #888; margin-bottom: 5px;">Threat type:</label>
-            <select id="crime-event-type" onchange="updateImpactDefault()" style="width: 100%; padding: 6px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid #444; border-radius: 6px; font-size: 12px; margin-bottom: 8px;">
-                <option value="IED">💣 IED / suspicious object</option>
-                <option value="ambush">🎯 Ambush risk</option>
-                <option value="stone_pelting">🪨 Stone pelting</option>
-                <option value="road_blockade">🚧 Road blockade</option>
-                <option value="landslide">⛰️ Landslide (road closed)</option>
-                <option value="accident">💥 Accident / obstruction</option>
-            </select>
-            <label style="display: block; font-size: 11px; color: #888; margin-bottom: 3px;">Impact: <b id="threat-impact-value" style="color:#ffaa00;">92</b> <span style="color:#666;">(≥90 = road closed)</span></label>
-            <input type="range" id="threat-impact" min="10" max="100" step="1" value="92" oninput="updateImpactLabel()" style="width:100%; margin-bottom: 8px;">
-            <button onclick="clearThreats()" style="width: 100%; padding: 6px; background: rgba(255,255,255,0.1); border: 1px solid #666; color: #fff; border-radius: 6px; cursor: pointer; font-size: 11px;">
-                🗑️ Clear All Threats
-            </button>
-        </div>
-
-        <!-- Intel feed -->
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <button id="fetch-crimes-btn" onclick="fetchLiveThreats()" style="width: 100%; padding: 10px; background: rgba(102,126,234,0.2); border: 1px solid #667eea; color: #667eea; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
-                📡 Fetch Intel Reports
-            </button>
-            <div id="fetch-status" style="display:none; margin-top: 10px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px; border: 1px solid #667eea; font-size: 11px; color: #ccc;">
-                <em>Status will appear here...</em>
+        <!-- Threats -->
+        <section class="panel-section">
+            <button id="report-threat-btn" class="btn btn-danger-outline btn-block" onclick="Threats.setReportMode(!Threats.reportMode)">Report threat on map</button>
+            <div class="threat-form">
+                <label class="field"><span>Threat type</span>
+                    <select id="threat-type" class="input" onchange="Threats.applyTypeDefaults()"></select></label>
+                <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">(≥90 = road closed)</span></span>
+                    <input type="range" id="threat-impact" class="range" min="10" max="100" step="1" value="92" oninput="Threats.updateSliderLabels()"></label>
+                <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b></span>
+                    <input type="range" id="threat-radius" class="range" min="25" max="500" step="25" value="100" oninput="Threats.updateSliderLabels()"></label>
+                <button class="btn btn-ghost btn-sm btn-block" onclick="Threats.clearAll()">Clear all threats</button>
             </div>
-        </div>
+        </section>
 
-        <!-- SITREP parser -->
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <label style="display:block; font-size: 12px; color: #667eea; font-weight: bold; margin-bottom: 5px;">🤖 SITREP → threat (AI parse)</label>
-            <textarea id="sitrep-input" rows="3" placeholder="e.g. Suspected IED reported near the bridge on Fore Shore Road" style="width:100%; box-sizing:border-box; padding:6px; background: rgba(0,0,0,0.3); color:#fff; border:1px solid #444; border-radius:6px; font-size:11px; resize:vertical;"></textarea>
-            <button onclick="parseSitrep()" style="width:100%; margin-top:5px; padding:7px; background: rgba(102,126,234,0.2); border: 1px solid #667eea; color: #667eea; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Parse &amp; add threat</button>
-            <div id="sitrep-status" style="display:none; margin-top:6px; font-size:11px;"></div>
-        </div>
+        <section class="panel-section">
+            <button id="fetch-intel-btn" class="btn btn-info-outline btn-block" onclick="Threats.fetchIntel()">Fetch intel reports</button>
+        </section>
+
+        <section class="panel-section">
+            <label class="section-label" for="sitrep-input">SITREP → threat</label>
+            <textarea id="sitrep-input" class="input" rows="3" placeholder="e.g. IED at junction of Nalahmar Road and Maharaj Ganj Road"></textarea>
+            <button class="btn btn-info-outline btn-sm btn-block" onclick="Threats.parseSitrep()">Parse SITREP</button>
+            <div id="sitrep-status" class="sitrep-status"></div>
+            <div id="sitrep-preview"></div>
+        </section>
 
         <!-- Legend -->
         <div id="legend" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; font-size: 11px;">
@@ -105,8 +88,11 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <!-- Pathfinding JS -->
+    <!-- Pathfinding + threat geometry (pure, Node-testable) -->
     <script src="pathfinding.js"></script>
+    <script src="js/threat-geo.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/threats.js"></script>
     
     <!-- App JS -->
     <script src="app.js"></script>

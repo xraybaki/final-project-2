@@ -11,12 +11,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 @pytest.fixture(scope="module")
 def graph():
-    return json.loads((ROOT / "routing_graph.json").read_text())
+    return json.loads((ROOT / "routing_graph.json").read_text(encoding="utf-8"))
 
 
 @pytest.fixture(scope="module")
 def metrics():
-    return json.loads((ROOT / "reports" / "metrics.json").read_text())
+    return json.loads((ROOT / "reports" / "metrics.json").read_text(encoding="utf-8"))
 
 
 def test_schema(graph):
@@ -48,7 +48,7 @@ def test_weights_in_range_no_nans(graph):
 
 
 def test_geojson_matches_graph(graph):
-    gj = json.loads((ROOT / "routing_edges.geojson").read_text())
+    gj = json.loads((ROOT / "routing_edges.geojson").read_text(encoding="utf-8"))
     assert len(gj["features"]) == len(graph["edges"])
     assert gj["features"][0]["geometry"]["type"] == "LineString"
 
@@ -61,14 +61,14 @@ def test_model_beats_baseline(metrics):
 
 
 def test_synthetic_label():
-    inc = (ROOT / "data" / "incidents.csv").read_text().splitlines()
+    inc = (ROOT / "data" / "incidents.csv").read_text(encoding="utf-8").splitlines()
     assert "data_label" in inc[0] and "SYNTHETIC" in inc[1]
-    live = json.loads((ROOT / "data" / "live_threats.json").read_text())
+    live = json.loads((ROOT / "data" / "live_threats.json").read_text(encoding="utf-8"))
     assert "SYNTHETIC" in live["source"] and 4 <= len(live["events"]) <= 6
     for ev in live["events"]:
         assert {"lat", "lon", "type", "impact", "location", "description"} <= ev.keys()
 
 
-def test_js_astar():
-    out = subprocess.run(["node", str(ROOT / "tests" / "test_astar.js")], capture_output=True, text=True)
+def test_js_suite():
+    out = subprocess.run(["node", str(ROOT / "tests" / "run_js_tests.js")], capture_output=True, text=True)
     assert out.returncode == 0, out.stdout + out.stderr
