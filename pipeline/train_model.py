@@ -144,6 +144,7 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
                              "pr_auc": float(average_precision_score(y_val, b_val)),
                              **_threshold_metrics(y_val, b_val, bthr)},
     }
+    metrics["spatial_block_cv"] = _spatial_cv(eidx, X, y)
     metrics["feature_importance"] = _plots(model, name, y_val, s_val, b_val)
     m, b = metrics["model_metrics"], metrics["baseline_metrics"]
     print(f"  [M3] {name}: ROC-AUC={m['roc_auc']:.3f} PR-AUC={m['pr_auc']:.3f} "
@@ -184,6 +185,28 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
     (C.REPORTS_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2))
     print(f"  [M3] model -> models/risk_model.joblib ; metrics -> reports/metrics.json")
     return scored, metrics
+
+
+def _spatial_cv(eidx, X, y, cell_m: float = 1500.0, folds: int = 5) -> dict:
+    """Spatially blocked CV: edges grouped into cell_m grid cells so neighbouring edges never
+    sit on both sides of the split. A more honest estimate than the random split."""
+    from sklearn.model_selection import GroupKFold
+    groups = (np.floor(eidx.mid_xy[:, 0] / cell_m).astype(int) * 100003
+              + np.floor(eidx.mid_xy[:, 1] / cell_m).astype(int))
+    m_auc, b_auc = [], []
+    for tr, te in GroupKFold(n_splits=folds).split(X, y, groups):
+        if len(set(y[te])) < 2:
+            continue
+        mdl, _ = make_model(pos_weight=float((y[tr] == 0).sum() / max(1, y[tr].sum())))
+        mdl.fit(X.iloc[tr], y[tr])
+        m_auc.append(roc_auc_score(y[te], mdl.predict_proba(X.iloc[te])[:, 1]))
+        b_auc.append(roc_auc_score(y[te], -X.iloc[te]["dist_nearest_inc"].values))
+    out = {"cell_m": cell_m, "folds": len(m_auc),
+           "model_roc_auc_mean": float(np.mean(m_auc)), "model_roc_auc_std": float(np.std(m_auc)),
+           "baseline_roc_auc_mean": float(np.mean(b_auc))}
+    print(f"  [M3] spatial-block CV ({cell_m:.0f} m cells): model ROC-AUC {out['model_roc_auc_mean']:.3f}"
+          f" ± {out['model_roc_auc_std']:.3f}  vs baseline {out['baseline_roc_auc_mean']:.3f}")
+    return out
 
 
 def _prior_correct(p, prior_train, prior_true):

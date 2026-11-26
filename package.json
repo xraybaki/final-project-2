@@ -1,18 +1,20 @@
 {
-  "name": "saferoute-ai",
+  "name": "convoy-route-planner",
   "version": "1.0.0",
-  "description": "Risk-aware urban map for Toronto using crime data",
+  "description": "AI-based safest route planner for mobile convoys (adapted from SafeSteps_AI)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node tests/test_astar.js"
   },
   "keywords": [
     "leaflet",
-    "geojson",
-    "toronto",
-    "crime",
-    "visualization"
+    "osm",
+    "convoy",
+    "routing",
+    "risk",
+    "astar"
   ],
   "author": "",
   "license": "MIT"

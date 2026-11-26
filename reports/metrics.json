@@ -40,6 +40,13 @@
       "tp": 740
     }
   },
+  "spatial_block_cv": {
+    "cell_m": 1500.0,
+    "folds": 5,
+    "model_roc_auc_mean": 0.6811515779124933,
+    "model_roc_auc_std": 0.07966979407069874,
+    "baseline_roc_auc_mean": 0.5808440561482467
+  },
   "feature_importance": {
     "inc_500m": 0.11718572676181793,
     "hostile_500m": 0.09164206683635712,
