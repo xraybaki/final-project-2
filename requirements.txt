@@ -1,0 +1,15 @@
+# Core pipeline
+osmnx>=1.9
+networkx
+geopandas
+shapely
+pandas
+numpy
+scikit-learn
+xgboost            # optional at runtime: pipeline falls back to scikit-learn if missing
+joblib
+matplotlib
+python-dotenv
+pytest
+# Optional: Gemini SITREP parsing (demo works without it)
+# google-genai
