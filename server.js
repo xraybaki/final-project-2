@@ -304,6 +304,68 @@ function handleLive(req, res, url) {
     return false;
 }
 
+// ------------------------------------------------------------------ convoys (M14)
+const CONVOYS_FILE = process.env.CONVOYS_DB || path.join(ROOT, 'data', 'convoys.json');
+const convoysDb = new JsonStore(CONVOYS_FILE, () => []);
+const PROFILES = ['fastest', 'balanced', 'safest'];
+const CONVOY_FIELDS = ['call_sign', 'color', 'start', 'dest', 'sp_time', 'priority', 'vehicles', 'spacing_m', 'speed_kmph', 'profile'];
+
+function validateConvoy(b, full) {
+    const has = (k) => b[k] !== undefined;
+    if ((full || has('call_sign')) && !(typeof b.call_sign === 'string' && b.call_sign.trim().length >= 1 && b.call_sign.length <= 24)) return 'call_sign is required (1-24 chars)';
+    if (has('sp_time') && !/^([01]?\d|2[0-3]):[0-5]\d$/.test(String(b.sp_time))) return 'sp_time must be HH:MM';
+    if (has('priority') && ![1, 2, 3].includes(Number(b.priority))) return 'priority must be 1, 2 or 3';
+    if (has('vehicles') && !(Number(b.vehicles) >= 1 && Number(b.vehicles) <= 200)) return 'vehicles must be 1-200';
+    if (has('spacing_m') && !(Number(b.spacing_m) >= 10 && Number(b.spacing_m) <= 500)) return 'spacing_m must be 10-500';
+    if (has('speed_kmph') && !(Number(b.speed_kmph) >= 5 && Number(b.speed_kmph) <= 80)) return 'speed_kmph must be 5-80';
+    if (has('profile') && !PROFILES.includes(b.profile)) return `profile must be one of ${PROFILES.join(', ')}`;
+    for (const k of ['start', 'dest']) {
+        if (has(k) && b[k] !== null && !(Number.isFinite(+b[k].lat) && Number.isFinite(+b[k].lon))) return `${k} must be {lat, lon} or null`;
+    }
+    return null;
+}
+
+function handleConvoys(req, res, url) {
+    if (url === '/api/convoys' && req.method === 'GET') return sendJSON(res, 200, { records: convoysDb.records });
+    if (url === '/api/convoys' && req.method === 'POST') {
+        return readJSONBody(req, res, (b) => {
+            const err = validateConvoy(b, true);
+            if (err) return sendJSON(res, 422, { error: err });
+            const n = convoysDb.records.reduce((m, r) => Math.max(m, +(r.id.split('-')[1]) || 0), 0) + 1;
+            const now = new Date().toISOString();
+            const rec = { id: `CVY-${String(n).padStart(3, '0')}`, call_sign: b.call_sign.trim(), color: b.color || '#4ea1ff',
+                          start: b.start || null, dest: b.dest || null, sp_time: b.sp_time || '07:30', priority: Number(b.priority || 2),
+                          vehicles: Number(b.vehicles || 10), spacing_m: Number(b.spacing_m || 50), speed_kmph: Number(b.speed_kmph || 30),
+                          profile: b.profile || 'balanced', created_at: now, updated_at: now, version: 1 };
+            convoysDb.insert(rec);
+            broadcast('convoys_changed', { action: 'created', record: rec });
+            sendJSON(res, 201, rec);
+        });
+    }
+    const m = url.match(/^\/api\/convoys\/(CVY-\d+)$/);
+    if (m && req.method === 'PATCH') {
+        return readJSONBody(req, res, (b) => {
+            if (!convoysDb.find(m[1])) return sendJSON(res, 404, { error: 'not found' });
+            const err = validateConvoy(b, false);
+            if (err) return sendJSON(res, 422, { error: err });
+            const rec = convoysDb.update(m[1], (r) => {
+                for (const k of CONVOY_FIELDS) if (b[k] !== undefined) r[k] = ['priority', 'vehicles', 'spacing_m', 'speed_kmph'].includes(k) ? Number(b[k]) : b[k];
+                r.updated_at = new Date().toISOString();
+                r.version = (r.version || 1) + 1;
+            });
+            broadcast('convoys_changed', { action: 'updated', record: rec });
+            sendJSON(res, 200, rec);
+        });
+    }
+    if (m && req.method === 'DELETE') {
+        const rec = convoysDb.remove(m[1]);
+        if (!rec) return sendJSON(res, 404, { error: 'not found' });
+        broadcast('convoys_changed', { action: 'deleted', record: rec });
+        return sendJSON(res, 200, rec);
+    }
+    return false;
+}
+
 // ------------------------------------------------------------------ server
 const server = http.createServer((req, res) => {
     const u = new URL(req.url, 'http://localhost');
@@ -324,6 +386,7 @@ const server = http.createServer((req, res) => {
         if (handleEvents(req, res, url) !== false) return;
     }
     if ((url === '/api/scenarios' || url.startsWith('/api/convoys/')) && handleLive(req, res, url) !== false) return;
+    if (url.startsWith('/api/convoys') && handleConvoys(req, res, url) !== false) return;
     if (typeof extraRoutes === 'function' && extraRoutes(req, res, url, u.searchParams) !== false) return;
     if (url.startsWith('/api/')) return sendJSON(res, 404, { error: 'unknown API route' });
 

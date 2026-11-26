@@ -242,6 +242,43 @@
     on the alternative" lands on the rerouted path). One scenario is shipped: Srinagar, IED
     on route, then stone pelting on the alternative.
 
+## M14: multi-convoy deconfliction and timing
+73. **Occupancy:** the head enters edge e at `t_in = SP + dist / v`; the tail leaves at
+    `t_exit_head + column / v` with column = vehicles × spacing. Window = [t_in − buffer,
+    t_out + buffer], buffer 3 min by default. Junction crossings get the same window at the
+    node. Times are minutes of day from the 24-hour SP (HH:MM).
+74. **Conflict rules:** head-on = same edge, opposite directions, overlapping windows. It is
+    **Critical** on a bridge, chokepoint (top-5% betweenness), narrow road (≤ 1 lane, minor
+    class) or unpaved road; High elsewhere. Bunching = same edge, same direction, head gap
+    < 10 min (Medium). Junction = same node with overlapping windows where the routes *cross*
+    (nodes on a shared stretch are not double-counted) (Medium). Shared threat exposure = both
+    convoys inside the same threat radius at overlapping times (High).
+75. **Grouping:** consecutive shared edges of one pair and type form *one* conflict, labelled at
+    its worst location (a bridge is preferred), so a long shared stretch doesn't produce dozens
+    of warnings.
+76. **Resolution (prioritised planning):** sort by priority, then SP. The first convoy keeps
+    its plan. Each next convoy tries (1) delaying SP in 2-min steps up to 60 min and (2) an
+    alternative route found with A* where edges reserved by higher-priority convoys get
+    +400 risk (Critical ones are blocked, with λ ≥ 0.5 so the penalty also applies to
+    "fastest"). The option with the fewest critical, then high, then total conflicts wins,
+    with ties broken by cost = delay minutes + extra route cost converted to minutes
+    (Δcost × L_ref ÷ speed). If nothing is conflict-free, the least-bad option is kept and
+    the remaining conflicts are flagged.
+77. **Recommendations, not silent changes:** "Bravo-2: delay SP by 14 min (07:32 → 07:46) to avoid
+    head-on with Alpha-1 on Syed Mansoor Bridge" with Accept / Accept all. Accepting a reroute
+    pins that route until the convoy's endpoints or profile change.
+78. **Persistence:** `data/convoys.json` (git-ignored, atomic writes) via
+    `GET/POST/PATCH/DELETE /api/convoys`. Changes are broadcast over SSE (`convoys_changed`)
+    so other tabs stay in sync.
+79. **Run all:** every convoy runs in the M13 live engine from its own SP (sim offsets
+    relative to the earliest SP). The Gantt shows a "now" line. After any live reroute, the
+    conflict check re-runs on the convoys' remaining routes from their current positions, and
+    any new High or Critical conflict raises a toast.
+80. **Demo convoys** ("Load demo convoys"): Alpha-1 south→north 07:30 (P1), Bravo-2 north→south
+    07:32 (P2), Charlie-3 south→north 07:34 (P3), between both banks of the Jhelum. Their
+    routes share river-bridge chokepoints, which gives 2 Critical head-ons and 1 bunching;
+    "Accept all" delays Bravo-2 by 14 min and Charlie-3 by 28 min, leaving zero conflicts.
+
 ---
 
 ## Summary

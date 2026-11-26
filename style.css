@@ -374,3 +374,47 @@ a.btn { text-decoration: none; }
 .live-banner .closed { color: var(--closed); }
 .ev-departed b, .ev-scenario b { color: var(--info); } .ev-stuck b { color: var(--danger); } .ev-high_risk b, .ev-chokepoint b { color: var(--text-dim); }
 .btn-row select.input { min-width: 0; flex: 1 1 0; text-overflow: ellipsis; }
+
+/* ------------------------------------------------------------- M14: convoys tab */
+.sidebar[data-tab="convoys"] .panels { width: 860px; }
+@media (max-width: 1279px) { .sidebar[data-tab="convoys"] .panels { width: 680px; } }
+.settings-row { display: flex; gap: var(--s4); align-items: center; margin-top: var(--s3); font-size: 12px; color: var(--text-dim); flex-wrap: wrap; }
+.num-input { width: 64px; }
+.cs-input { width: 96px; }
+.cv-card { padding-bottom: var(--s2); }
+.cv-wrap { overflow-x: auto; }
+.cv-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cv-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-dim); padding: 4px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.cv-table td { padding: 4px; border-bottom: 1px solid rgba(255, 255, 255, .05); vertical-align: middle; }
+.cv-table .input-sm { width: auto; }
+.cv-table input[type="time"] { width: 92px; }
+.btn.is-set { color: var(--accent); border-color: rgba(34, 211, 155, .6); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.small { font-size: 11px; }
+.cf-row { display: grid; grid-template-columns: 70px 1fr auto; gap: var(--s2); align-items: center; padding: 6px 8px; margin: 4px 0; border-radius: var(--r-sm); background: var(--bg); border-left: 3px solid var(--warn); }
+.cf-row.sev-critical { border-left-color: var(--closed); } .cf-row.sev-high { border-left-color: var(--danger); }
+.badge.sev-critical { color: var(--closed); border-color: var(--closed); }
+.badge.sev-high { color: var(--danger); border-color: var(--danger); }
+.badge.sev-medium { color: var(--warn); border-color: var(--warn); }
+.rec-title { margin-top: var(--s3); }
+.rec-row { display: flex; justify-content: space-between; gap: var(--s2); align-items: center; padding: 6px 0; border-top: 1px solid var(--border); font-size: 12px; }
+.gantt { width: 100%; height: auto; display: block; font-family: var(--font); }
+.g-grid { stroke: rgba(255, 255, 255, .07); }
+.g-tick { fill: var(--text-dim); font-size: 10px; font-variant-numeric: tabular-nums; }
+.g-label { font-size: 11px; font-weight: 700; }
+.g-seg { opacity: .9; }
+.g-low { fill: var(--risk-low); } .g-med { fill: var(--risk-med); } .g-high { fill: var(--risk-high); } .g-crit { fill: var(--risk-crit); } .g-closed { fill: var(--closed); }
+.g-outline { fill: none; stroke-width: 1.5; }
+.g-conflict { stroke: #000; stroke-width: .5; }
+.g-conflict.sev-critical { fill: var(--closed); } .g-conflict.sev-high { fill: var(--danger); } .g-conflict.sev-medium { fill: var(--warn); }
+.g-now { stroke: #fff; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.g-legend { margin-top: 4px; }
+.march { border-top: 1px solid var(--border); padding: 6px 0; }
+.march summary { cursor: pointer; font-size: 12px; }
+.conflict-icon-wrap { background: none; border: 0; }
+.conflict-icon { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; color: #000; background: var(--warn); border: 2px solid #fff; box-shadow: 0 0 10px rgba(0, 0, 0, .6); }
+.conflict-icon.sev-critical { background: var(--closed); color: #fff; } .conflict-icon.sev-high { background: var(--danger); color: #fff; }
+.cv-table td { white-space: nowrap; }
+.cv-table .num-input { width: 54px; }
+.cv-table .time-input { width: 62px; font-variant-numeric: tabular-nums; }
+.cv-table .cs-input { width: 90px; }
