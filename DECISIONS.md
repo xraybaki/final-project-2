@@ -190,6 +190,21 @@
 59. CSV export has a UTF-8 BOM so Excel on Windows shows non-ASCII place names correctly.
     The database files are never served as static files (HTTP 403).
 
+## M12: risk guide + tooltips
+60. **One λ default:** Balanced = 0.6 everywhere (`ROUTE_LAMBDAS` in `pathfinding.js`, which
+    `app.js` reads). Presets are labelled "Fastest (λ 0) · Balanced (λ 0.6) · Safest (λ 0.95)".
+    The slider moves only the Balanced route (max 0.95, so Balanced never exceeds Safest).
+61. **Guide tables are computed, not typed:** the multiplier table (C) uses the router's
+    `1 + 3·impact/100` and the λ table (D) uses `1 + λ·(R/100)/(1 − λ)` with R = 80, so the
+    explanation cannot drift from the code. The values match the IMPROVEMENTS.md tables
+    (×1.5 / 1.9 / 2.5 / 3.4; 1.0 / 1.2 / 1.4 / 2.2 / 4.2 / 16 km).
+62. **Tooltips:** one ⓘ per number or label (route rows, λ, impact, radius, legend, threat-popup
+    effect, edge popups, live HUD). Each shows one sentence plus a "More in Guide" link that
+    opens the Guide tab at the right section. It works with hover, keyboard focus or click,
+    and the popover stays open while hovered so the link can be clicked.
+63. The "multiplier" (risk ×1.5) and "λ" (preference 0.6) are always labelled differently and
+    explained side by side in a call-out.
+
 ---
 
 ## Summary

@@ -335,10 +335,13 @@
             impV.textContent = impactText(d.impact); radV.textContent = `${d.radius_m} m`;
         });
         root.appendChild(el('label', { class: 'field' }, el('span', {}, 'Type'), typeSel));
-        root.appendChild(el('label', { class: 'field' }, el('span', {}, 'Impact ', impV), imp));
-        root.appendChild(el('label', { class: 'field' }, el('span', {}, 'Radius ', radV), rad));
-        root.appendChild(el('div', { class: 'tp-effect' }, closed ? 'Effect: ROAD CLOSED (hard block)'
-            : `Effect: risk ×${(1 + 3 * t.impact / 100).toFixed(1)} on the part of each road inside the circle`));
+        const tipEl = (k) => { const sp = el('span', {}); sp.innerHTML = window.Guide ? ' ' + Guide.tip(k) : ''; return sp; };
+        root.appendChild(el('label', { class: 'field' }, el('span', {}, 'Impact ', impV, tipEl('impact')), imp));
+        root.appendChild(el('label', { class: 'field' }, el('span', {}, 'Radius ', radV, tipEl('radius')), rad));
+        const eff = el('div', { class: 'tp-effect' }, closed ? 'Effect: ROAD CLOSED (hard block) '
+            : `Effect: risk ×${(1 + 3 * t.impact / 100).toFixed(1)} on the part of each road inside the circle `);
+        if (window.Guide) eff.insertAdjacentHTML('beforeend', Guide.tip(closed ? 'impact' : 'multiplier'));
+        root.appendChild(eff);
         root.appendChild(el('div', { class: 'tp-actions' },
             el('button', { class: 'btn btn-primary btn-sm', onclick: () => {
                 map.closePopup();
@@ -522,7 +525,7 @@
         host.innerHTML = '';
         host.appendChild(el('div', { class: 'preview-card' },
             el('div', { class: 'pv-head' }, el('b', {}, `${info.emoji} ${info.label}`),
-                el('span', { class: `badge conf-${r.confidence}` }, r.confidence)),
+                el('span', { class: `badge conf-${r.confidence}`, title: 'Location confidence - see the Guide' }, r.confidence)),
             el('div', { class: 'pv-loc' }, r.location_label),
             el('div', { class: 'pv-grid' },
                 el('span', {}, 'Impact'), el('b', { class: 'num' }, impactText(r.impact)),

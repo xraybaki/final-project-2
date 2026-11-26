@@ -63,6 +63,7 @@
                             <span class="chip chip-fast">Fastest (λ 0)</span>
                             <span class="chip chip-bal">Balanced (λ <b id="chip-bal-lambda">0.6</b>)</span>
                             <span class="chip chip-safe">Safest (λ 0.95)</span>
+                            <span data-tip-key="lambda"></span>
                         </div>
                     </div>
                     <div id="route-result" class="card route-card" hidden></div>
@@ -87,9 +88,9 @@
                             <select id="threat-type" class="input" onchange="Threats.applyTypeDefaults()"></select></label>
                         <label class="field"><span>Reported by</span>
                             <input id="reported-by" class="input" value="Ops desk" maxlength="80"></label>
-                        <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">≥90 = road closed</span></span>
+                        <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">≥90 = road closed</span> <span data-tip-key="impact"></span></span>
                             <input type="range" id="threat-impact" class="range" min="10" max="100" step="1" value="92" oninput="Threats.updateSliderLabels()"></label>
-                        <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b></span>
+                        <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b> <span data-tip-key="radius"></span></span>
                             <input type="range" id="threat-radius" class="range" min="25" max="500" step="25" value="100" oninput="Threats.updateSliderLabels()"></label>
                         <div class="btn-row">
                             <button id="report-threat-btn" class="btn btn-danger-outline grow" onclick="Threats.setReportMode(!Threats.reportMode)"><svg class="icon"><use href="#i-pin"/></svg><span>Click map to place</span></button>
@@ -127,7 +128,7 @@
                 <!-- GUIDE (M12) -->
                 <section id="tab-guide" class="tab-panel" role="tabpanel">
                     <header class="panel-head"><h2>Risk guide</h2><p class="muted">What every number means</p></header>
-                    <div id="guide-root"></div>
+                    <div id="guide-root"><div class="card empty">Loading…</div></div>
                 </section>
             </div>
         </aside>
@@ -153,7 +154,7 @@
             <div id="legend-chip" class="legend-chip" tabindex="0" aria-expanded="false">
                 <div class="lg-head"><svg class="icon"><use href="#i-layers"/></svg><span>Legend</span></div>
                 <div class="lg-body">
-                    <div class="lg-title">Segment risk (ML)</div>
+                    <div class="lg-title">Segment risk (ML) <span data-tip-key="legend"></span></div>
                     <div class="lg-row"><i class="sw sw-low"></i>Low 0–30</div>
                     <div class="lg-row"><i class="sw sw-med"></i>Medium 30–60</div>
                     <div class="lg-row"><i class="sw sw-high"></i>High 60–80</div>
@@ -188,6 +189,7 @@
     <script src="js/ui.js"></script>
     <script src="js/threats.js"></script>
     <script src="js/log.js"></script>
+    <script src="js/guide.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
