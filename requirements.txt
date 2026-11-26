@@ -8,6 +8,7 @@ numpy
 scikit-learn
 xgboost            # optional at runtime: pipeline falls back to scikit-learn if missing
 joblib
+osmium             # reads regional .osm.pbf extracts when Overpass is unreachable
 matplotlib
 python-dotenv
 pytest

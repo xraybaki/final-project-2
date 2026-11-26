@@ -3,7 +3,7 @@
 // (written by `python -m pipeline.run_all`), so switching region needs no JS change.
 const CONFIG = {
     map: {
-        center: [30.3165, 78.0322], // Dehradun (default; replaced by graph meta)
+        center: [34.0837, 74.7973], // Srinagar (default; replaced by graph meta)
         zoom: 13,
         minZoom: 9,
         maxZoom: 18

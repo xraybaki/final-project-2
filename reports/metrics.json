@@ -1,6 +1,6 @@
 {
   "data": "SYNTHETIC - for demonstration only",
-  "region": "Toronto (FALLBACK - OSM download failed)",
+  "region": "Srinagar, Jammu & Kashmir",
   "model": "XGBoost",
   "split": {
     "feature_months": "1-18",
@@ -9,71 +9,71 @@
     "val_fraction": 0.25,
     "stratified": true
   },
-  "n_edges": 11934,
-  "positive_rate": 0.2967152673035026,
+  "n_edges": 29078,
+  "positive_rate": 0.16455739734507188,
   "model_metrics": {
-    "roc_auc": 0.9550606557332926,
-    "pr_auc": 0.8987908774292366,
-    "threshold": 0.5086284279823303,
-    "precision": 0.8061767838125665,
-    "recall": 0.8553672316384181,
-    "f1": 0.8300438596491229,
+    "roc_auc": 0.9360074686447967,
+    "pr_auc": 0.7939195014299554,
+    "threshold": 0.6350045204162598,
+    "precision": 0.7168429617575265,
+    "recall": 0.7366220735785953,
+    "f1": 0.7265979381443299,
     "confusion_matrix": {
-      "tn": 1917,
-      "fp": 182,
-      "fn": 128,
-      "tp": 757
+      "tn": 5726,
+      "fp": 348,
+      "fn": 315,
+      "tp": 881
     }
   },
   "baseline_metrics": {
     "description": "distance to nearest past incident only",
-    "roc_auc": 0.6069093972647723,
-    "pr_auc": 0.361107724527447,
-    "threshold": -209.4621389222275,
-    "precision": 0.34291010194624655,
-    "recall": 0.8361581920903954,
-    "f1": 0.4863621426224121,
+    "roc_auc": 0.7103103666816069,
+    "pr_auc": 0.29925935988209057,
+    "threshold": -157.38036971593706,
+    "precision": 0.3016006739679865,
+    "recall": 0.5986622073578596,
+    "f1": 0.4011204481792717,
     "confusion_matrix": {
-      "tn": 681,
-      "fp": 1418,
-      "fn": 145,
-      "tp": 740
+      "tn": 4416,
+      "fp": 1658,
+      "fn": 480,
+      "tp": 716
     }
   },
   "spatial_block_cv": {
     "cell_m": 1500.0,
     "folds": 5,
-    "model_roc_auc_mean": 0.6811515779124933,
-    "model_roc_auc_std": 0.07966979407069874,
-    "baseline_roc_auc_mean": 0.5808440561482467
+    "model_roc_auc_mean": 0.760707501002853,
+    "model_roc_auc_std": 0.026288339568568686,
+    "baseline_roc_auc_mean": 0.7034271145639115
   },
   "feature_importance": {
-    "inc_500m": 0.11718572676181793,
-    "hostile_500m": 0.09164206683635712,
-    "recent_500m": 0.08704295754432678,
-    "unpaved": 0.0672970786690712,
-    "inc_1km": 0.06527281552553177,
-    "sev_density_500m": 0.06293971836566925,
-    "node_density_500m": 0.059563156217336655,
-    "night_share_500m": 0.05841585248708725,
-    "inc_250m": 0.05196727439761162,
-    "dist_nearest_inc": 0.048644937574863434,
-    "chokepoint": 0.03489847108721733,
-    "road_priority": 0.03141411021351814,
-    "betweenness": 0.028366269543766975,
-    "length_m": 0.027823667973279953,
-    "narrow": 0.027301859110593796,
-    "lanes": 0.0270399060100317,
-    "degree_max": 0.026683082804083824,
-    "bridge": 0.022556034848093987,
-    "degree_min": 0.022175900638103485,
-    "tunnel": 0.021705035120248795,
-    "curviness": 0.02006407640874386
+    "inc_500m": 0.19369272887706757,
+    "recent_500m": 0.17756585776805878,
+    "sev_density_500m": 0.07731033861637115,
+    "chokepoint": 0.060055192559957504,
+    "node_density_500m": 0.05625331029295921,
+    "inc_1km": 0.0446622259914875,
+    "night_share_500m": 0.04199553281068802,
+    "hostile_500m": 0.04030270129442215,
+    "dist_nearest_inc": 0.03479864448308945,
+    "inc_250m": 0.032778654247522354,
+    "road_priority": 0.030498161911964417,
+    "narrow": 0.030320478603243828,
+    "degree_max": 0.02790951542556286,
+    "lanes": 0.026916364207863808,
+    "degree_min": 0.023700695484876633,
+    "betweenness": 0.022910358384251595,
+    "length_m": 0.02132842317223549,
+    "unpaved": 0.02007109485566616,
+    "bridge": 0.01950763911008835,
+    "curviness": 0.017422005534172058,
+    "tunnel": 0.0
   },
   "scoring": {
     "window_months": "7-24",
-    "weight_scale_q99": 0.6579431716723426,
+    "weight_scale_q99": 0.6849673180298341,
     "incident_active_hours": 12.0,
-    "pct_high_risk_ge60": 0.10180995475113122
+    "pct_high_risk_ge60": 0.06816149666414471
   }
 }

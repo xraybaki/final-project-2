@@ -74,7 +74,7 @@ def find_street(text: str, streets: dict):
             best = name
     if best:
         return best
-    # fallback: match the distinctive first word(s) of a street ("rajpur" -> "Rajpur Road")
+    # fallback: match the distinctive first word(s) of a street ("boulevard" -> "Boulevard Road")
     for name in sorted(streets, key=lambda s: -sum(x["length"] for x in streets[s])):
         first = _norm(name).split(" ")[0]
         if len(first) >= 5 and re.search(rf"\b{re.escape(first)}\b", t):
@@ -172,7 +172,7 @@ def parse(text: str) -> dict:
             location = street + (" (bridge)" if "bridge" in text.lower() else "")
     if lat is None:
         return {"error": "Could not match any road name in the SITREP. Mention a road name from the map "
-                         "(e.g. 'Rajpur Road') or give coordinates 'lat, lon'.", "parser": parser}
+                         "(e.g. 'Boulevard Road') or give coordinates 'lat, lon'.", "parser": parser}
     if fields.get("offset_km") and fields.get("direction"):
         lat, lon = apply_offset(lat, lon, float(fields["offset_km"]), fields["direction"])
         location += f" (+{fields['offset_km']} km {fields['direction']})"

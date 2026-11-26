@@ -1,17 +1,17 @@
 # DECISIONS.md: assumptions and choices
 
 ## Environment and data
-1. **OSM download was blocked in the build sandbox.** overpass-api.de, two public Overpass
-   mirrors and Geofabrik all reset the connection through the cloud sandbox's egress proxy
-   (other hosts, such as unpkg and Esri tiles, worked). As CLAUDE.md §3 specifies, the
-   pipeline therefore fell back to the **Toronto** street extract in `legacy_toronto/`, and
-   **the committed `routing_graph.json` / screenshots / metrics are Toronto**, labelled
-   "Toronto (FALLBACK)" in the UI. The Dehradun path is fully implemented: on any machine with
-   normal internet, `python -m pipeline.run_all` downloads Dehradun and rebuilds everything.
-   **Before the presentation, run it once on a laptop and commit the regenerated outputs.**
-2. Region kept as **Dehradun, Uttarakhand** (no team report or slides naming another area were
-   available). Centre 30.3165, 78.0322, radius 12 km, `network_type="drive"`.
-3. The Toronto fallback keeps only drivable OSM classes (motorway…service) and splits ways at
+1. **Region: Srinagar, Jammu & Kashmir** (changed from the original Dehradun default at the
+   team's request). Centre 34.0837, 74.7973 (city centre), 12 km half-width box,
+   `network_type="drive"`. The Dehradun settings are kept as a comment in `config.py`.
+2. **OSM source.** The Overpass API (and two mirrors, and Geofabrik) were unreachable from the
+   build sandbox, so I added a second download path: the openstreetmap.fr
+   `jammu_and_kashmir-latest.osm.pbf` extract (27 MB). It is clipped to the box with `osmium`
+   (pip `osmium`), filtered with OSMnx's own "drive" rules (no service roads, tracks, footways
+   or private access), and loaded with `ox.graph_from_xml` → simplify → bbox truncate. On a
+   normal connection the Overpass path is tried first. Both produce the same OSMnx graph type.
+   The `.pbf` and the clipped `.osm` live in `data/cache/` (git-ignored).
+3. The Toronto fallback (used only if both OSM sources fail) keeps only drivable OSM classes (motorway…service) and splits ways at
    shared vertices to form intersections.
 4. The graph is restricted to its **largest connected component**, so any two clicked points are routable.
 5. Parallel edges are collapsed to the shortest one in the undirected graph. One-way
@@ -20,6 +20,9 @@
    original README is `legacy_toronto/README_original.md`. `test.ipynb` was left untouched.
 
 ## Synthetic data (M2)
+6b. Live threats and SITREP examples use real Srinagar street names (e.g. Fore Shore Road,
+    Boulevard Road) so the demo is concrete. The *events* are invented, generic, and labelled
+    "SYNTHETIC / fictional training scenario" in the data, the popups and the UI footer.
 7. The incident count scales with the network size (about 4 per 100 edges, clipped to
    500–3000). With a fixed 2,400 incidents the small Toronto area produced 73% positive
    labels, which made the task trivial.
@@ -90,7 +93,8 @@
 ## Summary
 
 ### What works
-* `python -m pipeline.run_all`: M1 → M4 in about 100 s (Toronto fallback, 9.5k nodes / 12k edges).
+* `python -m pipeline.run_all`: M1 → M4 in about 110 s on **Srinagar** (24,574 nodes / 29,078 edges,
+  real OSM data). Model: XGBoost ROC-AUC 0.936 random split / 0.76 spatial CV vs baseline 0.71 / 0.70.
 * ML risk map, three routes in ~10–25 ms (well under 1 s), comparison table with all convoy metrics, λ slider.
 * Threat reporting by map click (type + impact slider), intel feed, and SITREP text. 300 m
   zones, hard blocks never crossed, automatic re-route with Δkm / Δrisk banner.
@@ -99,29 +103,27 @@
   both random and spatial CV, synthetic labels, JS A* fixture). `npm test` runs the A* check.
 
 ### Stubbed / not done
-* The Dehradun graph was not built in the sandbox (network block; see #1). Code path is ready.
 * Gemini path untested (no key in the sandbox). The rule-based fallback is tested.
 * No OSM building/POI density, no elevation.
 
-### Demo script (committed Toronto build)
-1. `node server.js`, then open http://localhost:3000. The ML risk map loads (green / yellow / orange / red).
+### Demo script (committed Srinagar build)
+1. `node server.js`, then open http://localhost:3000. The ML risk map of Srinagar loads
+   (about 2.5 s; the graph files are about 40 MB). Red clusters are the synthetic hotspots.
    Click a red segment to show the model probability, road type and chokepoint flag.
-2. Click **Plan Convoy Route**. Click **A** near **43.6348, −79.4248** (west waterfront) and
-   **B** near **43.6586, −79.3756** (downtown east).
-   *Audience sees:* Fastest (blue) cuts straight through a red hotspot band, at about 17%
-   route incident probability and 3.9 min high-risk exposure. Safest (green) follows the
-   waterfront: +1.7 km, about 3.8%, 0.1 min exposure.
+2. Click **Plan Convoy Route**. Click **A** near **34.0931, 74.8095** (city centre, just east of
+   the Jhelum) and **B** near **34.0649, 74.7415** (west Srinagar).
+   *Audience sees:* Fastest (blue) and Balanced (orange) cut through the red cluster west of
+   the river: about 10.6% route incident probability, 18 high-risk segments. Safest (green)
+   swings south round it: 10.0 km (+1.5 km, +3 min), **1.7%**, zero high-risk segments.
 3. Click **Report Threat**, choose **IED** (impact 92 = road closed), and click on the green
-   route on the waterfront near **43.6394, −79.3876**.
+   route near **34.0718, 74.7926**.
    *Audience sees:* a magenta closed zone, and the banner "🔀 Re-routed: previous route
-   BLOCKED · +1.2 km". The new safest route goes round it.
+   BLOCKED · +3.25 km". The new safest route goes further south round the closure.
 4. Drag the **λ slider** to show the Balanced route moving between fastest and safest.
-5. Click **Fetch Intel Reports**: 5 synthetic reports pop up, the zones appear and the route updates.
-6. Type a SITREP: `Stone pelting mob reported on Queen Street West` and click **Parse & add
-   threat**. A threat appears on that street.
+5. Click **Fetch Intel Reports**: 5 synthetic reports appear (Gandarbal Road IED,
+   Lalbazar ambush, Amda Kadal stone pelting, Srinagar–Athwajan Road blockade, Nowgam
+   landslide), 2 of them road closures, and the route updates.
+6. Type the SITREP `Suspected IED reported near the bridge on Fore Shore Road` and click
+   **Parse & add threat**. The threat lands on the Fore Shore Road bridge segment.
+   Also try `Stone pelting mob gathering on Boulevard Road, 1 km east`.
 7. Click **Animate Convoy** to watch the convoy and its live segment-risk readout.
-
-### Demo script (after rebuilding on Dehradun)
-Use the same steps with A at the Clock Tower area (~30.3245, 78.0418) and B up Rajpur Road
-towards Mussoorie (~30.385, 78.080). Then use the SITREP
-`Suspected IED reported near the bridge on Rajpur Road`. Re-check the exact clicks after the rebuild.

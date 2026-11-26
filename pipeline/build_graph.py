@@ -65,27 +65,116 @@ def _to_bool(v):
     return str(v).lower() not in ("no", "false", "0", "nan", "none", "")
 
 
+# OSMnx "drive" network filter, applied by hand when reading a .pbf extract
+_DRIVE_EXCLUDE = {"abandoned", "bridleway", "bus_guideway", "construction", "corridor", "cycleway",
+                  "elevator", "escalator", "footway", "no", "path", "pedestrian", "planned",
+                  "platform", "proposed", "raceway", "razed", "service", "steps", "track"}
+_SERVICE_EXCLUDE = {"alley", "driveway", "emergency_access", "parking", "parking_aisle", "private"}
+
+
+def _is_drive_way(tags) -> bool:
+    hw = tags.get("highway")
+    return bool(hw) and hw not in _DRIVE_EXCLUDE and tags.get("area") != "yes" \
+        and tags.get("access") != "private" and tags.get("motor_vehicle") != "no" \
+        and tags.get("motorcar") != "no" and tags.get("service") not in _SERVICE_EXCLUDE
+
+
+def _bbox():
+    lat, lon = C.CENTER
+    dlat = C.RADIUS_M / 110_540.0
+    dlon = C.RADIUS_M / (111_320.0 * math.cos(math.radians(lat)))
+    return lat - dlat, lon - dlon, lat + dlat, lon + dlon  # south, west, north, east
+
+
+def _extract_to_osm_xml(pbf_path, xml_path):
+    """Clip a regional .osm.pbf to the operating box, keeping drivable ways (+ their nodes)."""
+    import osmium
+
+    s, w, n, e = _bbox()
+    keep_ways, need_nodes = set(), set()
+
+    class WayPass(osmium.SimpleHandler):
+        def way(self, way):
+            if not _is_drive_way(way.tags):
+                return
+            refs = [nd.ref for nd in way.nodes]
+            inside = any(nd.location.valid() and s <= nd.lat <= n and w <= nd.lon <= e
+                         for nd in way.nodes)
+            if inside:
+                keep_ways.add(way.id)
+                need_nodes.update(refs)
+
+    WayPass().apply_file(str(pbf_path), locations=True)
+    if not keep_ways:
+        raise RuntimeError(f"extract {pbf_path.name} has no drivable roads inside {C.REGION_NAME} box")
+
+    if xml_path.exists():
+        xml_path.unlink()
+    writer = osmium.SimpleWriter(str(xml_path))
+
+    class WritePass(osmium.SimpleHandler):
+        def node(self, node):
+            if node.id in need_nodes:
+                writer.add_node(node)
+
+        def way(self, way):
+            if way.id in keep_ways:
+                writer.add_way(way)
+
+    WritePass().apply_file(str(pbf_path))
+    writer.close()
+    print(f"  [M1] clipped extract: {len(keep_ways):,} drivable ways, {len(need_nodes):,} nodes")
+
+
+def _graph_from_extract(ox):
+    import urllib.request
+
+    url = C.OSM_EXTRACT_URL
+    pbf = C.CACHE_DIR / url.rsplit("/", 1)[-1]
+    if not pbf.exists():
+        print(f"  [M1] downloading regional OSM extract {url} ...")
+        tmp = pbf.with_suffix(".part")
+        urllib.request.urlretrieve(url, tmp)
+        tmp.rename(pbf)
+    xml = C.CACHE_DIR / "region_clip.osm"
+    _extract_to_osm_xml(pbf, xml)
+    G = ox.graph_from_xml(xml, bidirectional=False, simplify=True, retain_all=False)
+    s, w, n, e = _bbox()
+    G = ox.truncate.truncate_graph_bbox(G, (w, s, e, n))
+    G.graph["source"] = f"OpenStreetMap extract ({url.rsplit('/', 1)[-1]})"
+    return G
+
+
 # --------------------------------------------------------------------------- OSMnx path
 def _download_osm():
     import osmnx as ox
 
     ox.settings.use_cache = True
     ox.settings.cache_folder = str(C.CACHE_DIR / "osmnx_http")
-    ox.settings.requests_timeout = 300
+    ox.settings.requests_timeout = 180
     ox.settings.log_console = False
+    if "surface" not in ox.settings.useful_tags_way:
+        ox.settings.useful_tags_way = list(ox.settings.useful_tags_way) + ["surface"]
 
     if C.GRAPHML_CACHE.exists():
         print(f"  [M1] using cached graph {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
-        G = ox.load_graphml(C.GRAPHML_CACHE)
-    else:
-        print(f"  [M1] downloading OSM '{C.NETWORK_TYPE}' network: {C.REGION_NAME} "
-              f"centre={C.CENTER} r={C.RADIUS_M} m ...")
+        return ox.load_graphml(C.GRAPHML_CACHE)
+
+    print(f"  [M1] downloading OSM '{C.NETWORK_TYPE}' network: {C.REGION_NAME} "
+          f"centre={C.CENTER} r={C.RADIUS_M} m ...")
+    try:
         G = ox.graph_from_point(C.CENTER, dist=C.RADIUS_M, network_type=C.NETWORK_TYPE,
                                 simplify=True)
-        G = ox.add_edge_speeds(G)
-        G = ox.add_edge_travel_times(G)
-        ox.save_graphml(G, C.GRAPHML_CACHE)
-        print(f"  [M1] cached to {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
+        G.graph["source"] = "OpenStreetMap via OSMnx (Overpass API)"
+    except Exception as exc:  # noqa: BLE001
+        if not getattr(C, "OSM_EXTRACT_URL", None):
+            raise
+        print(f"  [M1] Overpass failed ({type(exc).__name__}) - trying regional extract instead")
+        G = _graph_from_extract(ox)
+    G = ox.add_edge_speeds(G)
+    G = ox.add_edge_travel_times(G)
+    ox.save_graphml(G, C.GRAPHML_CACHE)
+    print(f"  [M1] cached to {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
     return G
 
 
@@ -194,7 +283,7 @@ def build_graph() -> tuple[nx.Graph, dict]:
         Gm = _download_osm()
         H = _osmnx_to_simple(Gm)
         region = {"name": C.REGION_NAME, "center": list(C.CENTER), "radius_m": C.RADIUS_M,
-                  "source": "OpenStreetMap via OSMnx"}
+                  "source": Gm.graph.get("source", "OpenStreetMap via OSMnx")}
     except Exception as exc:  # noqa: BLE001 - any download failure -> fallback
         warnings.warn(f"OSM download failed: {exc!r}")
         print(f"  [M1] OSM download failed: {type(exc).__name__}: {str(exc)[:200]}")

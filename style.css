@@ -782,3 +782,10 @@ body {
 }
 .leaflet-bottom { bottom: 22px; }
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
+/* compact info panel so the route panel never overlaps it */
+.info-panel { padding: 14px 16px; max-width: 300px; }
+.info-panel p { margin-bottom: 8px; }
+#stats p { margin-bottom: 3px; font-size: 12px; }
+.bounds-info { margin: 6px 0; padding: 6px 8px; }
+.route-result-panel { max-height: calc(100vh - 430px); min-height: 200px; }
+.route-table td, .route-table th { padding: 2px 6px; }

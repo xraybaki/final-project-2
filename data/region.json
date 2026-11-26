@@ -1,21 +1,21 @@
 {
   "data_label": "SYNTHETIC - for demonstration only",
   "region": {
-    "name": "Toronto (FALLBACK - OSM download failed)",
+    "name": "Srinagar, Jammu & Kashmir",
     "center": [
-      43.654059433572314,
-      -79.39133798283459
+      34.0837,
+      74.7973
     ],
-    "radius_m": 5000,
-    "source": "legacy_toronto/downtown_streets.geojson",
+    "radius_m": 12000,
+    "source": "OpenStreetMap extract (jammu_and_kashmir-latest.osm.pbf)",
     "bounds": [
       [
-        43.6283256,
-        -79.4373188
+        33.9753558,
+        74.6671799
       ],
       [
-        43.6794619,
-        -79.3408571
+        34.1922536,
+        74.92735
       ]
     ]
   },
@@ -23,9 +23,9 @@
   "threat_zone_radius_m": 300,
   "hard_block_impact": 90,
   "high_risk_weight": 60,
-  "L_ref": 42.2,
+  "L_ref": 65.2,
   "model": "XGBoost",
-  "model_roc_auc": 0.9550606557332926,
-  "model_roc_auc_spatial_cv": 0.6811515779124933,
-  "baseline_roc_auc_spatial_cv": 0.5808440561482467
+  "model_roc_auc": 0.9360074686447967,
+  "model_roc_auc_spatial_cv": 0.760707501002853,
+  "baseline_roc_auc_spatial_cv": 0.7034271145639115
 }

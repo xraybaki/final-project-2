@@ -8,10 +8,16 @@ Switch the operating area by editing REGION_NAME / CENTER / RADIUS_M and re-runn
 from pathlib import Path
 
 # ---------------------------------------------------------------- operating area
-REGION_NAME = "Dehradun, Uttarakhand"
-CENTER = (30.3165, 78.0322)        # (lat, lon) - Clock Tower area
-RADIUS_M = 12_000                  # download radius around CENTER
+REGION_NAME = "Srinagar, Jammu & Kashmir"
+CENTER = (34.0837, 74.7973)        # (lat, lon) - Srinagar city centre
+RADIUS_M = 12_000                  # half-width of the download box around CENTER
 NETWORK_TYPE = "drive"
+# Fallback source if the Overpass API is unreachable: a regional OSM extract (.osm.pbf)
+# that is clipped to the box above. Set to None to skip. Must cover CENTER.
+OSM_EXTRACT_URL = "https://download.openstreetmap.fr/extracts/asia/india/jammu_and_kashmir-latest.osm.pbf"
+# Previous default (Uttarakhand extract for Dehradun):
+#   REGION_NAME = "Dehradun, Uttarakhand"; CENTER = (30.3165, 78.0322)
+#   OSM_EXTRACT_URL = "https://download.openstreetmap.fr/extracts/asia/india/uttarakhand-latest.osm.pbf"
 
 # ---------------------------------------------------------------- convoy parameters
 CONVOY_SPEED_KMPH = 30             # average convoy speed used for ETA / exposure time

@@ -10,8 +10,10 @@ factors. Operators can inject **live threat reports** by clicking the map, loadi
 feed, or typing a free-text **SITREP** that is parsed by AI. The convoy then **re-routes**
 automatically, and road closures are never crossed.
 
-Default operating area: **Dehradun, Uttarakhand** (urban roads plus hill roads towards
-Mussoorie). The area is set in one file, `pipeline/config.py`.
+Operating area: **Srinagar, Jammu & Kashmir**. That's a 24 × 24 km box around the city
+centre: old-city lanes, bridges over the Jhelum, Dal Lake shore roads, the national highway
+and bypasses. The real OSM road network has 24,574 intersections and 29,078 road segments.
+The area is set in one file, `pipeline/config.py`.
 
 ![Three-route comparison](reports/screens/2_three_route_comparison.png)
 
@@ -63,13 +65,16 @@ node server.js                      # http://localhost:3000
 pytest -q
 ```
 
-* The first `run_all` downloads the road network from OpenStreetMap (Overpass API) and caches
-  it in `data/cache/graph.graphml`. Later runs work offline.
-* **Fallback:** if the download fails (no internet, or Overpass is down), the pipeline prints a
-  clear warning and builds the graph from the bundled Toronto street extract in
-  `legacy_toronto/`. The UI shows the region as *"Toronto (FALLBACK)"*.
-* Change the area by editing `REGION_NAME / CENTER / RADIUS_M` in `pipeline/config.py`,
-  deleting `data/cache/`, and re-running `run_all`. The frontend reads the centre and bounds
+* The first `run_all` gets the road network from OpenStreetMap and caches it in
+  `data/cache/graph.graphml`. Later runs work offline. It tries these sources in order:
+  1. the **Overpass API** via OSMnx;
+  2. a **regional OSM extract** (`OSM_EXTRACT_URL`, by default the Jammu & Kashmir `.osm.pbf`
+     from openstreetmap.fr, 27 MB), clipped to the operating box with `osmium` and loaded
+     with OSMnx using the same "drive" road filter;
+  3. if both fail, the bundled Toronto street extract in `legacy_toronto/`, with a clear warning.
+     The UI then shows the region as *"Toronto (FALLBACK)"*.
+* Change the area by editing `REGION_NAME / CENTER / RADIUS_M` (and `OSM_EXTRACT_URL` for the
+  matching state) in `pipeline/config.py`, deleting `data/cache/`, and re-running `run_all`. The frontend reads the centre and bounds
   from `routing_graph.json`, so no JavaScript changes are needed.
 * Windows: `server.js` uses `python` on Windows and `python3` elsewhere (override with `PYTHON=...`).
 * Optional: put `GEMINI_API_KEY=...` in `.env` and `pip install google-genai` to use Gemini for
@@ -78,8 +83,8 @@ pytest -q
 ## 4. Method
 
 ### 4.1 Road network (M1)
-`ox.graph_from_point(CENTER, dist=12 km, network_type="drive")`, with OSMnx speeds and
-travel times added. The graph is converted to undirected (keeping the shortest parallel
+`ox.graph_from_point(CENTER, dist=12 km, network_type="drive")`, or the same "drive" filter
+applied to the clipped regional extract, with OSMnx speeds and travel times added. The graph is converted to undirected (keeping the shortest parallel
 edge), restricted to the largest connected component, and relabelled `0..N-1`. Each edge
 keeps its length, road class, name, lanes, maxspeed, bridge/tunnel flags, surface and
 geometry.
@@ -142,28 +147,30 @@ and threat-zone segments.
 
 ## 5. Results (`reports/metrics.json`)
 
-Numbers below are from the committed build (the Toronto fallback graph, 11,934 edges,
-29.7% positive edges). Re-running on Dehradun produces the same report for that area.
+Srinagar build: 29,078 edges, 16.5% positive (an incident within 150 m in months 19–24).
 
 | | ROC-AUC | PR-AUC | Precision | Recall |
 |---|---|---|---|---|
-| **XGBoost**, random stratified split | **0.955** | **0.899** | 0.81 | 0.86 |
-| Baseline (nearest past incident), random split | 0.607 | 0.361 | 0.34 | 0.84 |
-| **XGBoost**, spatial-block CV (1.5 km cells, 5 folds) | **0.68 ± 0.08** | | | |
-| Baseline, spatial-block CV | 0.58 | | | |
+| **XGBoost**, random stratified split | **0.936** | **0.794** | 0.72 | 0.74 |
+| Baseline (nearest past incident), random split | 0.710 | 0.299 | 0.30 | 0.60 |
+| **XGBoost**, spatial-block CV (1.5 km cells, 5 folds) | **0.76 ± 0.03** | | | |
+| Baseline, spatial-block CV | 0.70 | | | |
 
-Confusion matrix (validation set, F1-optimal threshold): TN 1917 · FP 182 · FN 128 · TP 757.
+Confusion matrix (validation set, F1-optimal threshold): TN 5726 · FP 348 · FN 315 · TP 881.
 
 **Read the spatial-block number as the honest one.** In a random split, neighbouring edges
 (which share almost the same incident counts) land on both sides, which inflates the score.
-Grouping edges into 1.5 km cells removes that. The model still beats the baseline clearly in
-both settings. Incident-history features rank highest, followed by unpaved surface,
-settlement density and night share (`reports/feature_importance.png`).
+Grouping edges into 1.5 km cells removes that. The model still beats the baseline in both
+settings. Recent and nearby incident counts rank highest, followed by severity density,
+**chokepoint** status and settlement density (`reports/feature_importance.png`).
 
 ![ROC/PR](reports/roc_pr.png)
 
-Example route comparison (screenshot above): Fastest 6.00 km, route incident probability
-17.3%, 3.9 min exposure; Safest 7.74 km (+1.7 km, +3 min), **3.8%**, 0.1 min exposure.
+Example route comparison (screenshot above, city centre → west Srinagar): Fastest 8.50 km,
+route incident probability 10.6%, 18 high-risk segments, 1.8 min high-risk exposure, 72
+chokepoints. Safest 10.01 km (+1.5 km, +3 min): **1.7%**, no high-risk segments, 45
+chokepoints. After an IED (road closed) is reported on that safest route, it re-routes:
+"previous route BLOCKED · +3.25 km".
 
 | Screens | |
 |---|---|
@@ -171,6 +178,7 @@ Example route comparison (screenshot above): Fastest 6.00 km, route incident pro
 | Three-route comparison | `reports/screens/2_three_route_comparison.png` |
 | Re-route around a threat (hard block) | `reports/screens/3_reroute_around_threat.png` |
 | Intel reports loaded | `reports/screens/4_intel_reports.png` |
+| SITREP parsed to a threat | `reports/screens/5_sitrep_parsed.png` |
 
 ## 6. Limitations
 * **Synthetic data.** The incident generator encodes our own assumptions about what makes a
@@ -182,6 +190,8 @@ Example route comparison (screenshot above): Fastest 6.00 km, route incident pro
   at query time. Live threats are layered on with a rule (zone penalty and hard block),
   not learned.
 * Route probability assumes independent segments, the standard simplification in Krumm & Horvitz.
+* The live threats and SITREP examples use real Srinagar street names so the demo is
+  concrete. The events themselves are invented and labelled SYNTHETIC everywhere.
 * Building and POI density from OSM was skipped for speed (node density is used as the
   settlement proxy).
 
