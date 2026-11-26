@@ -85,6 +85,8 @@
                         <div class="card-title">Place threat on map</div>
                         <label class="field"><span>Threat type</span>
                             <select id="threat-type" class="input" onchange="Threats.applyTypeDefaults()"></select></label>
+                        <label class="field"><span>Reported by</span>
+                            <input id="reported-by" class="input" value="Ops desk" maxlength="80"></label>
                         <label class="field"><span>Impact <b id="threat-impact-value" class="num">92</b> <span class="muted">≥90 = road closed</span></span>
                             <input type="range" id="threat-impact" class="range" min="10" max="100" step="1" value="92" oninput="Threats.updateSliderLabels()"></label>
                         <label class="field"><span>Radius <b id="threat-radius-value" class="num">100 m</b></span>
@@ -119,7 +121,7 @@
                 <!-- LOG (M11) -->
                 <section id="tab-log" class="tab-panel" role="tabpanel">
                     <header class="panel-head"><h2>SITREP log</h2><p class="muted">Every threat from every source</p></header>
-                    <div id="log-root"><div class="card empty">Threat records appear here.</div></div>
+                    <div id="log-root"></div>
                 </section>
 
                 <!-- GUIDE (M12) -->
@@ -185,6 +187,7 @@
     <!-- UI modules -->
     <script src="js/ui.js"></script>
     <script src="js/threats.js"></script>
+    <script src="js/log.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

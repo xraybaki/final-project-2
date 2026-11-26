@@ -4,3 +4,8 @@ __pycache__/
 node_modules/
 data/cache/
 .pytest_cache/
+data/sitrep_db.json
+data/sitrep_db.json.tmp
+data/convoys.json
+data/convoys.json.tmp
+*.corrupt-*

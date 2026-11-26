@@ -328,6 +328,8 @@ async function loadRoutingGraph() {
 
         Loading.set(0.97, 'Indexing roads and landmarks…');
         await Threats.onGraphLoaded();
+        await Threats.loadFromServer();
+        Threats.connectStream();
         updateStats();
     } catch (error) {
         console.error('Error loading routing graph:', error);

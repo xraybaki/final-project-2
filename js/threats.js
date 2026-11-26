@@ -132,11 +132,54 @@
         };
     };
 
-    // Persistence hooks: local in M9; M11 swaps these for the server API.
+    // Persistence (M11): every create / edit / move / clear goes through the server API.
+    // The UI updates from the API response and from SSE - never optimistically.
+    async function api(method, url, body) {
+        try {
+            const res = await fetch(url, { method, headers: body ? { 'Content-Type': 'application/json' } : {},
+                                           body: body ? JSON.stringify(body) : undefined });
+            const data = await res.json();
+            if (!res.ok) { toast(`Not saved: ${data.error || res.status}`, { type: 'danger' }); return null; }
+            return data;
+        } catch (e) {
+            toast('Server unreachable - threat not saved', { type: 'danger' });
+            return null;
+        }
+    }
+    T.reporter = () => {
+        const i = document.getElementById('reported-by');
+        return (i && i.value.trim()) || 'Ops desk';
+    };
     T.store = {
-        async create(t) { return t; },
-        async update(id, changes) { return { ...T.get(id), ...changes }; },
-        async remove(id) { return { ...T.get(id), status: 'cleared' }; },
+        create(t) {
+            const { id, created_at, expires_at, status, ...body } = t;   // server assigns id / times / status
+            return api('POST', '/api/threats', { ...body, reported_by: T.reporter() });
+        },
+        update(id, changes) { return api('PATCH', `/api/threats/${encodeURIComponent(id)}`, { ...changes, by: T.reporter() }); },
+        remove(id) { return api('DELETE', `/api/threats/${encodeURIComponent(id)}?by=${encodeURIComponent(T.reporter())}`); },
+    };
+
+    T.loadFromServer = async function () {
+        try {
+            const data = await (await fetch('/api/threats?status=active')).json();
+            data.records.forEach(r => T.upsertLocal(r, false));
+            T.changed('loaded', null);
+        } catch (e) {
+            console.error('threat load failed', e);
+        }
+    };
+
+    T.connectStream = function () {
+        if (!window.EventSource) return;
+        const es = new EventSource('/api/stream');
+        ['threat_created', 'threat_updated', 'threat_cleared'].forEach(ev =>
+            es.addEventListener(ev, (m) => T.upsertLocal(JSON.parse(m.data), true)));
+        es.addEventListener('event_logged', (m) => emit('event_logged', JSON.parse(m.data)));
+        es.addEventListener('convoy_position', (m) => emit('convoy_position', JSON.parse(m.data)));
+        es.addEventListener('convoys_changed', (m) => emit('convoys_changed', JSON.parse(m.data)));
+        es.onerror = () => { document.body.classList.add('stream-down'); };
+        es.onopen = () => { document.body.classList.remove('stream-down'); };
+        T.stream = es;
     };
 
     T.get = (id) => T.list.find(t => t.id === id);
@@ -146,7 +189,7 @@
         const t = await T.store.create(T.makeThreat(o));
         if (!t) return null;
         T.upsertLocal(t, notify);
-        return t;
+        return T.get(t.id) || t;
     };
 
     T.update = async function (id, changes) {
@@ -166,8 +209,10 @@
 
     /** Apply a threat record coming from the store / server / SSE to local state + map. */
     T.upsertLocal = function (t, notify = true) {
+        if (!t || !t.id) return;
         const i = T.list.findIndex(x => x.id === t.id);
         const isNew = i < 0;
+        if (!isNew && (T.list[i].version || 0) >= (t.version || 0)) return;   // API response + SSE echo: apply once
         if (isNew) T.list.push(t); else T.list[i] = t;
         if (t.status === 'active') drawThreat(t); else undrawThreat(t.id);
         if (notify) T.changed(isNew ? 'threat_created' : (t.status === 'active' ? 'threat_updated' : 'threat_cleared'), t);
@@ -520,27 +565,14 @@
 
     // ------------------------------------------------------------------ intel feed
     T.fetchIntel = async function () {
-        try {
-            const data = await (await fetch('/fetch-live-threats')).json();
-            if (!data.success || !data.events || !data.events.length) {
-                toast(data.error || 'No current intel reports', { type: 'warn' });
-                return;
-            }
-            let n = 0;
-            for (const ev of data.events) {
-                if (T.list.some(t => t.status === 'active' && t.source === 'intel_feed' && Math.abs(t.lat - ev.lat) < 1e-6 && Math.abs(t.lon - ev.lon) < 1e-6)) continue;
-                await T.add({ lat: ev.lat, lon: ev.lon, type: ev.type, impact: ev.impact, radius_m: ev.radius_m,
-                              location_label: ev.location_label, resolution: 'coordinates', confidence: 'high',
-                              source: 'intel_feed', description: ev.description, id: ev.id }, { notify: false });
-                n++;
-            }
-            T.changed('intel_loaded', null);
-            const closed = data.events.filter(e => e.impact >= T.hardBlock).length;
-            toast(`${n} intel report(s) loaded · ${closed} road closure(s) · SYNTHETIC`, { type: 'ok' });
-        } catch (e) {
-            console.error(e);
-            toast('Intel service unavailable', { type: 'danger' });
-        }
+        const data = await api('POST', '/api/intel/apply');
+        if (!data) return;
+        data.records.forEach(r => T.upsertLocal(r, false));
+        T.changed('intel_loaded', null);
+        const closed = data.records.filter(r => r.impact >= T.hardBlock).length;
+        toast(data.records.length
+            ? `${data.records.length} intel report(s) active (${data.activated} new) · ${closed} road closure(s) · SYNTHETIC`
+            : 'No intel reports in the database', { type: data.records.length ? 'ok' : 'warn' });
     };
 
     // ------------------------------------------------------------------ active threat list (Threats tab)

@@ -156,6 +156,40 @@
 50. Risk bands in `getDangerLevel` now match the legend and Guide exactly
     (Low < 30 ≤ Medium < 60 ≤ High < 80 ≤ Critical).
 
+## M11: persistent SITREP database
+51. **Store:** `data/sitrep_db.json` (git-ignored) shaped `{version, records, events}`, with an
+    in-memory copy in the server. Every write goes to `sitrep_db.json.tmp` followed by
+    `fs.renameSync` (atomic). A corrupt file is moved aside (`*.corrupt-<ts>`) instead of crashing.
+    Override the path with `SITREP_DB=...` (used by the tests).
+52. **Server-assigned ids** `THR-YYYYMMDD-NNNN` (daily sequence). Records carry a `version`, which
+    is incremented on every change. The client applies a record only if its version is newer,
+    so the API response and the SSE echo of the same change are applied once.
+53. **Intel feed:** on first run the database is seeded from `data/live_threats.json` with
+    `source: "intel_feed"`, `status: "pending"`. "Intel reports" (`POST /api/intel/apply`)
+    activates them, so they only appear when the operator asks, as before. `/fetch-live-threats`
+    still works and returns those records in the old format. Statuses:
+    pending / active / cleared / expired.
+54. **Auto-SITREP:** every record gets a standard one-line `sitrep_line` (DTG `DDHHMMZ MON YY`,
+    UTC). Manual map threats also use it as `sitrep_text`; SITREP-sourced records keep the
+    operator's original text in `sitrep_text`. The location label (nearest road + nearest
+    landmark with distance and compass direction) is computed in the browser from the M9
+    gazetteer and sent with the create request.
+55. **Validation:** type must be in `threat_types.json`; impact 10–100; radius 25–500; lat/lon inside
+    the operating box (from `data/region.json`) with about 1 km of padding. Invalid requests
+    get HTTP 422 with a message, and the UI shows it as a toast.
+56. **Delete is a soft delete** (`status: "cleared"` plus a history entry). The record stays in
+    the log and the CSV export. History actions: created / edited / moved / cleared /
+    activated / expired, with `changes: {field: {from, to}}`.
+57. **Expiry:** per-type TTL from `threat_types.json` (accident 2 h, stone pelting 4 h,
+    ambush 6 h, blockade 8 h, IED and landslide until cleared). The server sweeps every 15 s,
+    marks records `expired` and broadcasts the change, so they stop affecting routing.
+58. **Live sync = Server-Sent Events** (`/api/stream`, with a ping every 20 s), chosen over
+    WebSockets because it needs no library on the server or in the browser and reconnects
+    automatically. Events: threat_created / threat_updated / threat_cleared / event_logged
+    (convoy_position and convoys_changed are added in M13 / M14).
+59. CSV export has a UTF-8 BOM so Excel on Windows shows non-ASCII place names correctly.
+    The database files are never served as static files (HTTP 403).
+
 ---
 
 ## Summary
