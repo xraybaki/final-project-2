@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeRoute AI - Toronto Risk Map</title>
+    <title>Convoy Route Planner - AI Safest Route</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,120 +14,94 @@
 <body>
     <div id="map"></div>
     
-    <!-- Control Panel for OSM Layers -->
+    <!-- Control Panel -->
     <div class="control-panel">
-        <h3>🗺️ Map Layers</h3>
-        
-        <!-- Crime Layer Type Selector -->
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; font-size: 12px; color: #000000; margin-bottom: 5px;">Crime Layer Type:</label>
-            <select id="crime-layer-type" onchange="changeCrimeLayer()" style="width: 100%; padding: 8px; background: rgba(4, 4, 4, 0.1); color: #22b17b; border: 1px solid #000000; border-radius: 6px; cursor: pointer;">
-                <option value="all">🎯 All Crimes (Weighted)</option>
-                <option value="violent">⚠️ Violent Crimes</option>
-                <option value="property">🏠 Property Crimes</option>
-                <option value="personal">👤 Personal Safety</option>
-                <option value="vehicle">🚗 Vehicle Safety</option>
-                <option value="bike">🚲 Bike Safety</option>
-                <option value="critical">🔴 Critical (Homicide + Shooting)</option>
-                <option value="assault">👊 Assault Only</option>
-                <option value="robbery">💰 Robbery Only</option>
-                <option value="breakenter">🚪 Break & Enter Only</option>
-            </select>
-        </div>
-        
-        <label class="layer-toggle">
-            <input type="checkbox" id="toggle-crime" checked onchange="toggleLayer('crime')">
-            <span>Show Crime Data</span>
-        </label>
-        
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <button id="show-network-btn" onclick="toggleNetworkDisplay()">🔍 Show Street Network</button>
-        </div>
-        
+        <h3>🛡️ Convoy Ops</h3>
+
+        <button id="show-network-btn" onclick="toggleNetworkDisplay()">🔍 Show Street Network</button>
+
         <div style="margin-top: 10px;">
-            <button id="routing-toggle-btn" onclick="toggleRoutingMode()">🗺️ Plan Safe Route</button>
+            <button id="routing-toggle-btn" onclick="toggleRoutingMode()">🗺️ Plan Convoy Route</button>
         </div>
-        
-        <!-- Transport Mode Selector REMOVED -->
-        
-        <!-- Report Crime Mode -->
+
+        <div id="routing-instructions" style="display:none; margin-top: 10px; padding: 10px; background: rgba(0,255,136,0.1); border-radius: 8px; font-size: 12px;">
+            <strong>📍 Click on the map:</strong><br>
+            1️⃣ First click = Start (A)<br>
+            2️⃣ Second click = Destination (B)
+        </div>
+
+        <!-- Report Threat Mode -->
         <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <button id="report-crime-btn" onclick="toggleReportCrimeMode()" style="width: 100%; padding: 10px; background: rgba(255,68,68,0.2); border: 1px solid #ff4444; color: #ff4444; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
-                🚨 Report Crime Event
+            <button id="report-crime-btn" onclick="toggleReportThreatMode()" style="width: 100%; padding: 10px; background: rgba(255,68,68,0.2); border: 1px solid #ff4444; color: #ff4444; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
+                🚨 Report Threat
             </button>
         </div>
-        
-        <!-- Gemini AI Safety Check -->
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
-            <button id="fetch-crimes-btn" onclick="fetchLiveCrimes()" style="width: 100%; padding: 10px; background: rgba(102,126,234,0.2); border: 1px solid #667eea; color: #667eea; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
-                🤖 Fetch Live Crime Data
+
+        <div id="report-crime-panel" style="display:none; margin-top: 10px; padding: 12px; background: rgba(255,68,68,0.1); border-radius: 8px; border: 1px solid #ff4444;">
+            <div style="font-size: 12px; color: #ff4444; margin-bottom: 8px; font-weight: bold;">📍 Click on map to place threat</div>
+            <label style="display: block; font-size: 11px; color: #888; margin-bottom: 5px;">Threat type:</label>
+            <select id="crime-event-type" onchange="updateImpactDefault()" style="width: 100%; padding: 6px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid #444; border-radius: 6px; font-size: 12px; margin-bottom: 8px;">
+                <option value="IED">💣 IED / suspicious object</option>
+                <option value="ambush">🎯 Ambush risk</option>
+                <option value="stone_pelting">🪨 Stone pelting</option>
+                <option value="road_blockade">🚧 Road blockade</option>
+                <option value="landslide">⛰️ Landslide (road closed)</option>
+                <option value="accident">💥 Accident / obstruction</option>
+            </select>
+            <label style="display: block; font-size: 11px; color: #888; margin-bottom: 3px;">Impact: <b id="threat-impact-value" style="color:#ffaa00;">92</b> <span style="color:#666;">(≥90 = road closed)</span></label>
+            <input type="range" id="threat-impact" min="10" max="100" step="1" value="92" oninput="updateImpactLabel()" style="width:100%; margin-bottom: 8px;">
+            <button onclick="clearThreats()" style="width: 100%; padding: 6px; background: rgba(255,255,255,0.1); border: 1px solid #666; color: #fff; border-radius: 6px; cursor: pointer; font-size: 11px;">
+                🗑️ Clear All Threats
             </button>
-            
+        </div>
+
+        <!-- Intel feed -->
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
+            <button id="fetch-crimes-btn" onclick="fetchLiveThreats()" style="width: 100%; padding: 10px; background: rgba(102,126,234,0.2); border: 1px solid #667eea; color: #667eea; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.3s;">
+                📡 Fetch Intel Reports
+            </button>
             <div id="fetch-status" style="display:none; margin-top: 10px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px; border: 1px solid #667eea; font-size: 11px; color: #ccc;">
                 <em>Status will appear here...</em>
             </div>
         </div>
-        
-        <div id="report-crime-panel" style="display:none; margin-top: 10px; padding: 12px; background: rgba(255,68,68,0.1); border-radius: 8px; border: 1px solid #ff4444;">
-            <div style="font-size: 12px; color: #ff4444; margin-bottom: 8px; font-weight: bold;">
-                📍 Click on map to report crime
-            </div>
-            <label style="display: block; font-size: 11px; color: #888; margin-bottom: 5px;">Crime Type:</label>
-            <select id="crime-event-type" style="width: 100%; padding: 6px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid #444; border-radius: 6px; font-size: 12px; margin-bottom: 8px;">
-                <option value="shooting">🔫 Shooting</option>
-                <option value="homicide">☠️ Homicide</option>
-                <option value="robbery">💰 Robbery</option>
-                <option value="assault">👊 Assault</option>
-                <option value="breakenter">🚪 Break & Enter</option>
-                <option value="autotheft">🚗 Auto Theft</option>
-            </select>
-            <button onclick="clearCrimeEvents()" style="width: 100%; padding: 6px; background: rgba(255,255,255,0.1); border: 1px solid #666; color: #fff; border-radius: 6px; cursor: pointer; font-size: 11px;">
-                🗑️ Clear All Events
-            </button>
+
+        <!-- SITREP parser -->
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
+            <label style="display:block; font-size: 12px; color: #667eea; font-weight: bold; margin-bottom: 5px;">🤖 SITREP → threat (AI parse)</label>
+            <textarea id="sitrep-input" rows="3" placeholder="e.g. Suspected IED reported near the bridge on Rajpur Road" style="width:100%; box-sizing:border-box; padding:6px; background: rgba(0,0,0,0.3); color:#fff; border:1px solid #444; border-radius:6px; font-size:11px; resize:vertical;"></textarea>
+            <button onclick="parseSitrep()" style="width:100%; margin-top:5px; padding:7px; background: rgba(102,126,234,0.2); border: 1px solid #667eea; color: #667eea; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Parse &amp; add threat</button>
+            <div id="sitrep-status" style="display:none; margin-top:6px; font-size:11px;"></div>
         </div>
-        
-        <div id="routing-instructions" style="display:none; margin-top: 10px; padding: 10px; background: rgba(0,255,136,0.1); border-radius: 8px; font-size: 12px;">
-            <strong>📍 Click on the map:</strong><br>
-            1️⃣ First click = Start (A)<br>
-            2️⃣ Second click = End (B)
-        </div>
-        
+
         <!-- Legend -->
         <div id="legend" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; font-size: 11px;">
-            <strong style="display: block; margin-bottom: 8px; color: #00ff88;">Risk Levels:</strong>
-            <div style="display: flex; align-items: center; margin-bottom: 4px;">
-                <div style="width: 20px; height: 12px; background: #00ff00; margin-right: 8px; border-radius: 2px;"></div>
-                <span>Low (0-30)</span>
-            </div>
-            <div style="display: flex; align-items: center; margin-bottom: 4px;">
-                <div style="width: 20px; height: 12px; background: #ffff00; margin-right: 8px; border-radius: 2px;"></div>
-                <span>Medium (30-60)</span>
-            </div>
-            <div style="display: flex; align-items: center; margin-bottom: 4px;">
-                <div style="width: 20px; height: 12px; background: #ff6b35; margin-right: 8px; border-radius: 2px;"></div>
-                <span>High (60-80)</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <div style="width: 20px; height: 12px; background: #ff0000; margin-right: 8px; border-radius: 2px;"></div>
-                <span>Critical (80+)</span>
-            </div>
+            <strong style="display: block; margin-bottom: 8px; color: #00ff88;">Segment risk (ML):</strong>
+            <div class="legend-row"><div class="legend-swatch" style="background:#00ff00;"></div><span>Low (0-30)</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#ffff00;"></div><span>Medium (30-60)</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#ff6b35;"></div><span>High (60-80)</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#ff0000;"></div><span>Critical (80+)</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#ff00ff;"></div><span>Road closed (threat ≥ 90)</span></div>
+            <strong style="display: block; margin: 8px 0 6px; color: #00ff88;">Routes:</strong>
+            <div class="legend-row"><div class="legend-swatch" style="background:#3b9dff;"></div><span>Fastest</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#ffb000;"></div><span>Balanced</span></div>
+            <div class="legend-row"><div class="legend-swatch" style="background:#00e676;"></div><span>Safest</span></div>
         </div>
     </div>
-    
+
     <!-- Route Result Panel -->
     <div id="route-result" class="route-result-panel" style="display:none;"></div>
-    
+
     <!-- Info Panel -->
     <div class="info-panel">
-        <h2>SafeRoute AI</h2>
-        <p>Toronto Downtown</p>
-        <div class="bounds-info">
-            <small>📍 Area: 43.612°N to 43.823°N<br>
-            79.563°W to 79.187°W</small>
-        </div>
+        <h2>AI Safest Route Planner</h2>
+        <p>Mobile Convoys · <span id="region-name">Dehradun, Uttarakhand</span></p>
+        <div class="bounds-info"><small id="bounds-info"></small></div>
         <div id="stats"></div>
     </div>
-    
+
+    <!-- Footer -->
+    <div class="synthetic-footer">⚠️ All incident &amp; threat data is SYNTHETIC — for demonstration only. Road network © OpenStreetMap contributors.</div>
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     

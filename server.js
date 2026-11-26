@@ -1,10 +1,13 @@
-// Simple Node.js server for serving static files
+// Simple Node.js server: static files + convoy threat endpoints
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const ROOT = __dirname;
+// Windows usually has `python`, Linux/macOS `python3`; override with PYTHON=...
+const PYTHON = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
 
 // MIME types
 const mimeTypes = {
@@ -13,133 +16,110 @@ const mimeTypes = {
     '.css': 'text/css',
     '.json': 'application/json',
     '.geojson': 'application/json',
+    '.csv': 'text/csv',
     '.png': 'image/png',
     '.jpg': 'image/jpg',
     '.gif': 'image/gif',
     '.svg': 'image/svg+xml'
 };
 
+function sendJSON(res, status, obj) {
+    res.writeHead(status, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(obj));
+}
+
+// Run a python script with JSON on stdin; falls back from python3 -> python if not found
+function runPython(script, input, cb, exe = PYTHON) {
+    const py = spawn(exe, [path.join(ROOT, script)], { cwd: ROOT });
+    let out = '', err = '';
+    let done = false;
+    const timer = setTimeout(() => { if (!done) { py.kill(); } }, 30000);
+    py.on('error', (e) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        if (e.code === 'ENOENT' && exe !== 'python') return runPython(script, input, cb, 'python');
+        cb(e);
+    });
+    py.stdout.on('data', d => out += d.toString());
+    py.stderr.on('data', d => err += d.toString());
+    py.on('close', (code) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        if (err) console.error(`[${script}]`, err.trim().slice(0, 500));
+        if (code !== 0) return cb(new Error(`exit ${code}`));
+        cb(null, out);
+    });
+    py.stdin.write(input);
+    py.stdin.end();
+}
+
+function readBody(req, cb) {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk;
+        if (body.length > 1e5) req.destroy();
+    });
+    req.on('end', () => cb(body));
+}
+
 const server = http.createServer((req, res) => {
-    console.log(`${req.method} ${req.url}`);
+    const url = req.url.split('?')[0];
+    console.log(`${req.method} ${url}`);
 
-    // Chat API endpoint
-    if (req.url === '/chat' && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', () => {
-            // Call Python script
-            const python = spawn('python', ['gemini_api.py']);
-
-            python.stdin.write(body); // send {street, time, situation} JSON
-            python.stdin.end();
-
-            let result = '';
-            python.stdout.on('data', data => result += data.toString());
-            python.stderr.on('data', data => console.error('Python error:', data.toString()));
-            python.on('close', (code) => {
-                if (code !== 0) {
-                    res.writeHead(500, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ error: 'Python script error' }));
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(result); // send Gemini response back to chat.js
-                }
-            });
+    // Live threat reports (SYNTHETIC) - served instantly from data/live_threats.json
+    if ((url === '/fetch-live-threats' || url === '/fetch-live-crimes') && req.method === 'GET') {
+        fs.readFile(path.join(ROOT, 'data', 'live_threats.json'), 'utf8', (error, content) => {
+            if (error) {
+                return sendJSON(res, 200, { success: false, events: [],
+                    error: 'data/live_threats.json not found - run: python -m pipeline.run_all' });
+            }
+            const data = JSON.parse(content);
+            data.timestamp = new Date().toISOString();
+            sendJSON(res, 200, data);
         });
-        return; // skip static file handling
-    }
-
-    // Fetch live crimes endpoint - HARDCODED REAL TORONTO INCIDENTS
-    if (req.url === '/fetch-live-crimes' && req.method === 'GET') {
-        console.log('🔍 Simulating crime data fetch...');
-        
-        // Simulate AI processing delay (10 seconds)
-        setTimeout(() => {
-            // Real Toronto crime incidents (hardcoded for reliability)
-            const hardcodedCrimes = {
-            success: true,
-            events: [
-                {
-                    lat: 43.6532,
-                    lon: -79.3832,
-                    type: "shooting",
-                    impact: 95,
-                    location: "King St W & Spadina Ave (Entertainment District)",
-                    description: "Multiple gunshots fired outside nightclub on King Street West near Spadina Avenue around 2:30 AM. Two victims transported to hospital with non-life-threatening injuries. Police have cordoned off the area and are reviewing security footage from nearby establishments. Witnesses report hearing 5-6 shots."
-                },
-                {
-                    lat: 43.6608,
-                    lon: -79.3857,
-                    type: "robbery",
-                    impact: 80,
-                    location: "Yonge St & Dundas St (Yonge-Dundas Square)",
-                    description: "Armed robbery at convenience store on Yonge Street near Dundas Square. Suspect described as male, 5'10\", wearing dark hoodie and face mask. Fled eastbound on Dundas with undisclosed amount of cash. No injuries reported. Police are canvassing the area for witnesses."
-                },
-                {
-                    lat: 43.6426,
-                    lon: -79.3871,
-                    type: "assault",
-                    impact: 75,
-                    location: "Front St E & Jarvis St (St. Lawrence Market)",
-                    description: "Aggravated assault reported near St. Lawrence Market. Victim sustained injuries requiring medical attention after altercation with unknown individual. Toronto Paramedics responded to the scene. Police investigating and searching for suspect who fled northbound on Jarvis Street."
-                },
-                {
-                    lat: 43.7289,
-                    lon: -79.3836,
-                    type: "break_and_enter",
-                    impact: 65,
-                    location: "Yonge St & Eglinton Ave (Midtown)",
-                    description: "Break and enter reported at residential building on Yonge Street near Eglinton Avenue. Multiple units targeted overnight. Electronics and valuables stolen. Building security footage being reviewed. Residents urged to report any suspicious activity to police."
-                },
-                {
-                    lat: 43.6465,
-                    lon: -79.5484,
-                    type: "auto_theft",
-                    impact: 70,
-                    location: "Bloor St W & Islington Ave (Etobicoke)",
-                    description: "High-end vehicle stolen from parking lot on Bloor Street West near Islington Avenue. White 2023 BMW X5 taken using electronic key fob relay attack. Part of recent spike in auto thefts in the area. Police recommend residents use steering wheel locks and park in well-lit areas."
-                },
-                {
-                    lat: 43.6500,
-                    lon: -79.5600,
-                    type: "shooting",
-                    impact: 95,
-                    location: "Lakeshore Blvd W & Park Lawn Rd (Humber Bay)",
-                    description: "Shooting incident near Humber Bay Shores. One male victim with gunshot wounds transported to trauma centre in critical condition. Heavy police presence in the area. Forensic identification unit on scene collecting evidence. Witnesses report hearing multiple shots around 9 PM."
-                },
-                {
-                    lat: 43.6762,
-                    lon: -79.2930,
-                    type: "robbery",
-                    impact: 85,
-                    location: "Danforth Ave & Greenwood Ave (Greektown)",
-                    description: "Armed robbery at late-night restaurant on Danforth Avenue. Two masked suspects entered through back entrance demanding cash. One suspect armed with knife. Employees unharmed but shaken. Police forensics team processing scene for evidence."
-                }
-            ],
-            source: "hardcoded",
-            timestamp: new Date().toISOString()
-        };
-        
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(hardcodedCrimes));
-        }, 10000); // 10 second delay
         return;
     }
 
-    // Default to index.html
-    let filePath = '.' + req.url;
-    if (filePath === './') {
-        filePath = './index.html';
+    // SITREP -> structured threat (Gemini if GEMINI_API_KEY, otherwise rule-based fallback)
+    if (url === '/parse-sitrep' && req.method === 'POST') {
+        readBody(req, (body) => {
+            runPython('gemini_api.py', body, (err, out) => {
+                if (err) return sendJSON(res, 500, { error: `SITREP parser failed (${err.message})` });
+                try {
+                    const parsed = JSON.parse(out.trim().split('\n').pop());
+                    sendJSON(res, parsed.error ? 422 : 200, parsed);
+                } catch (e) {
+                    sendJSON(res, 500, { error: 'SITREP parser returned invalid JSON' });
+                }
+            });
+        });
+        return;
     }
 
-    // Get file extension
-    const extname = String(path.extname(filePath)).toLowerCase();
-    const contentType = mimeTypes[extname] || 'application/octet-stream';
+    // Legacy Toronto chat assistant (needs google-genai, bs4, GEMINI_API_KEY)
+    if (url === '/chat' && req.method === 'POST') {
+        readBody(req, (body) => {
+            runPython(path.join('legacy_toronto', 'gemini_api.py'), body, (err, out) => {
+                if (err) return sendJSON(res, 500, { error: 'Python script error' });
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(out);
+            });
+        });
+        return;
+    }
 
-    // Read and serve file
+    // Static files (no directory traversal outside ROOT)
+    let filePath = path.normalize(path.join(ROOT, decodeURIComponent(url === '/' ? '/index.html' : url)));
+    if (!filePath.startsWith(ROOT)) {
+        res.writeHead(403);
+        return res.end('Forbidden');
+    }
+    const contentType = mimeTypes[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
     fs.readFile(filePath, (error, content) => {
         if (error) {
-            if (error.code === 'ENOENT') {
+            if (error.code === 'ENOENT' || error.code === 'EISDIR') {
                 res.writeHead(404, { 'Content-Type': 'text/html' });
                 res.end('<h1>404 - File Not Found</h1>', 'utf-8');
             } else {
@@ -148,13 +128,17 @@ const server = http.createServer((req, res) => {
             }
         } else {
             res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+            res.end(content);
         }
     });
 });
 
-server.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}/`);
-    console.log(`📍 SafeRoute AI - Toronto Risk Map`);
-    console.log(`Press Ctrl+C to stop the server`);
-});
+if (require.main === module) {
+    server.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}/`);
+        console.log(`🛡️  AI-Based Safest Route Planner for Mobile Convoys`);
+        console.log(`Press Ctrl+C to stop the server`);
+    });
+}
+
+module.exports = server;

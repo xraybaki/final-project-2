@@ -1,73 +1,90 @@
 /**
- * A* Pathfinding Algorithm for Safe Route Calculation
- * Finds multiple route alternatives with different priorities
+ * A* Pathfinding for Convoy Route Planning
+ * Computes Fastest / Balanced / Safest routes over the ML-weighted road graph
+ * and reports convoy metrics for each.
+ *
+ * Cost per edge (both terms on comparable, dimensionless scales):
+ *     cost = (1 - λ) * (length_m / L_ref)  +  λ * (weight / 100) * (length_m / L_ref)
+ * where L_ref = median edge length. Risk is per-metre exposure, so a long risky road
+ * costs more than a short one. Heuristic h = straight_line / L_ref * (1 - λ) is admissible
+ * because weight >= 0.
+ *
+ * Route incident probability uses the independent-Bernoulli model
+ *     P(route) = 1 - Π (1 - p_i)
+ * (Krumm & Horvitz, "Risk-Aware Planning: Methods and Case Study for Safer Driving Routes", AAAI 2017).
  */
 
-// Transport modes removed - uses any available path
+const ROUTING_DEBUG = false;  // set true to log search statistics
+const ROUTE_LAMBDAS = { fastest: 0.0, balanced: 0.6, safest: 0.95 };
 
+// ---------------------------------------------------------------- binary min-heap
 class PriorityQueue {
     constructor() {
         this.items = [];
     }
 
     enqueue(element, priority) {
-        const item = { element, priority };
-        
-        // Binary search insertion (much faster than full sort)
-        if (this.items.length === 0) {
-            this.items.push(item);
-            return;
+        const items = this.items;
+        items.push({ element, priority });
+        let i = items.length - 1;
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (items[p].priority <= items[i].priority) break;
+            [items[p], items[i]] = [items[i], items[p]];
+            i = p;
         }
-        
-        let low = 0;
-        let high = this.items.length;
-        
-        while (low < high) {
-            const mid = (low + high) >>> 1;
-            if (this.items[mid].priority < priority) {
-                low = mid + 1;
-            } else {
-                high = mid;
-            }
-        }
-        
-        this.items.splice(low, 0, item);
     }
 
     dequeue() {
-        return this.items.shift();
+        const items = this.items;
+        if (items.length === 0) return undefined;
+        const top = items[0];
+        const last = items.pop();
+        if (items.length > 0) {
+            items[0] = last;
+            let i = 0;
+            const n = items.length;
+            for (;;) {
+                const l = 2 * i + 1, r = l + 1;
+                let m = i;
+                if (l < n && items[l].priority < items[m].priority) m = l;
+                if (r < n && items[r].priority < items[m].priority) m = r;
+                if (m === i) break;
+                [items[m], items[i]] = [items[i], items[m]];
+                i = m;
+            }
+        }
+        return top;
     }
 
     isEmpty() {
         return this.items.length === 0;
     }
-    
+
     size() {
         return this.items.length;
     }
 }
 
 /**
- * Calculate distance between two points (Haversine formula)
+ * Distance between two points in metres (Haversine)
  */
 function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Earth radius in km
+    const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
               Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c * 1000; // Return in meters
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1000;
 }
 
 /**
- * Find nearest node to a clicked point
+ * Find nearest node to a point
  */
 function findNearestNode(lat, lon, nodes) {
     let nearest = null;
     let minDist = Infinity;
-
     for (const node of nodes) {
         const dist = getDistance(lat, lon, node.lat, node.lon);
         if (dist < minDist) {
@@ -75,235 +92,195 @@ function findNearestNode(lat, lon, nodes) {
             nearest = node;
         }
     }
-
     return nearest;
 }
 
 /**
- * A* Algorithm - finds path between start and end nodes
- * @param {object} graph - adjacency list {nodeId: [{target, weight, length_m}, ...]}
- * @param {object} nodes - node lookup {id: {lat, lon, weight}}
- * @param {number} startId - start node ID
- * @param {number} endId - end node ID
- * @param {number} weightFactor - 0 = shortest, 1 = safest, 0.5 = balanced
+ * Default edge-weight provider (no live threats). Returns the effective risk weight
+ * (0-100+, Infinity = blocked) for an adjacency entry.
  */
-function astar(graph, nodes, startId, endId, weightFactor = 0.5) {
-    console.log(`  🔍 A* search (weightFactor=${weightFactor})...`);
-    const startTime = performance.now();
-    
-    const openSet = new PriorityQueue();
-    const closedSet = new Set();
-    const cameFrom = {};
-    const gScore = {};
-    
-    // Only initialize what we need
-    gScore[startId] = 0;
-    
+function defaultEdgeWeight(edge) {
+    return edge.weight;
+}
+
+/**
+ * A* search.
+ * @param {object} graph        adjacency list {"nodeId": [{target, weight, length_m, ...}]}
+ * @param {object} nodes        node lookup {"id": {lat, lon, weight}}
+ * @param {string} startId
+ * @param {string} endId
+ * @param {number} weightFactor λ in [0,1]: 0 = fastest, ~1 = safest
+ * @param {object} opts         {Lref, edgeWeight(edge, fromId, toId) -> weight|Infinity}
+ */
+function astar(graph, nodes, startId, endId, weightFactor = 0.5, opts = {}) {
+    const t0 = (typeof performance !== 'undefined' ? performance : Date).now();
+    startId = String(startId);
+    endId = String(endId);
+    const Lref = opts.Lref || 100;
+    const edgeWeight = opts.edgeWeight || (typeof window !== 'undefined' && window.getAdjustedEdgeWeight) || defaultEdgeWeight;
+    const lam = weightFactor;
+
     const startNode = nodes[startId];
     const endNode = nodes[endId];
-    
-    if (!startNode || !endNode) {
-        console.error('  ❌ Invalid start or end node');
-        return null;
-    }
-    
-    // No transport mode restrictions
-    
-    const heuristic = getDistance(startNode.lat, startNode.lon, endNode.lat, endNode.lon) / 1000;
-    openSet.enqueue(startId, heuristic);
+    if (!startNode || !endNode) return null;
 
+    const openSet = new PriorityQueue();
+    const closed = new Set();
+    const cameFrom = {};
+    const gScore = { [startId]: 0 };
+    const h = (n) => getDistance(n.lat, n.lon, endNode.lat, endNode.lon) / Lref * (1 - lam);
+
+    openSet.enqueue(startId, h(startNode));
     let iterations = 0;
-    const maxIterations = 50000;
 
-    while (!openSet.isEmpty() && iterations < maxIterations) {
-        iterations++;
-        
+    while (!openSet.isEmpty()) {
         const current = openSet.dequeue().element;
-        console.log(`  🔄 Processing node: ${current} (type: ${typeof current})`);
-        console.log(`     gScore[${current}] = ${gScore[current]}`);
+        if (closed.has(current)) continue;
+        closed.add(current);
+        iterations++;
 
-        // Skip if already processed
-        if (closedSet.has(current)) continue;
-        closedSet.add(current);
-
-        // Found the goal
         if (current === endId) {
-            const elapsed = performance.now() - startTime;
-            console.log(`  ✅ Path found in ${elapsed.toFixed(1)}ms (${iterations} iterations)`);
-            return reconstructPath(cameFrom, current, nodes, graph);
+            if (ROUTING_DEBUG) {
+                const ms = (typeof performance !== 'undefined' ? performance : Date).now() - t0;
+                console.log(`A* λ=${lam}: ${iterations} expansions, ${ms.toFixed(1)} ms`);
+            }
+            return reconstructPath(cameFrom, current, nodes);
         }
 
-        // Check all neighbors
-        const neighbors = graph[current] || [];
-        console.log(`  🔍 Checking ${neighbors.length} neighbors for node ${current}`);
-        
-        for (const edge of neighbors) {
-            const neighbor = String(edge.target); // Convert to string to match node IDs
-            console.log(`    → Neighbor: ${neighbor} (original: ${edge.target}, type: ${typeof edge.target})`);
-            
-            // Skip if already processed
-            if (closedSet.has(neighbor)) {
-                console.log(`      ⏭️ Already processed`);
-                continue;
-            }
-            
-            // No highway type restrictions - use all edges
-            
-            // Cost = combination of distance and safety
-            const distanceCost = edge.length_m / 1000; // Convert to km
-            
-            // Get adjusted safety cost based on crime events
-            const currentNode = nodes[current];
-            const neighborNode = nodes[neighbor];
-            let safetyCost = edge.weight;
-            
-            console.log(`      🧪 Function check: ${typeof window.getAdjustedEdgeWeight}, currentNode: ${!!currentNode}, neighborNode: ${!!neighborNode}`);
-            
-            // Apply dynamic crime event adjustments if function is available
-            if (typeof window.getAdjustedEdgeWeight === 'function' && currentNode && neighborNode) {
-                const originalWeight = edge.weight;
-                safetyCost = window.getAdjustedEdgeWeight(edge.weight, currentNode, neighborNode);
-                console.log(`      🎯 Applied adjustment: ${originalWeight.toFixed(2)} → ${safetyCost.toFixed(2)}`);
-            }
-            
-            console.log(`      🔍 About to read gScore[${current}] - value is: ${gScore[current]}`);
-            console.log(`      🔑 gScore keys:`, Object.keys(gScore));
-            const currentG = gScore[current] ?? Infinity;  // Use ?? instead of || to handle 0 correctly
-            const neighborG = gScore[neighbor] ?? Infinity;
-            const tentativeGScore = currentG + 
-                (distanceCost * (1 - weightFactor) + safetyCost * weightFactor);
-            
-            console.log(`      📊 currentG: ${currentG}, neighborG: ${neighborG}, tentative: ${tentativeGScore}`);
-
-            if (tentativeGScore < neighborG) {
-                cameFrom[neighbor] = { from: current, edge: edge };
-                gScore[neighbor] = tentativeGScore;
-                
-                const neighborNode = nodes[neighbor];
-                if (!neighborNode) {
-                    console.log(`      ❌ Neighbor node ${neighbor} not found in nodes lookup!`);
-                    console.log(`      🔑 Available node IDs sample:`, Object.keys(nodes).slice(0, 5));
-                    continue;
-                }
-                
-                console.log(`      ✅ Valid neighbor, adding to queue`);
-                const h = getDistance(neighborNode.lat, neighborNode.lon, endNode.lat, endNode.lon) / 1000;
-                const fScore = gScore[neighbor] + h * (1 - weightFactor);
-
-                openSet.enqueue(neighbor, fScore);
+        const g = gScore[current];
+        for (const edge of graph[current] || []) {
+            const neighbor = String(edge.target);
+            if (closed.has(neighbor)) continue;
+            const w = edgeWeight(edge, current, neighbor);
+            if (w === Infinity) continue;  // hard block: convoy must not pass
+            const lenN = edge.length_m / Lref;
+            const tentative = g + (1 - lam) * lenN + lam * (w / 100) * lenN;
+            if (tentative < (gScore[neighbor] ?? Infinity)) {
+                const nn = nodes[neighbor];
+                if (!nn) continue;
+                gScore[neighbor] = tentative;
+                cameFrom[neighbor] = { from: current, edge };
+                openSet.enqueue(neighbor, tentative + h(nn));
             }
         }
     }
-
-    const elapsed = performance.now() - startTime;
-    console.log(`  ❌ No path found after ${elapsed.toFixed(1)}ms (${iterations} iterations)`);
-    return null; // No path found
+    if (ROUTING_DEBUG) console.log(`A* λ=${lam}: no path (${iterations} expansions)`);
+    return null;
 }
 
 /**
  * Reconstruct path from A* result
  */
-function reconstructPath(cameFrom, current, nodes, graph) {
+function reconstructPath(cameFrom, current, nodes) {
     const path = [current];
-    let totalDistance = 0;
-    let totalWeight = 0;
     const edges = [];
-
     while (cameFrom[current]) {
-        const prev = cameFrom[current].from;
-        const edge = cameFrom[current].edge;
-        
-        path.unshift(prev);
-        edges.unshift(edge);
-        totalDistance += edge.length_m;
-        totalWeight += edge.weight;
-        
-        current = prev;
+        edges.unshift(cameFrom[current].edge);
+        current = cameFrom[current].from;
+        path.unshift(current);
     }
-
-    // Calculate coordinates for the path
-    const coordinates = path.map(nodeId => {
-        const node = nodes[nodeId];
-        return [node.lon, node.lat];
-    });
-
-    // Calculate average danger score (0-100)
-    const avgWeight = edges.length > 0 ? totalWeight / edges.length : 0;
-    const dangerScore = Math.min(100, (avgWeight / 84) * 100); // Normalize by max weight
-
-    console.log(`  📊 Path reconstructed: ${path.length} nodes, ${totalDistance.toFixed(1)}m, ${edges.length} edges`);
-
+    const coordinates = path.map(id => [nodes[id].lon, nodes[id].lat]);
+    const totalDistance = edges.reduce((s, e) => s + e.length_m, 0);
+    const totalWeight = edges.reduce((s, e) => s + e.weight, 0);
+    const avgWeight = edges.length ? totalWeight / edges.length : 0;
     return {
-        path: path,
-        coordinates: coordinates,
-        edges: edges,
-        distance: totalDistance / 1000, // Convert meters to km
-        totalWeight: totalWeight,
-        avgWeight: avgWeight,
-        dangerScore: dangerScore,
+        path,
+        coordinates,
+        edges,
+        distance: totalDistance / 1000,  // km
+        totalWeight,
+        avgWeight,
+        dangerScore: Math.min(100, avgWeight),
         numSegments: edges.length
     };
 }
 
 /**
- * Calculate 3 alternative routes
+ * Convoy metrics for a route under the current threat picture.
+ * @param {object} route   result of astar
+ * @param {object} opts    {edgeWeight, edgeProb(edge, w) -> p, speedKmph, highRisk}
  */
-function calculateRoutes(graph, nodes, startId, endId) {
-    console.log(`Calculating routes from ${startId} to ${endId}`);
+function computeRouteMetrics(route, opts = {}) {
+    const speed = opts.speedKmph || 30;
+    const highRisk = opts.highRisk || 60;
+    const edgeWeight = opts.edgeWeight || defaultEdgeWeight;
+    const edgeProb = opts.edgeProb || ((e) => e.p_traverse ?? 0);
+    const mps = speed / 3.6;
 
-    // Route 1: Safest (prioritize low weights)
-    const safestRoute = astar(graph, nodes, startId, endId, 0.9);
-    
-    // Route 2: Balanced (mix of distance and safety)
-    const balancedRoute = astar(graph, nodes, startId, endId, 0.5);
-    
-    // Route 3: Shortest (prioritize distance)
-    const shortestRoute = astar(graph, nodes, startId, endId, 0.1);
-
-    if (!safestRoute || !balancedRoute || !shortestRoute) {
-        return null; // No path found
-    }
-
-    return {
-        safest: {
-            ...safestRoute,
-            name: '🟢 Safest Route',
-            color: '#00ff00',
-            description: 'Prioritizes low-crime areas'
-        },
-        balanced: {
-            ...balancedRoute,
-            name: '🟡 Balanced Route',
-            color: '#ffaa00',
-            description: 'Balance between safety and distance'
-        },
-        shortest: {
-            ...shortestRoute,
-            name: '🔴 Shortest Route',
-            color: '#ff0000',
-            description: 'Fastest path, may go through risky areas'
+    let logSurvive = 0, lenW = 0, maxW = 0, nHigh = 0, exposure = 0, choke = 0, blocked = 0, zones = 0;
+    route.path.slice(0, -1).forEach((from, i) => {
+        const e = route.edges[i];
+        const to = route.path[i + 1];
+        const w = edgeWeight(e, from, to);
+        if (w === Infinity) { blocked++; return; }
+        if (w > e.weight) zones++;
+        const p = Math.min(0.999999, Math.max(0, edgeProb(e, w)));
+        logSurvive += Math.log1p(-p);
+        lenW += Math.min(100, w) * e.length_m;
+        maxW = Math.max(maxW, w);
+        if (w >= highRisk) {
+            nHigh++;
+            exposure += e.length_m / mps;
         }
+        if (e.chokepoint) choke++;
+    });
+    const distM = route.distance * 1000;
+    return {
+        distanceKm: route.distance,
+        etaMin: distM / mps / 60,
+        incidentProb: blocked ? 1 : 1 - Math.exp(logSurvive),
+        meanRisk: distM ? lenW / distM : 0,
+        maxRisk: Math.min(100, maxW),
+        highRiskSegments: nHigh,
+        exposureMin: exposure / 60,
+        chokepoints: choke,
+        threatSegments: zones,
+        blockedSegments: blocked
     };
 }
 
 /**
- * Format distance for display
+ * Calculate the three convoy route options.
  */
-function formatDistance(meters) {
-    if (meters < 1000) {
-        return `${Math.round(meters)}m`;
-    } else {
-        return `${(meters / 1000).toFixed(2)}km`;
+function calculateRoutes(graph, nodes, startId, endId, opts = {}) {
+    const lambdas = { ...ROUTE_LAMBDAS, ...(opts.lambdas || {}) };
+    const fastest = astar(graph, nodes, startId, endId, lambdas.fastest, opts);
+    if (!fastest) return null;
+    const balanced = astar(graph, nodes, startId, endId, lambdas.balanced, opts) || fastest;
+    const safest = astar(graph, nodes, startId, endId, lambdas.safest, opts) || balanced;
+
+    const style = {
+        fastest: { name: '🔵 Fastest', color: '#3b9dff', description: `λ=${lambdas.fastest} · minimum travel time; ignores risk (respects road closures)` },
+        balanced: { name: '🟡 Balanced', color: '#ffb000', description: `λ=${lambdas.balanced} · trades time against threat exposure` },
+        safest: { name: '🟢 Safest', color: '#00e676', description: `λ=${lambdas.safest} · minimises threat exposure` }
+    };
+    const out = {};
+    for (const [k, r] of Object.entries({ fastest, balanced, safest })) {
+        out[k] = { ...r, ...style[k], key: k, lambda: lambdas[k], metrics: computeRouteMetrics(r, opts) };
     }
+    return out;
 }
 
 /**
- * Get danger level description
+ * Format distance for display (input km)
+ */
+function formatDistance(km) {
+    const meters = km * 1000;
+    return meters < 1000 ? `${Math.round(meters)} m` : `${km.toFixed(2)} km`;
+}
+
+/**
+ * Danger level description for a 0-100 risk score
  */
 function getDangerLevel(score) {
-    if (score < 20) return { label: 'Very Safe', color: '#00ff00' };
-    if (score < 40) return { label: 'Safe', color: '#7fff00' };
+    if (score < 20) return { label: 'Very Low', color: '#00ff00' };
+    if (score < 40) return { label: 'Low', color: '#7fff00' };
     if (score < 60) return { label: 'Moderate', color: '#ffaa00' };
-    if (score < 80) return { label: 'Risky', color: '#ff6600' };
-    return { label: 'High Risk', color: '#ff0000' };
+    if (score < 80) return { label: 'High', color: '#ff6600' };
+    return { label: 'Critical', color: '#ff0000' };
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { PriorityQueue, getDistance, findNearestNode, astar, reconstructPath,
+                       computeRouteMetrics, calculateRoutes, formatDistance, getDangerLevel, ROUTE_LAMBDAS };
 }

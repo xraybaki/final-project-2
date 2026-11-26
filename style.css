@@ -737,3 +737,48 @@ body {
 .crime-event-marker {
     animation: pulse 2s infinite;
 }
+
+/* ===================== Convoy planner additions ===================== */
+.control-panel {
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    width: 250px;
+}
+.info-panel h2 { font-size: 20px; }
+.legend-row { display: flex; align-items: center; margin-bottom: 4px; }
+.legend-swatch { width: 20px; height: 10px; margin-right: 8px; border-radius: 2px; }
+
+.route-result-panel {
+    bottom: 36px;
+    left: auto;
+    right: 20px;
+    transform: none;
+    width: 540px;
+    max-width: calc(100% - 300px);
+    padding: 14px 16px;
+    max-height: 55vh;
+    overflow-y: auto;
+}
+.route-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 8px; }
+.route-table th { text-align: center; padding: 4px 6px; border-bottom: 1px solid #333; font-size: 13px; }
+.route-table td { text-align: center; padding: 3px 6px; border-bottom: 1px solid #1d1d1d; color: #ddd; }
+.route-table td.metric-label { text-align: left; color: #999; white-space: nowrap; }
+.reroute-banner {
+    margin: 4px 0 8px; padding: 8px 10px; border-radius: 6px; font-size: 12px;
+    background: rgba(255, 170, 0, 0.12); border: 1px solid #ffaa00; color: #ffd27a;
+}
+.lambda-control { font-size: 11px; color: #aaa; display: flex; align-items: center; gap: 8px; }
+.lambda-control input { flex: 1; }
+.animate-btn, .stop-btn {
+    width: 100%; padding: 10px; margin-bottom: 8px; color: white; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 13px; font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.stop-btn { background: #ff6b6b; }
+.synthetic-footer {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 1001;
+    text-align: center; font-size: 11px; padding: 4px 8px;
+    background: rgba(40, 20, 0, 0.92); color: #ffaa00; border-top: 1px solid #ffaa00;
+}
+.leaflet-bottom { bottom: 22px; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
