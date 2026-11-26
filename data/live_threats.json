@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "events": [
+    {
+      "lat": 43.671873,
+      "lon": -79.379179,
+      "type": "IED",
+      "impact": 92,
+      "location": "Bloor Street East",
+      "description": "Unattended object reported on the road shoulder near Bloor Street East. Area under observation; movement through the segment is not advised until cleared. (Fictional training scenario.)"
+    },
+    {
+      "lat": 43.658768,
+      "lon": -79.395518,
+      "type": "ambush",
+      "impact": 80,
+      "location": "College Street",
+      "description": "Report of suspicious individuals observing traffic on a winding stretch of College Street. Convoys advised to avoid or proceed with heightened caution. (Fictional training scenario.)"
+    },
+    {
+      "lat": 43.651519,
+      "lon": -79.379741,
+      "type": "stone_pelting",
+      "impact": 65,
+      "location": "Richmond Street West",
+      "description": "Crowd gathering and sporadic stone throwing reported along Richmond Street West. Vehicles have sustained minor damage. (Fictional training scenario.)"
+    },
+    {
+      "lat": 43.662916,
+      "lon": -79.421432,
+      "type": "road_blockade",
+      "impact": 70,
+      "location": "Bloor Street West",
+      "description": "Road blocked by a protest sit-in on Bloor Street West. Traffic diverted; expected to persist for several hours. (Fictional training scenario.)"
+    },
+    {
+      "lat": 43.640691,
+      "lon": -79.401387,
+      "type": "landslide",
+      "impact": 94,
+      "location": "Bathurst Street",
+      "description": "Debris from a slope failure has fully blocked Bathurst Street. Road closed to all vehicles until clearance. (Fictional training scenario.)"
+    }
+  ],
+  "source": "SYNTHETIC - for demonstration only",
+  "data_label": "SYNTHETIC - for demonstration only",
+  "timestamp": "2026-11-26T15:14:25+00:00"
+}

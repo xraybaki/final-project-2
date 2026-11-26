@@ -1,0 +1,29 @@
+{
+  "data_label": "SYNTHETIC - for demonstration only",
+  "region": {
+    "name": "Toronto (FALLBACK - OSM download failed)",
+    "center": [
+      43.654059433572314,
+      -79.39133798283459
+    ],
+    "radius_m": 5000,
+    "source": "legacy_toronto/downtown_streets.geojson",
+    "bounds": [
+      [
+        43.6283256,
+        -79.4373188
+      ],
+      [
+        43.6794619,
+        -79.3408571
+      ]
+    ]
+  },
+  "convoy_speed_kmph": 30,
+  "threat_zone_radius_m": 300,
+  "hard_block_impact": 90,
+  "high_risk_weight": 60,
+  "L_ref": 42.2,
+  "model": "XGBoost",
+  "model_roc_auc": 0.9550606557332926
+}

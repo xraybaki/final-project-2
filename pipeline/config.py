@@ -23,7 +23,7 @@ CHOKEPOINT_TOP_PCT = 5             # top-N% edge betweenness flagged as chokepoi
 # ---------------------------------------------------------------- synthetic data
 RANDOM_SEED = 42
 N_HOTSPOTS = 10                    # 8-12 clusters
-N_INCIDENTS = 2400                 # total synthetic incidents over 24 months
+N_INCIDENTS = None                 # total synthetic incidents over 24 months (None = auto: ~4 per 100 edges)
 HISTORY_MONTHS = 24
 FEATURE_MONTHS = 18                # months 1-18 -> features, 19-24 -> label
 LABEL_RADIUS_M = 150               # edge is "risky" if a future incident is within this

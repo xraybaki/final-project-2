@@ -1,0 +1,72 @@
+{
+  "data": "SYNTHETIC - for demonstration only",
+  "region": "Toronto (FALLBACK - OSM download failed)",
+  "model": "XGBoost",
+  "split": {
+    "feature_months": "1-18",
+    "label_months": "19-24",
+    "label_radius_m": 150,
+    "val_fraction": 0.25,
+    "stratified": true
+  },
+  "n_edges": 11934,
+  "positive_rate": 0.2967152673035026,
+  "model_metrics": {
+    "roc_auc": 0.9550606557332926,
+    "pr_auc": 0.8987908774292366,
+    "threshold": 0.5086284279823303,
+    "precision": 0.8061767838125665,
+    "recall": 0.8553672316384181,
+    "f1": 0.8300438596491229,
+    "confusion_matrix": {
+      "tn": 1917,
+      "fp": 182,
+      "fn": 128,
+      "tp": 757
+    }
+  },
+  "baseline_metrics": {
+    "description": "distance to nearest past incident only",
+    "roc_auc": 0.6069093972647723,
+    "pr_auc": 0.361107724527447,
+    "threshold": -209.4621389222275,
+    "precision": 0.34291010194624655,
+    "recall": 0.8361581920903954,
+    "f1": 0.4863621426224121,
+    "confusion_matrix": {
+      "tn": 681,
+      "fp": 1418,
+      "fn": 145,
+      "tp": 740
+    }
+  },
+  "feature_importance": {
+    "inc_500m": 0.11718572676181793,
+    "hostile_500m": 0.09164206683635712,
+    "recent_500m": 0.08704295754432678,
+    "unpaved": 0.0672970786690712,
+    "inc_1km": 0.06527281552553177,
+    "sev_density_500m": 0.06293971836566925,
+    "node_density_500m": 0.059563156217336655,
+    "night_share_500m": 0.05841585248708725,
+    "inc_250m": 0.05196727439761162,
+    "dist_nearest_inc": 0.048644937574863434,
+    "chokepoint": 0.03489847108721733,
+    "road_priority": 0.03141411021351814,
+    "betweenness": 0.028366269543766975,
+    "length_m": 0.027823667973279953,
+    "narrow": 0.027301859110593796,
+    "lanes": 0.0270399060100317,
+    "degree_max": 0.026683082804083824,
+    "bridge": 0.022556034848093987,
+    "degree_min": 0.022175900638103485,
+    "tunnel": 0.021705035120248795,
+    "curviness": 0.02006407640874386
+  },
+  "scoring": {
+    "window_months": "7-24",
+    "weight_scale_q99": 0.6579431716723426,
+    "incident_active_hours": 12.0,
+    "pct_high_risk_ge60": 0.10180995475113122
+  }
+}
