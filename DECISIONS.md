@@ -279,42 +279,59 @@
     routes share river-bridge chokepoints, which gives 2 Critical head-ons and 1 bunching;
     "Accept all" delays Bravo-2 by 14 min and Charlie-3 by 28 min, leaving zero conflicts.
 
+## M15: polish and verification
+81. **Performance** (headless Chromium, localhost): load 1.9 s (target < 5 s); three routes 52 ms;
+    reroute A* from the convoy's position 9.5 ms (target < 100 ms); reroute decision 0.2 ms.
+    The risk layer uses the canvas renderer. Panning measured about 50 ms per frame only because
+    headless Chromium renders in software at 2× DPR; a GPU laptop is much faster.
+82. Screenshots in `reports/screens/` were regenerated with Playwright against a fresh database.
+83. The pipeline is reproducible: a re-run changes only the `timestamp` in `data/live_threats.json`.
+
 ---
 
 ## Summary
 
 ### What works
-* `python -m pipeline.run_all`: M1 → M4 in about 110 s on **Srinagar** (24,574 nodes / 29,078 edges,
-  real OSM data). Model: XGBoost ROC-AUC 0.936 random split / 0.76 spatial CV vs baseline 0.71 / 0.70.
-* ML risk map, three routes in ~10–25 ms (well under 1 s), comparison table with all convoy metrics, λ slider.
-* Threat reporting by map click (type + impact slider), intel feed, and SITREP text. 300 m
-  zones, hard blocks never crossed, automatic re-route with Δkm / Δrisk banner.
-* Convoy animation showing live segment risk.
-* `pytest -q`: 7 tests pass (schema, string keys, weights 0–100, no NaN, model > baseline in
-  both random and spatial CV, synthetic labels, JS A* fixture). `npm test` runs the A* check.
+* `python -m pipeline.run_all`: the real **Srinagar** OSM network (24,574 nodes / 29,078 edges),
+  1,806-entry landmark gazetteer, synthetic incidents, XGBoost model (ROC-AUC 0.94 random split /
+  **0.76 spatial CV** vs baseline 0.71 / 0.70), export. About 2 min.
+* **Plan:** three routes with full convoy metrics, λ slider with a live plain-language sentence.
+* **Threats:** point + small per-type radius, snapping, editable / draggable, fractional penalty,
+  clipped display. SITREP resolver: coordinates (decimal / DMS / MGRS), junction, landmark,
+  landmark + offset along the road; road-only → pin mode; preview card.
+* **SITREP database:** persistent JSON store, REST API, SSE sync across tabs, auto-generated DTG
+  SITREP lines, history, soft delete, TTL expiry, CSV export, Log tab.
+* **Live:** sim / GPS / external feed; mandatory, turn-back and advisory reroutes with hysteresis;
+  banner, ghost route, HUD, next hazard, event log, voice; inject-threat-ahead; scenario files.
+* **Convoys:** occupancy, conflict detection, prioritised resolution with Accept / Accept all,
+  Gantt, march tables, Run all with live re-checks.
+* **Guide** + ⓘ tooltips for every number. A single λ default (0.6).
+* Tests: `pytest -q` (17 passed) and `npm test` (5 JS test files passed).
 
-### Stubbed / not done
-* Gemini path untested (no key in the sandbox). The rule-based fallback is tested.
-* No OSM building/POI density, no elevation.
+### Not done / limits
+* The Gemini path is wired but untested here (no key in the sandbox); the offline parser is tested.
+* No terrain or elevation; constant convoy speed; synthetic data only.
+* In this cloud sandbox Overpass was unreachable, so the J&K PBF extract path was used. On a normal
+  connection Overpass is tried first.
 
-### Demo script (committed Srinagar build)
-1. `node server.js`, then open http://localhost:3000. The ML risk map of Srinagar loads
-   (about 2.5 s; the graph files are about 40 MB). Red clusters are the synthetic hotspots.
-   Click a red segment to show the model probability, road type and chokepoint flag.
-2. Click **Plan Convoy Route**. Click **A** near **34.0931, 74.8095** (city centre, just east of
-   the Jhelum) and **B** near **34.0649, 74.7415** (west Srinagar).
-   *Audience sees:* Fastest (blue) and Balanced (orange) cut through the red cluster west of
-   the river: about 10.6% route incident probability, 18 high-risk segments. Safest (green)
-   swings south round it: 10.0 km (+1.5 km, +3 min), **1.7%**, zero high-risk segments.
-3. Click **Report Threat**, choose **IED** (impact 92 = road closed), and click on the green
-   route near **34.0718, 74.7926**.
-   *Audience sees:* a magenta closed zone, and the banner "🔀 Re-routed: previous route
-   BLOCKED · +3.25 km". The new safest route goes further south round the closure.
-4. Drag the **λ slider** to show the Balanced route moving between fastest and safest.
-5. Click **Fetch Intel Reports**: 5 synthetic reports appear (Gandarbal Road IED,
-   Lalbazar ambush, Amda Kadal stone pelting, Srinagar–Athwajan Road blockade, Nowgam
-   landslide), 2 of them road closures, and the route updates.
-6. Type the SITREP `Suspected IED reported near the bridge on Fore Shore Road` and click
-   **Parse & add threat**. The threat lands on the Fore Shore Road bridge segment.
-   Also try `Stone pelting mob gathering on Boulevard Road, 1 km east`.
-7. Click **Animate Convoy** to watch the convoy and its live segment-risk readout.
+### Demo script (about 8 minutes)
+1. `node server.js` → http://localhost:3000. The loading bar fills and the Srinagar ML risk map
+   appears. Click the header chip (region · model · SYNTHETIC) to show model stats.
+2. **Plan (1):** *Pick start & destination* → A near **34.0931, 74.8095** (city centre), B near
+   **34.0649, 74.7415** (west). Fastest / Balanced cut through the red cluster (~10.6% incident
+   probability); Safest goes round it (1.7%, +1.5 km). Hover an ⓘ; drag λ and read the sentence.
+3. **Threats (3):** choose *Stone pelting* (100 m), click *Click map to place*, click near Nalahmar
+   Road. The threat snaps to the road and **only the part of the road inside the circle turns red**.
+   Click it, change the radius to 200 m, Apply.
+4. SITREP `IED on Nalahmar Road` → **pin mode** (road pulses cyan) → click on it. Then
+   `IED at junction of Nalahmar Road and Maharaj Ganj Road` → preview card → Confirm.
+5. **Log (5):** the records with auto-generated DTG SITREP lines; expand one for its history;
+   Export CSV. Open a second browser tab: new threats appear there within a second.
+6. **Live (2):** *Clear all* threats first (Threats tab), then Plan → *Start live* (or Live →
+   *Start convoy*). Set 10×, click **Inject threat ahead** (IED). The banner reads "Threat reported
+   … Rerouted via … · Δkm · risk …", the old route fades, the new one draws on, and the convoy
+   carries on. Or run the scenario *Srinagar, IED on route, then stone pelting on the alternative*.
+7. **Convoys (4):** *Load demo convoys* → 2 Critical head-ons + 1 bunching on river-bridge
+   chokepoints, shown on the Gantt and map → **Accept all** → 0 conflicts, bars separated →
+   *Run all (live)*.
+8. **Guide (6):** risk bands, impact, multiplier vs λ, route metrics.

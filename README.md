@@ -3,93 +3,214 @@
 > ⚠️ **All incident and threat data in this project is SYNTHETIC, for demonstration only.**
 > It contains no real security data, real units, real people or operational details.
 
-A web app that plans **Fastest / Balanced / Safest** routes for a road convoy over a real
-OpenStreetMap road network. Every road segment gets a **threat score** from a
-**machine-learning model** (XGBoost) trained on incident history plus convoy-relevant road
-factors. Operators can inject **live threat reports** by clicking the map, loading an intel
-feed, or typing a free-text **SITREP** that is parsed by AI. The convoy then **re-routes**
-automatically, and road closures are never crossed.
+A web app for planning and running road-convoy movements over the real OpenStreetMap road
+network of **Srinagar, Jammu & Kashmir** (24,574 intersections, 29,078 road segments).
 
-Operating area: **Srinagar, Jammu & Kashmir**. That's a 24 × 24 km box around the city
-centre: old-city lanes, bridges over the Jhelum, Dal Lake shore roads, the national highway
-and bypasses. The real OSM road network has 24,574 intersections and 29,078 road segments.
-The area is set in one file, `pipeline/config.py`.
+* An **ML model** (XGBoost) gives every road segment a threat score from incident history and
+  convoy-relevant road factors (bridges, chokepoints, narrow or unpaved roads, settlement density).
+* A* plans **Fastest / Balanced / Safest** routes and reports convoy metrics.
+* Operators add **live threats** as a precise point with a small radius: by clicking the map,
+  from an intel feed, or from a free-text **SITREP** resolved against an offline OSM gazetteer.
+  Every threat is stored in a persistent **SITREP database**.
+* A **Live** view moves convoys (simulation, device GPS or an external tracker feed) and
+  **reroutes them on the move**, Google-Maps style, when a threat appears ahead.
+* A **Convoys** planner **deconflicts several convoys** (head-on on bridges, bunching,
+  junctions, shared threats) and recommends start-point (SP) times.
+* A **Guide** explains every number in plain language.
 
 ![Three-route comparison](reports/screens/2_three_route_comparison.png)
 
 ---
 
-## 1. Problem statement
-
-The shortest road route is often not the best route for a convoy. Narrow hill roads,
-bridges, chokepoints that every route must pass through, and areas with repeated
-incidents all add risk. A planner needs to:
-
-1. quantify the risk of each road segment from past incidents and road characteristics,
-2. trade travel time against threat exposure in an explainable way,
-3. react to new threat reports by re-routing at once, and
-4. report convoy-relevant metrics: ETA at convoy speed, route incident probability,
-   time exposed to high-risk segments, and chokepoints crossed.
-
-## 2. Architecture
-
-```mermaid
-flowchart LR
-    OSM[OpenStreetMap<br/>OSMnx drive network] --> G[M1 build_graph<br/>undirected graph]
-    G --> SYN[M2 synthetic_threats<br/>24-month incident history]
-    G --> F[M3 features<br/>road + network + incident history]
-    SYN --> F
-    F --> ML[M3 XGBoost risk model<br/>temporal split, baseline]
-    ML --> W[M4 export_graph<br/>routing_graph.json<br/>routing_edges.geojson]
-    W --> A[A* pathfinding.js<br/>Fastest / Balanced / Safest]
-    A --> UI[Leaflet UI app.js]
-    LT[Live threats<br/>map click · intel feed · SITREP] --> UI
-    UI -->|threat zones, hard blocks| A
-    SITREP[gemini_api.py<br/>Gemini or rule-based] --> LT
-```
-
-| Layer | Files |
-|---|---|
-| Data pipeline (Python) | `pipeline/config.py`, `build_graph.py`, `synthetic_threats.py`, `features.py`, `train_model.py`, `export_graph.py`, `run_all.py` |
-| Server (Node, no dependencies) | `server.js`: static files, `GET /fetch-live-threats`, `POST /parse-sitrep` |
-| Frontend (plain JS + Leaflet from CDN) | `index.html`, `app.js`, `pathfinding.js`, `style.css` |
-| SITREP parser | `gemini_api.py`: Gemini if `GEMINI_API_KEY` is set, otherwise an offline keyword parser plus OSM street-name lookup |
-| Tests | `tests/test_pipeline.py` (pytest), `tests/test_astar.js` (Node) |
-
-## 3. How to run
+## 1. Quick start
 
 ```bash
 pip install -r requirements.txt
-python -m pipeline.run_all          # build graph + synthetic threats + train model + export (~2-4 min)
+python -m pipeline.run_all          # road network + synthetic threats + ML model + export (~2 min)
 node server.js                      # http://localhost:3000
-pytest -q
+pytest -q                           # Python tests (pipeline, SITREP resolver, JS suite)
+npm test                            # JS tests (A*, threat geometry, API, rerouting, deconfliction)
 ```
 
-* The first `run_all` gets the road network from OpenStreetMap and caches it in
-  `data/cache/graph.graphml`. Later runs work offline. It tries these sources in order:
-  1. the **Overpass API** via OSMnx;
-  2. a **regional OSM extract** (`OSM_EXTRACT_URL`, by default the Jammu & Kashmir `.osm.pbf`
-     from openstreetmap.fr, 27 MB), clipped to the operating box with `osmium` and loaded
-     with OSMnx using the same "drive" road filter;
-  3. if both fail, the bundled Toronto street extract in `legacy_toronto/`, with a clear warning.
-     The UI then shows the region as *"Toronto (FALLBACK)"*.
-* Change the area by editing `REGION_NAME / CENTER / RADIUS_M` (and `OSM_EXTRACT_URL` for the
-  matching state) in `pipeline/config.py`, deleting `data/cache/`, and re-running `run_all`. The frontend reads the centre and bounds
-  from `routing_graph.json`, so no JavaScript changes are needed.
-* Windows: `server.js` uses `python` on Windows and `python3` elsewhere (override with `PYTHON=...`).
-* Optional: put `GEMINI_API_KEY=...` in `.env` and `pip install google-genai` to use Gemini for
-  SITREP parsing. Without them the offline parser is used, so the demo never depends on the AI call.
+* The server uses **Node built-ins only** (no `npm install` needed). The frontend is plain JS
+  plus Leaflet from a CDN, with no build step.
+* The first `run_all` downloads OSM data, then works offline from `data/cache/`. Sources, in order:
+  1. the Overpass API via OSMnx;
+  2. the regional extract `OSM_EXTRACT_URL` (Jammu & Kashmir `.osm.pbf` from openstreetmap.fr,
+     27 MB), clipped with `osmium`;
+  3. the bundled Toronto streets in `legacy_toronto/` as a last resort (shown as "FALLBACK").
+* To change the operating area, edit `REGION_NAME / CENTER / RADIUS_M / OSM_EXTRACT_URL` in
+  `pipeline/config.py`, delete `data/cache/` and re-run. The frontend reads everything from
+  `routing_graph.json`.
+* Optional: put `GEMINI_API_KEY=...` in `.env` and `pip install google-genai` to let Gemini extract
+  SITREP fields. The demo never depends on it; the offline parser is always available.
 
-## 4. Method
+### Windows notes
+* `server.js` runs `python` on Windows and `python3` elsewhere (override with `PYTHON=...`).
+* **Python 3.12 is recommended.** If `pip install` fails building geo wheels (`pyproj`, `shapely`,
+  `osmium`, `geopandas`) on a very new Python such as 3.14, create a 3.12 virtual environment:
+  `py -3.12 -m venv .venv && .venv\Scripts\activate`.
+* Every Python file read and write uses `encoding="utf-8"` (CSV also uses `newline=""`). This fixes
+  `UnicodeEncodeError: 'charmap' codec can't encode characters` on Windows. Python is spawned
+  with `PYTHONIOENCODING=utf-8`.
+* The CSV exports include a UTF-8 BOM, so Excel shows place names correctly.
 
-### 4.1 Road network (M1)
+## 2. The six tabs (keys 1–6, Esc cancels any click mode)
+
+| Tab | What it does |
+|---|---|
+| **Plan** | Click start A and destination B. Fastest (λ 0) · Balanced (λ 0.6, slider) · Safest (λ 0.95) appear with a side-by-side metrics table. "Preview drive" or "Start live". |
+| **Live** | Run the convoy (sim 1×/5×/10×/30×, pause; device GPS; external feed). HUD shows road, speed, remaining distance, ETA, segment risk, next hazard and progress. Follow-cam, event log, voice/beep. "Inject threat ahead", scenario picker. |
+| **Threats** | Place a threat on the map (type, impact, radius, reported by), parse a SITREP, activate intel reports, list active threats (locate / clear). |
+| **Convoys** | Several convoys with SP/RP, SP time, priority, vehicles, spacing, speed and profile. Conflicts, recommendations (Accept / Accept all), Gantt timeline, march tables (CSV), Run all. |
+| **Log** | The SITREP database: sortable and filterable table with search, CSV export, Locate / Edit / Clear, expandable SITREP line and history, plus live events (reroutes, arrivals). |
+| **Guide** | Plain-language meaning of segment risk, threat impact, multiplier, λ and route metrics. Every number in the UI has an ⓘ tooltip linking here. |
+
+## 3. Threats: point + small radius
+
+* **Model:** every threat, whatever its source, is `{id, lat, lon, radius_m, type, impact,
+  location_label, resolution, confidence, source, created_at, expires_at, status, ...}`.
+* **Per-type defaults** live in one file, `threat_types.json`:
+
+  | Type | Impact | Radius | Expires |
+  |---|---|---|---|
+  | IED / suspicious object | 92 (road closed) | 100 m | until cleared |
+  | Ambush risk | 80 | 150 m | 6 h |
+  | Stone pelting | 60 | 100 m | 4 h |
+  | Road blockade | 70 | 50 m | 8 h |
+  | Landslide | 95 (road closed) | 50 m | until cleared |
+  | Accident / obstruction | 45 | 30 m | 2 h |
+
+* The radius slider runs from 25 to 500 m. **The circle drawn is exactly the radius used for routing.** Click a threat to
+  edit its type, impact or radius, drag it to move it, or delete it.
+* **Map clicks snap to the nearest road** (perpendicular projection, 250 m spatial grid). A dashed
+  line shows snaps over 10 m. With no road within 150 m, the operator is asked before placing off-road.
+* **Only the part of a road inside the circle is affected:**
+  * soft threats (impact < 90): `w_eff = w(1 − f_in) + max(w, impact)(1 + 3·impact/100)·f_in`,
+    where `f_in` = fraction of the edge inside the circle;
+  * hard block (impact ≥ 90): the whole junction-to-junction link is closed (a convoy must drive
+    it end to end).
+
+  The map paints only the clipped part red or magenta, with a thin dashed line for closed links.
+
+![Small-radius threat](reports/screens/3_threat_small_radius.png)
+
+## 4. SITREP → threat (never guesses)
+
+`POST /parse-sitrep` resolves the location **offline** against OSM roads and
+`data/landmarks.json` (1,806 named OSM features: bridges, chowks, police stations, hospitals,
+markets, religious sites, schools…). The first rule that matches wins:
+
+| # | Rule | Example | Result |
+|---|---|---|---|
+| 1 | Coordinates | `34.0812, 74.7956` · `34°05'01"N 74°47'50"E` · `43S DT 81299 71455` (MGRS) | exact point · high |
+| 2 | Junction of two roads | `IED at junction of Nalahmar Road and Maharaj Ganj Road` · `X / Y crossing` · `where X meets Y` | shared node · high (medium if OSM has a gap) |
+| 3 | Landmark | `Road blockade near Lal Chowk` · `near Nawa Kadal` | landmark snapped to road |
+| 4 | Landmark/junction + offset | `Ambush risk 300 m east of Nawa Kadal on Nalahmar Road` | walked 300 m **along** the road |
+| 5 | Road only | `IED on Nalahmar Road` | **no point placed**: the road pulses cyan; click it within 60 m to pin (Esc cancels) |
+| 6 | Nothing | `Something happened somewhere` | error listing the accepted formats |
+
+A resolved SITREP first shows a **preview card** (type, impact, radius, location, method,
+confidence badge) with a draggable dashed marker: **Confirm**, **Adjust** or **Cancel**. Gemini
+(optional) only extracts fields; it is never trusted for coordinates.
+
+| Pin mode | Junction preview |
+|---|---|
+| ![](reports/screens/4_sitrep_pin_mode.png) | ![](reports/screens/5_sitrep_junction_preview.png) |
+
+## 5. Live tracking and on-the-move rerouting
+
+* **Position sources:** simulation (default), device GPS (`watchPosition`, map-matched to the road,
+  outside the operating area → warning and fall back to simulation), or an **external feed**:
+
+  ```bash
+  curl -X POST http://localhost:3000/api/convoys/LIVE1/position -H "Content-Type: application/json" -d "{\"lat\":34.08,\"lon\":74.80,\"speed_kmph\":28}"
+  ```
+
+  The server rebroadcasts the fix over SSE, and the Live tab follows it when "External feed" is selected.
+* **Rerouting rules** (`js/reroute.js`), checked on every threat change (from this tab, another tab
+  or another client) and every 10 s of sim time:
+  * **Mandatory:** a remaining edge is closed → replan from the next node. If the closure is
+    ahead on the current segment, **TURN BACK** and replan from the previous node.
+  * **Advisory:** remaining risk cost up by more than 15% → switch automatically if the
+    alternative is at least 10% cheaper, otherwise show "Alternative available … [Accept] [Ignore]".
+  * **Hysteresis:** at most one automatic advisory reroute per 30 s, and never back to a route
+    abandoned in the last 2 min. Mandatory reroutes ignore the 30 s limit (safety).
+* **Feedback:** the old route fades out as a grey dashed line while the new one draws on. A banner
+  reads, for example, *"Threat reported on Munawar Link Road, 400 m ahead. Rerouted via Hamdania
+  Bridge · … · risk … → 1.8%"*. Events are written to the SITREP database.
+* **Demo:** "Inject threat ahead" drops a threat 500–1000 m ahead on the current route.
+  **Scenarios** (`data/scenarios/*.json`) are timed scripts:
+
+  ```json
+  {"name": "...", "start": {"lat": 34.093, "lon": 74.8095}, "end": {"lat": 34.065, "lon": 74.7415},
+   "profile": "safest", "speed_mult": 10,
+   "steps": [{"at_s": 60, "action": "add_threat", "ahead_m": 700, "type": "IED", "radius_m": 100},
+             {"at_s": 150, "action": "add_threat", "lat": 34.08, "lon": 74.79, "type": "stone_pelting"}]}
+  ```
+
+  Actions: `add_threat` (`lat`/`lon`, or `ahead_m` on the convoy's current route), `clear_threats`,
+  `set_speed`, `note`. One scenario is included: *Srinagar, IED on route, then stone pelting on the alternative*.
+
+![Live reroute](reports/screens/6_live_reroute.png)
+
+## 6. Multi-convoy deconfliction
+
+* **Occupancy:** the head enters an edge at `t_in`; the tail leaves `column / speed` after the head
+  exits (column = vehicles × spacing). Window = `[t_in − 3 min, t_out + 3 min]`; junctions likewise.
+* **Conflicts:**
+
+  | Conflict | Rule | Severity |
+  |---|---|---|
+  | Head-on | same edge, opposite directions, overlapping windows | **Critical** on bridge / chokepoint / narrow / unpaved, else High |
+  | Bunching | same edge, same direction, gap < 10 min | Medium |
+  | Junction crossing | same node, overlapping windows | Medium |
+  | Shared threat exposure | both inside the same threat radius at the same time | High |
+
+  Consecutive shared segments are grouped into one conflict per pair.
+* **Resolution:** order by priority, then SP. Each lower-priority convoy tries SP delays (2-min
+  steps up to 60 min) and an alternative route that avoids reserved edges, keeping the lowest
+  combined cost. These are shown as **recommendations**, e.g. *"Bravo-2: delay SP by 14 min
+  (07:32 → 07:46) to avoid head-on with Alpha-1 on Syed Mansoor Bridge"* [Accept] [Accept all].
+* **Outputs:** Gantt timeline (bars coloured by segment risk, conflict markers, live "now" line),
+  march tables (SP, every bridge or chokepoint with its ETA, RP) with CSV export, routes and
+  conflict markers on the map. **Run all** starts every convoy from its SP in the live engine,
+  and conflicts are re-checked after any reroute.
+* **Try it:** Convoys tab → *Load demo convoys* → 2 Critical head-ons + 1 bunching → *Accept all*
+  → 0 conflicts and the bars separate on the Gantt.
+
+| Conflicts | Resolved |
+|---|---|
+| ![](reports/screens/7_convoys_conflicts.png) | ![](reports/screens/8_convoys_gantt_resolved.png) |
+
+## 7. Method
+
+```mermaid
+flowchart LR
+    OSM[OpenStreetMap<br/>Overpass or regional PBF] --> G[build_graph<br/>drive network]
+    OSM --> LM[landmarks<br/>gazetteer]
+    G --> SYN[synthetic_threats<br/>24-month history]
+    G --> F[features<br/>road + network + incidents]
+    SYN --> F
+    F --> ML[XGBoost risk model<br/>temporal split + spatial CV]
+    ML --> W[export<br/>routing_graph.json]
+    W --> A[A* + metrics<br/>pathfinding.js]
+    A --> UI[Leaflet UI<br/>6 tabs]
+    LM --> SR[sitrep_resolver.py]
+    SR --> DB[(SITREP database<br/>server.js + SSE)]
+    UI <--> DB
+    DB --> RR[live rerouting<br/>reroute.js]
+    DB --> DC[deconfliction<br/>deconflict.js]
+```
+
+### 7.1 Road network (M1)
 `ox.graph_from_point(CENTER, dist=12 km, network_type="drive")`, or the same "drive" filter
 applied to the clipped regional extract, with OSMnx speeds and travel times added. The graph is converted to undirected (keeping the shortest parallel
 edge), restricted to the largest connected component, and relabelled `0..N-1`. Each edge
 keeps its length, road class, name, lanes, maxspeed, bridge/tunnel flags, surface and
 geometry.
 
-### 4.2 Synthetic incidents (M2)
+### 7.2 Synthetic incidents (M2)
 `data/incidents.csv` holds a seeded (reproducible) 24-month history of
 `IED / ambush / stone_pelting / road_blockade / landslide / accident` incidents, all placed
 on real road edges:
@@ -100,7 +221,7 @@ on real road edges:
 * Hostile types are concentrated at night (20:00–05:00) and landslides in the monsoon (Jul–Sep).
 * `data/live_threats.json` holds 5 "current" intel reports with fictional descriptions.
 
-### 4.3 Features and ML risk model (M3)
+### 7.3 Features and ML risk model (M3)
 **Temporal split to avoid leakage.** Features use incidents from months 1–18. The label is
 whether any incident from months 19–24 falls within 150 m of the edge.
 
@@ -118,7 +239,7 @@ The final model is refit on all labelled data and scores the latest 18-month win
 Edge risk = `p_incident × expected-severity factor`, scaled to the 0–100 `weight` used by
 the map colours. The raw probability is stored as `risk_prob`.
 
-### 4.4 Routing (M5)
+### 7.4 Routing (M5)
 A* with a binary heap and a cost where both terms are on the same scale:
 
 ```
@@ -137,38 +258,47 @@ Other metrics per route: distance, ETA at 30 km/h, mean and max segment risk, nu
 high-risk segments, **exposure time** on segments with weight ≥ 60, chokepoints crossed,
 and threat-zone segments.
 
-### 4.5 Live threats and re-routing (M6, refined in M9)
-* A threat is a **point with a small radius**. Default impact and radius depend on the type
-  (`threat_types.json`: IED 100 m, ambush 150 m, stone pelting 100 m, blockade 50 m,
-  landslide 50 m, accident 30 m). The operator can change the radius (25–500 m), the impact
-  and the type at any time in the threat popup, and drag the marker to move it.
-* Map clicks **snap to the nearest road**. A dashed line shows the snap when it is more than 10 m.
-* **Only the part of a road inside the circle is affected.** Soft threats (impact < 90) scale the
-  penalty by the fraction of the edge inside the circle:
-  `w_eff = w(1 − f_in) + max(w, impact)(1 + 3·impact/100)·f_in`. **Impact ≥ 90 is a hard block:**
-  if the circle touches a link, the link is closed and no route uses it.
-* After any threat is added, edited or removed, the routes are recomputed and the panel shows e.g.
-  *"Re-routed: +1.18 km, previous route BLOCKED"* or *"+X km, risk −Y%"*.
+### 7.5 Risk scales (see the Guide tab)
+* **Segment risk 0–100** is *relative* (100 = top 1% of roads), not a probability.
+  Bands: Low < 30 ≤ Medium < 60 ≤ High < 80 ≤ Critical.
+* **Threat impact 10–100:** 90+ closes the road.
+* **Multiplier ×(1 + 3·impact/100)** is how many times more dangerous a segment inside a threat
+  counts. It is different from **λ**, which is a route preference: to avoid 1 km of risk-R road the
+  planner accepts a detour of up to `1 + λ·(R/100)/(1 − λ)` km (λ 0.6 → 2.2 km for R = 80).
 
-### 4.6 SITREP → threat (M9)
-`POST /parse-sitrep` resolves the location offline against OSM roads and `data/landmarks.json`.
-The first rule that matches wins, and the result carries a `resolution` and a `confidence`:
+## 8. Files and API
 
-| Rule | Example | Result |
+| Layer | Files |
+|---|---|
+| Pipeline (Python) | `pipeline/config.py`, `build_graph.py`, `landmarks.py`, `synthetic_threats.py`, `features.py`, `train_model.py`, `export_graph.py`, `run_all.py` |
+| SITREP | `sitrep_resolver.py` (offline resolver, MGRS / DMS), `gemini_api.py` (entry point, optional Gemini) |
+| Server (Node built-ins) | `server.js`, `lib/store.js` (atomic JSON store), `lib/sitrep.js` (validation, DTG, SITREP line, CSV) |
+| Frontend | `index.html`, `style.css`, `app.js` (map, routing, shell), `pathfinding.js`, `js/threat-geo.js`, `js/threats.js`, `js/reroute.js`, `js/live.js`, `js/deconflict.js`, `js/convoys.js`, `js/log.js`, `js/guide.js`, `js/ui.js` |
+| Shared config | `threat_types.json` |
+| Data | `data/landmarks.json`, `data/live_threats.json`, `data/incidents.csv`, `data/scenarios/`, `data/sitrep_db.json` and `data/convoys.json` (runtime, git-ignored) |
+
+| Method | Path | Purpose |
 |---|---|---|
-| Coordinates | `34.0812, 74.7956` · `34°05'01"N 74°47'50"E` · `43S DT 81299 71455` (MGRS) | exact point, high |
-| Junction | `IED at junction of Nalahmar Road and Maharaj Ganj Road` | shared node, high (medium if OSM has a gap) |
-| Landmark | `Road blockade near Lal Chowk` · `near Nawa Kadal` | landmark snapped to road |
-| Landmark + offset | `Ambush risk 300 m east of Nawa Kadal on Nalahmar Road` | walked 300 m **along** the road |
-| Road only | `IED on Nalahmar Road` | **no point**: the road pulses cyan and the operator clicks the exact spot (pin mode, Esc cancels) |
-| Nothing | — | error listing the accepted formats |
+| GET | `/api/threats?status=&source=&type=` | list threat records |
+| POST | `/api/threats` | create (validates type, impact 10–100, radius 25–500, inside the operating box) |
+| PATCH | `/api/threats/:id` | edit / move / change radius / clear |
+| DELETE | `/api/threats/:id` | soft delete (`status: cleared`, kept in history) |
+| GET | `/api/threats/export.csv` | CSV export of the log |
+| POST | `/api/intel/apply` | activate pending intel-feed records |
+| GET / POST | `/api/events` | live event log (reroutes, arrivals…) |
+| GET | `/api/stream` | Server-Sent Events: `threat_created/updated/cleared`, `event_logged`, `convoy_position`, `convoys_changed` |
+| GET / POST / PATCH / DELETE | `/api/convoys[/:id]` | convoy definitions (M14) |
+| POST | `/api/convoys/:id/position` | external position feed `{lat, lon, speed_kmph, heading, ts}` |
+| GET | `/api/scenarios` | scenario list |
+| POST | `/parse-sitrep` | `{text}` → `ok` / `needs_pin` / `error` |
+| GET | `/fetch-live-threats` | legacy alias: intel-feed records |
 
-A parsed SITREP first appears as a **preview card** (type, impact, radius, location, method,
-confidence) with a dashed draggable marker. Click **Confirm** to add it, or **Adjust** to drag it first.
+Manual threats get an auto-generated SITREP line using the military DTG, for example:
+`SITREP 270145Z NOV 26 | TYPE: IED/SUSPICIOUS OBJECT | LOC: 34.08112N 74.79563E (Nalahmar Rd, ~120 m W of Nawa Kadal) | RADIUS: 100 m | IMPACT: 92 (ROAD CLOSED) | SRC: MANUAL MAP ENTRY | BY: Ops desk | STATUS: ACTIVE | SYNTHETIC`
 
-## 5. Results (`reports/metrics.json`)
+## 9. Results
 
-Srinagar build: 29,078 edges, 16.5% positive (an incident within 150 m in months 19–24).
+### 9.1 Risk model (`reports/metrics.json`, Srinagar, 29,078 edges, 16.5% positive)
 
 | | ROC-AUC | PR-AUC | Precision | Recall |
 |---|---|---|---|---|
@@ -177,52 +307,52 @@ Srinagar build: 29,078 edges, 16.5% positive (an incident within 150 m in months
 | **XGBoost**, spatial-block CV (1.5 km cells, 5 folds) | **0.76 ± 0.03** | | | |
 | Baseline, spatial-block CV | 0.70 | | | |
 
-Confusion matrix (validation set, F1-optimal threshold): TN 5726 · FP 348 · FN 315 · TP 881.
-
-**Read the spatial-block number as the honest one.** In a random split, neighbouring edges
-(which share almost the same incident counts) land on both sides, which inflates the score.
-Grouping edges into 1.5 km cells removes that. The model still beats the baseline in both
-settings. Recent and nearby incident counts rank highest, followed by severity density,
-**chokepoint** status and settlement density (`reports/feature_importance.png`).
+Confusion matrix (validation, F1-optimal threshold): TN 5726 · FP 348 · FN 315 · TP 881.
+**The spatial-block number is the honest one**, because the random split puts neighbouring
+edges on both sides. The model beats the baseline in both settings.
 
 ![ROC/PR](reports/roc_pr.png)
 
-Example route comparison (screenshot above, city centre → west Srinagar): Fastest 8.50 km,
-route incident probability 10.6%, 18 high-risk segments, 1.8 min high-risk exposure, 72
-chokepoints. Safest 10.01 km (+1.5 km, +3 min): **1.7%**, no high-risk segments, 45
-chokepoints. After an IED (road closed) is reported on that safest route, it re-routes:
-"previous route BLOCKED · +3.25 km".
+### 9.2 Performance (measured in headless Chromium)
 
-| Screens | |
-|---|---|
-| ML risk map | `reports/screens/1_risk_map.png` |
-| Three-route comparison | `reports/screens/2_three_route_comparison.png` |
-| Re-route around a threat (hard block) | `reports/screens/3_reroute_around_threat.png` |
-| Intel reports loaded | `reports/screens/4_intel_reports.png` |
-| SITREP parsed to a threat | `reports/screens/5_sitrep_parsed.png` |
+| Check | Target | Measured |
+|---|---|---|
+| Initial load (39 MB graph + geometry, localhost) | < 5 s | **1.9 s** |
+| Three routes (Fastest / Balanced / Safest) | < 1 s | **52 ms** (first call incl. warm-up; later 10–35 ms) |
+| Reroute from the convoy's position (A* from next node) | < 100 ms | **9.5 ms** (decision logic 0.2 ms) |
+| Pan the 29k-segment risk layer | smooth | canvas renderer; ~50 ms/frame in *software-rendered* headless Chromium at 2× DPR. Expect much faster with a real GPU |
 
-## 6. Limitations
-* **Synthetic data.** The incident generator encodes our own assumptions about what makes a
-  road risky, so the model partly learns those assumptions back. Real performance would
-  need real incident feeds.
-* **Road-only.** There is no off-road movement and no terrain, elevation or line-of-sight
-  analysis. "Hill roads" are approximated by curviness.
-* **Static model.** It is retrained offline and has no time-of-day or seasonal conditioning
-  at query time. Live threats are layered on with a rule (zone penalty and hard block),
-  not learned.
-* Route probability assumes independent segments, the standard simplification in Krumm & Horvitz.
-* The live threats and SITREP examples use real Srinagar street names so the demo is
-  concrete. The events themselves are invented and labelled SYNTHETIC everywhere.
-* Building and POI density from OSM was skipped for speed (node density is used as the
-  settlement proxy).
+### 9.3 Screens (`reports/screens/`)
+`1_risk_map` · `2_three_route_comparison` · `3_threat_small_radius` · `4_sitrep_pin_mode` ·
+`5_sitrep_junction_preview` · `6_live_reroute` · `7_convoys_conflicts` · `8_convoys_gantt_resolved` ·
+`9_sitrep_log` · `10_risk_guide`
 
-## 7. Future work
-Real incident feeds; terrain and elevation (DEM) features; line-of-sight / overwatch
-exposure; multi-convoy deconfliction and timing; a time-of-day and seasonal model;
-k-diverse alternative routes; learning threat-zone impact from data.
+## 10. Tests
+* `pytest -q`: graph schema, string adjacency keys, weights 0–100, no NaN, model > baseline (random and
+  spatial), synthetic labels, **SITREP resolver** (road-only → needs_pin, junction, landmark within
+  150 m, decimal / DMS / MGRS, offset walked along the road), and it runs the JS suite.
+* `npm test`: A* fixture, **threat geometry** (clip length, `f_in`, hard block, snapping), **threat API**
+  (temp DB: create / list / patch / delete, validation, CSV, SSE), **rerouting** (next node, turn back,
+  thresholds, hysteresis, abandoned routes), **deconfliction** (Critical head-on on a bridge,
+  delay removes it, bunching, junction, shared threat, least-bad reroute).
 
-## 8. Credits and licence
+## 11. Limitations
+* **Synthetic data:** the generator encodes our assumptions about risky roads, so the model partly
+  learns them back. Real use needs real incident feeds.
+* Road-only: no off-road movement, terrain, elevation or line-of-sight. Hill roads are approximated
+  by curviness.
+* Static model with no time-of-day conditioning at query time. Live threats are applied by rule
+  (fractional penalty / hard block), not learned.
+* Independent-segment route probability (the Krumm & Horvitz simplification). Deconfliction
+  assumes constant convoy speed.
+
+## 12. Future work
+Real incident feeds; DEM / terrain features; line-of-sight exposure; time-of-day and seasonal
+models; k-diverse alternatives; learned threat impact; speed profiles by road class and gradient
+for convoy timing.
+
+## 13. Credits and licence
 Adapted from **SafeSteps_AI** (github.com/Solarcemir/SafeSteps_AI, MIT licence), a Toronto
 pedestrian crime-safety map. The original README, Toronto data and scripts are kept in
 `legacy_toronto/`. Road network © OpenStreetMap contributors (ODbL). Basemap tiles © Esri.
-This adaptation is released under the MIT licence.
+Route-risk model after Krumm & Horvitz, AAAI 2017. This adaptation is released under the MIT licence.

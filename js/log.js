@@ -157,7 +157,7 @@
         const evs = Log.events.slice(-60).reverse();
         if (!evs.length) { host.appendChild(el('p', { class: 'muted' }, 'No live events yet.')); return; }
         evs.forEach(e => host.appendChild(el('div', { class: `event-row ev-${e.kind}` },
-            el('span', { class: 'mono' }, e.dtg), el('b', {}, e.kind), el('span', {}, `${e.convoy ? e.convoy + ': ' : ''}${e.text}`))));
+            el('span', { class: 'mono' }, e.dtg), el('b', {}, e.kind), el('span', {}, `${e.convoy && !String(e.text).startsWith(e.convoy) ? e.convoy + ': ' : ''}${e.text}`))));
     };
 
     // keep the table live

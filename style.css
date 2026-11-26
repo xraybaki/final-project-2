@@ -418,3 +418,5 @@ a.btn { text-decoration: none; }
 .cv-table .num-input { width: 54px; }
 .cv-table .time-input { width: 62px; font-variant-numeric: tabular-nums; }
 .cv-table .cs-input { width: 90px; }
+.sitrep-line { overflow-wrap: anywhere; white-space: normal; }
+.log-detail td { max-width: 0; }
