@@ -25,5 +25,7 @@
   "high_risk_weight": 60,
   "L_ref": 42.2,
   "model": "XGBoost",
-  "model_roc_auc": 0.9550606557332926
+  "model_roc_auc": 0.9550606557332926,
+  "model_roc_auc_spatial_cv": 0.6811515779124933,
+  "baseline_roc_auc_spatial_cv": 0.5808440561482467
 }

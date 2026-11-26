@@ -8,11 +8,28 @@ const CONFIG = {
         minZoom: 9,
         maxZoom: 18
     },
+    // Basemaps (no API key needed for Esri / OSM; CARTO now watermarks keyless requests)
     tiles: {
-        // Dark basemap from CartoDB
-        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxZoom: 19
+        'Dark (Esri)': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+            maxZoom: 16
+        },
+        'Satellite (Esri)': {
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+            maxZoom: 18
+        },
+        'OpenStreetMap': {
+            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        },
+        'Dark (CARTO)': {
+            url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+            attribution: '&copy; OpenStreetMap contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            maxZoom: 19
+        }
     },
     geojson: {
         edges: 'routing_edges.geojson',
@@ -143,11 +160,13 @@ function initMap() {
         zoomControl: true
     });
 
-    // Add dark tile layer
-    L.tileLayer(CONFIG.tiles.url, {
-        attribution: CONFIG.tiles.attribution,
-        maxZoom: CONFIG.tiles.maxZoom
-    }).addTo(map);
+    // Basemaps with a switcher (first one is the default)
+    const bases = {};
+    Object.entries(CONFIG.tiles).forEach(([name, t]) => {
+        bases[name] = L.tileLayer(t.url, { attribution: t.attribution, maxNativeZoom: t.maxZoom, maxZoom: 19 });
+    });
+    Object.values(bases)[0].addTo(map);
+    L.control.layers(bases, null, { position: 'bottomleft' }).addTo(map);
 
     // Add click handler for routing / threat reporting
     map.on('click', onMapClick);
@@ -171,12 +190,15 @@ function updateStats() {
     const edges = routingGraph.edges || [];
     const high = edges.filter(e => e.weight >= CONFIG.convoy.highRiskWeight).length;
     const choke = edges.filter(e => e.chokepoint).length;
-    const auc = m.model_roc_auc ? m.model_roc_auc.toFixed(3) : 'n/a';
+    const auc = m.model_roc_auc ? m.model_roc_auc.toFixed(2) : 'n/a';
+    const sauc = m.model_roc_auc_spatial_cv ? m.model_roc_auc_spatial_cv.toFixed(2) : 'n/a';
+    const bauc = m.baseline_roc_auc_spatial_cv ? m.baseline_roc_auc_spatial_cv.toFixed(2) : 'n/a';
     statsDiv.innerHTML = `
         <p><strong>Road segments:</strong> ${edges.length.toLocaleString()}</p>
         <p><strong>High-risk (≥${CONFIG.convoy.highRiskWeight}):</strong> ${(100 * high / Math.max(1, edges.length)).toFixed(1)}%</p>
         <p><strong>Chokepoints:</strong> ${choke.toLocaleString()}</p>
-        <p><strong>Risk model:</strong> ${m.model || 'n/a'} (ROC-AUC ${auc})</p>
+        <p><strong>Risk model:</strong> ${m.model || 'n/a'}</p>
+        <p style="font-size:11px; color:#aaa;">ROC-AUC ${auc} (random split) · ${sauc} spatial-block CV vs baseline ${bauc}</p>
         <p><strong>Convoy speed:</strong> ${CONFIG.convoy.speedKmph} km/h</p>
         <p style="margin-top: 8px; font-size: 11px; color: #ffaa00;">⚠️ Threat data is SYNTHETIC - for demonstration only</p>
     `;
@@ -566,6 +588,7 @@ function setRoutePoint(lat, lon) {
         endNode = nearest;
         const marker = mk('B', '#ff4444', 'white');
         markerLayers.push(marker);
+        map.closePopup();
         calculateConvoyRoutes(false);
     }
 }

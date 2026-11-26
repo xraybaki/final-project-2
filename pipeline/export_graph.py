@@ -74,6 +74,8 @@ def export(G, eidx, road_df: pd.DataFrame, scored: pd.DataFrame, region: dict, m
         "L_ref": round(float(np.median(lengths)), 2),
         "model": (metrics or {}).get("model", "hand-tuned formula"),
         "model_roc_auc": (metrics or {}).get("model_metrics", {}).get("roc_auc"),
+        "model_roc_auc_spatial_cv": (metrics or {}).get("spatial_block_cv", {}).get("model_roc_auc_mean"),
+        "baseline_roc_auc_spatial_cv": (metrics or {}).get("spatial_block_cv", {}).get("baseline_roc_auc_mean"),
     }
     graph = {"meta": meta, "nodes": nodes, "edges": edges, "adjacency_list": adj}
     C.ROUTING_GRAPH_JSON.write_text(json.dumps(graph, separators=(",", ":")))
