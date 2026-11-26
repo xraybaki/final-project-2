@@ -205,6 +205,43 @@
 63. The "multiplier" (risk ×1.5) and "λ" (preference 0.6) are always labelled differently and
     explained side by side in a call-out.
 
+## M13: live tracking + on-the-move rerouting
+64. **Engine:** one `requestAnimationFrame` loop for all convoys, time-based (distance += speed ×
+    sim-dt; dt clamped to 0.25 s after tab switches). Sim clock multiplier 1× / 5× / 10× / 30×
+    plus pause. The column is drawn as vehicles × spacing behind the head; heading is smoothed;
+    the travelled part is grey and the remaining part coloured. Layers update at about 8 Hz and
+    the HUD at 5 Hz.
+65. **Reroute rules** (`js/reroute.js`, pure and unit-tested): mandatory if any remaining edge
+    is hard-blocked, replanning from the next node. If the closure lies *ahead on the current
+    edge*, the convoy **turns back** and replans from the previous node ("ahead" = the clipped
+    closure pieces project beyond the convoy's position on that edge). Advisory if the
+    remaining risk cost rises by more than 15% over the plan baseline: automatic if the
+    alternative is at least 10% cheaper, otherwise a prompt with Accept / Ignore.
+66. **Hysteresis:** at most one *automatic advisory* reroute per 30 s of sim time, and never back
+    to a route abandoned in the last 120 s. **Mandatory reroutes bypass the 30 s limit**
+    because a closed road is a safety stop, not a preference.
+67. **Triggers:** every threat change (local or arriving by SSE from another tab or client) and
+    every 10 s of sim time. Replanning uses the λ of the profile chosen at departure.
+68. **No jump:** the new drive line starts at the convoy's current position, then finishes the
+    current edge (or reverses it when turning back) and joins the new route. The old remaining
+    route fades out as a grey dashed ghost (6 s) while the new one draws on.
+69. **Feedback:** a top banner with the cause, the "via" road (the longest named road on the new
+    route that wasn't on the old one), Δkm, Δmin and route risk before → after. Optional
+    `speechSynthesis` voice and a WebAudio beep (off by default). Reroute / turn-back / stuck /
+    departed / arrived events are written to the SITREP database (`POST /api/events`) and shown
+    in the Live and Log tabs.
+70. **No passable route:** the convoy holds position ("HOLD - NO ROUTE") until a closure is lifted.
+71. **GPS:** `watchPosition` fixes are map-matched to the road (snap ≤ 60 m) and projected onto
+    the drive line (progress never jumps backwards on jitter). More than 80 m off the route →
+    replan from the nearest node. Outside the operating box → warning and fall back to
+    simulation. **External feed:** `POST /api/convoys/:id/position {lat, lon, speed_kmph,
+    heading, ts}` is rebroadcast over SSE (`convoy_position`) and drives the focused convoy
+    when "External feed" is selected.
+72. **Scenarios** (`data/scenarios/*.json`): timed steps by sim seconds; `add_threat` accepts
+    either `lat`/`lon` or `ahead_m` (placed on the convoy's *current* route, so "stone pelting
+    on the alternative" lands on the rerouted path). One scenario is shipped: Srinagar, IED
+    on route, then stone pelting on the alternative.
+
 ---
 
 ## Summary

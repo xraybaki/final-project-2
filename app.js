@@ -369,7 +369,7 @@ function setRoutePoint(lat, lon) {
     } else if (!endNode) {
         endNode = nearest;
         markerLayers.push(routeMarker(nearest.lat, nearest.lon, 'B').addTo(map));
-        toggleRoutingMode(true);
+        if (routingMode) toggleRoutingMode(true);   // leave placement mode, keep the route
         calculateConvoyRoutes(false);
     }
 }

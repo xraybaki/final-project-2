@@ -137,6 +137,8 @@
         <main class="map-wrap">
             <div id="map"></div>
 
+            <div id="live-banner" class="live-banner" role="status" aria-live="assertive"></div>
+
             <button id="drawer-btn" class="drawer-btn" aria-label="Open panel"><svg class="icon"><use href="#i-menu"/></svg></button>
 
             <div id="header-chip" class="header-chip" tabindex="0" aria-expanded="false">
@@ -185,11 +187,13 @@
     <!-- pure logic (also used by Node tests) -->
     <script src="pathfinding.js"></script>
     <script src="js/threat-geo.js"></script>
+    <script src="js/reroute.js"></script>
     <!-- UI modules -->
     <script src="js/ui.js"></script>
     <script src="js/threats.js"></script>
     <script src="js/log.js"></script>
     <script src="js/guide.js"></script>
+    <script src="js/live.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

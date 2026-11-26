@@ -1,0 +1,15 @@
+{
+  "name": "Srinagar — IED on route, then stone pelting on the alternative",
+  "description": "Safest-route convoy from the city centre to west Srinagar at 10x. At 60 s an IED (road closed) is reported 700 m ahead, forcing a mandatory reroute. At 150 s stone pelting is reported 600 m ahead on the new (alternative) route. SYNTHETIC - for demonstration only.",
+  "start": {"lat": 34.0930567, "lon": 74.8095364},
+  "end": {"lat": 34.0649318, "lon": 74.7415003},
+  "profile": "safest",
+  "speed_mult": 10,
+  "steps": [
+    {"at_s": 5,   "action": "note",       "text": "Convoy departed from the start point (SP)."},
+    {"at_s": 60,  "action": "add_threat", "ahead_m": 700, "type": "IED", "radius_m": 100,
+     "description": "Scenario: suspicious object reported on the convoy's route. (Fictional.)"},
+    {"at_s": 150, "action": "add_threat", "ahead_m": 600, "type": "stone_pelting", "radius_m": 120, "impact": 70,
+     "description": "Scenario: crowd gathering and stone throwing on the alternative route. (Fictional.)"}
+  ]
+}

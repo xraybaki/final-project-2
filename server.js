@@ -274,6 +274,36 @@ function handleEvents(req, res, url) {
     return false;
 }
 
+// ------------------------------------------------------------------ live (M13): scenarios + external position feed
+const positions = {};   // convoy id -> last reported position
+function handleLive(req, res, url) {
+    if (url === '/api/scenarios' && req.method === 'GET') {
+        const dir = path.join(ROOT, 'data', 'scenarios');
+        let list = [];
+        try {
+            list = fs.readdirSync(dir).filter(f => f.endsWith('.json')).map(f => {
+                const j = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+                return { file: f, name: j.name || f, description: j.description || '' };
+            });
+        } catch (e) { /* no scenarios */ }
+        return sendJSON(res, 200, { scenarios: list });
+    }
+    const m = url.match(/^\/api\/convoys\/([A-Za-z0-9_-]+)\/position$/);
+    if (m && req.method === 'POST') {
+        return readJSONBody(req, res, (b) => {
+            const lat = Number(b.lat), lon = Number(b.lon);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return sendJSON(res, 422, { error: 'lat and lon are required numbers' });
+            const p = { id: m[1], lat, lon, speed_kmph: Number.isFinite(+b.speed_kmph) ? +b.speed_kmph : null,
+                        heading: Number.isFinite(+b.heading) ? +b.heading : null, ts: b.ts || new Date().toISOString() };
+            positions[m[1]] = p;
+            broadcast('convoy_position', p);
+            sendJSON(res, 202, p);
+        });
+    }
+    if (url === '/api/convoys/positions' && req.method === 'GET') return sendJSON(res, 200, { positions });
+    return false;
+}
+
 // ------------------------------------------------------------------ server
 const server = http.createServer((req, res) => {
     const u = new URL(req.url, 'http://localhost');
@@ -293,6 +323,7 @@ const server = http.createServer((req, res) => {
     if (url === '/api/events') {
         if (handleEvents(req, res, url) !== false) return;
     }
+    if ((url === '/api/scenarios' || url.startsWith('/api/convoys/')) && handleLive(req, res, url) !== false) return;
     if (typeof extraRoutes === 'function' && extraRoutes(req, res, url, u.searchParams) !== false) return;
     if (url.startsWith('/api/')) return sendJSON(res, 404, { error: 'unknown API route' });
 
