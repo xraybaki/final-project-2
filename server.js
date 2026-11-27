@@ -6,7 +6,7 @@
 //  live updates (M11)      GET  /api/stream   (Server-Sent Events)
 //  event log (M13)         GET/POST /api/events
 //  SITREP parsing          POST /parse-sitrep (spawns gemini_api.py)
-//  legacy aliases          GET  /fetch-live-threats, /fetch-live-crimes
+//  intel feed (simple)     GET  /fetch-live-threats
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -390,8 +390,8 @@ const server = http.createServer((req, res) => {
     if (typeof extraRoutes === 'function' && extraRoutes(req, res, url, u.searchParams) !== false) return;
     if (url.startsWith('/api/')) return sendJSON(res, 404, { error: 'unknown API route' });
 
-    // legacy alias: intel-feed records from the database, in the old frontend format
-    if ((url === '/fetch-live-threats' || url === '/fetch-live-crimes') && req.method === 'GET') {
+    // intel-feed records from the database in a compact format
+    if (url === '/fetch-live-threats' && req.method === 'GET') {
         const recs = db.records.filter(r => r.source === 'intel_feed' && (r.status === 'active' || r.status === 'pending'));
         return sendJSON(res, 200, {
             success: recs.length > 0,
@@ -413,14 +413,6 @@ const server = http.createServer((req, res) => {
                 }
             });
         });
-    }
-
-    if (url === '/chat' && req.method === 'POST') {   // legacy Toronto assistant
-        return readBody(req, (body) => runPython(path.join('legacy_toronto', 'gemini_api.py'), body, (err, out) => {
-            if (err) return sendJSON(res, 500, { error: 'Python script error' });
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(out);
-        }));
     }
 
     // static files (no traversal outside ROOT; never serve the databases)

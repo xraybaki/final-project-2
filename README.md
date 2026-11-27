@@ -5,6 +5,7 @@
 
 A web app for planning and running road-convoy movements over the real OpenStreetMap road
 network of **Srinagar, Jammu & Kashmir** (24,574 intersections, 29,078 road segments).
+Designed and built by our team with the help of **Claude Code**.
 
 * An **ML model** (XGBoost) gives every road segment a threat score from incident history and
   convoy-relevant road factors (bridges, chokepoints, narrow or unpaved roads, settlement density).
@@ -37,8 +38,9 @@ npm test                            # JS tests (A*, threat geometry, API, rerout
 * The first `run_all` downloads OSM data, then works offline from `data/cache/`. Sources, in order:
   1. the Overpass API via OSMnx;
   2. the regional extract `OSM_EXTRACT_URL` (Jammu & Kashmir `.osm.pbf` from openstreetmap.fr,
-     27 MB), clipped with `osmium`;
-  3. the bundled Toronto streets in `legacy_toronto/` as a last resort (shown as "FALLBACK").
+     27 MB), clipped with `osmium`.
+
+  If neither source is reachable, the pipeline stops with a clear message.
 * To change the operating area, edit `REGION_NAME / CENTER / RADIUS_M / OSM_EXTRACT_URL` in
   `pipeline/config.py`, delete `data/cache/` and re-run. The frontend reads everything from
   `routing_graph.json`.
@@ -291,7 +293,7 @@ and threat-zone segments.
 | POST | `/api/convoys/:id/position` | external position feed `{lat, lon, speed_kmph, heading, ts}` |
 | GET | `/api/scenarios` | scenario list |
 | POST | `/parse-sitrep` | `{text}` → `ok` / `needs_pin` / `error` |
-| GET | `/fetch-live-threats` | legacy alias: intel-feed records |
+| GET | `/fetch-live-threats` | intel-feed records in a compact format |
 
 Manual threats get an auto-generated SITREP line using the military DTG, for example:
 `SITREP 270145Z NOV 26 | TYPE: IED/SUSPICIOUS OBJECT | LOC: 34.08112N 74.79563E (Nalahmar Rd, ~120 m W of Nawa Kadal) | RADIUS: 100 m | IMPACT: 92 (ROAD CLOSED) | SRC: MANUAL MAP ENTRY | BY: Ops desk | STATUS: ACTIVE | SYNTHETIC`
@@ -351,8 +353,17 @@ Real incident feeds; DEM / terrain features; line-of-sight exposure; time-of-day
 models; k-diverse alternatives; learned threat impact; speed profiles by road class and gradient
 for convoy timing.
 
-## 13. Credits and licence
-Adapted from **SafeSteps_AI** (github.com/Solarcemir/SafeSteps_AI, MIT licence), a Toronto
-pedestrian crime-safety map. The original README, Toronto data and scripts are kept in
-`legacy_toronto/`. Road network © OpenStreetMap contributors (ODbL). Basemap tiles © Esri.
-Route-risk model after Krumm & Horvitz, AAAI 2017. This adaptation is released under the MIT licence.
+## 13. Authors and acknowledgements
+Designed and built by our team with the help of **Claude Code** (Anthropic's AI coding assistant),
+which we used for implementation, testing and documentation.
+
+Data, libraries and references:
+* Road network and landmarks © OpenStreetMap contributors, available under the
+  Open Database Licence (ODbL).
+* Basemap tiles © Esri. Map rendering by Leaflet.
+* Python stack: OSMnx, NetworkX, GeoPandas, Shapely, pyosmium, scikit-learn, XGBoost, pandas, NumPy,
+  Matplotlib.
+* The route incident probability follows J. Krumm and E. Horvitz, *Risk-Aware Planning: Methods
+  and Case Study for Safer Driving Routes*, AAAI 2017.
+
+Released under the MIT licence.

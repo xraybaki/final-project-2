@@ -439,7 +439,6 @@ function calculateConvoyRoutes(isReroute = false) {
     showRouteComparison(routes, ms, rerouteMsg);
     document.dispatchEvent(new CustomEvent('routeschange', { detail: { routes, isReroute } }));
 }
-const calculateSafestRoute = () => calculateConvoyRoutes(false);  // backwards-compatible name
 
 function displayConvoyRoutes(routes, fit = true) {
     routeLayers.forEach(layer => map.removeLayer(layer));

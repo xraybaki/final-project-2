@@ -1,7 +1,9 @@
 # DECISIONS.md: assumptions and choices
 
+Design decisions for the convoy route planner, built by our team with the help of Claude Code.
+
 ## Environment and data
-1. **Region: Srinagar, Jammu & Kashmir** (changed from the original Dehradun default at the
+1. **Region: Srinagar, Jammu & Kashmir** (changed from an earlier Dehradun default at the
    team's request). Centre 34.0837, 74.7973 (city centre), 12 km half-width box,
    `network_type="drive"`. The Dehradun settings are kept as a comment in `config.py`.
 2. **OSM source.** The Overpass API (and two mirrors, and Geofabrik) were unreachable from the
@@ -11,21 +13,19 @@
    or private access), and loaded with `ox.graph_from_xml` → simplify → bbox truncate. On a
    normal connection the Overpass path is tried first. Both produce the same OSMnx graph type.
    The `.pbf` and the clipped `.osm` live in `data/cache/` (git-ignored).
-3. The Toronto fallback (used only if both OSM sources fail) keeps only drivable OSM classes (motorway…service) and splits ways at
-   shared vertices to form intersections.
+3. If neither OSM source is reachable on the first run, the pipeline stops with a clear message
+   (no silent switch to another city). After the first run everything comes from `data/cache/`.
 4. The graph is restricted to its **largest connected component**, so any two clicked points are routable.
 5. Parallel edges are collapsed to the shortest one in the undirected graph. One-way
    restrictions are ignored (convoys can be escorted against flow; this keeps the graph simple).
-6. Original Toronto data and scripts moved to `legacy_toronto/` (nothing deleted). The
-   original README is `legacy_toronto/README_original.md`. `test.ipynb` was left untouched.
 
 ## Synthetic data (M2)
 6b. Live threats and SITREP examples use real Srinagar street names (e.g. Fore Shore Road,
     Boulevard Road) so the demo is concrete. The *events* are invented, generic, and labelled
     "SYNTHETIC / fictional training scenario" in the data, the popups and the UI footer.
 7. The incident count scales with the network size (about 4 per 100 edges, clipped to
-   500–3000). With a fixed 2,400 incidents the small Toronto area produced 73% positive
-   labels, which made the task trivial.
+   500–3000). A fixed count would make the label trivial on small areas (most edges positive)
+   and too sparse on large ones.
 8. 10 hotspots: 6 persistent, 2 *fading* (months 1–15) and 2 *emerging* (months 13–24), plus
    38% background incidents driven only by road factors. This makes the future only partly
    predictable from the past, so road features matter and the model can beat the baseline.
@@ -47,7 +47,7 @@
     xgboost → HistGradientBoosting → RandomForest, chosen automatically.
 15. Threshold = F1-optimal on validation (for the reported precision, recall and confusion matrix).
 16. **Added spatial-block CV** (1.5 km grid cells, GroupKFold × 5) because the random split
-    is optimistic (0.955 vs 0.68). Both are reported; the spatial number is the honest one.
+    is optimistic (0.936 vs 0.76 on Srinagar). Both are reported; the spatial number is the honest one.
 17. "Retrain on all 24 months" means: refit on the full labelled set (which uses all 24
     months), then score features from the **latest 18-month window (months 7–24)**, so the
     feature scales match training.
@@ -65,7 +65,8 @@
     minimum distance. OSM `travel_time` is kept in the data but not used for convoy ETA.
 23. Threat penalty: `w' = max(w, impact) × (1 + 3·impact/100)`. A purely multiplicative
     penalty barely moves low-risk roads (2 × 4 = 8), so the max() term lifts any zone edge to
-    at least the impact level. No cap (this fixes the original 84-cap bug).
+    at least the impact level. There is deliberately no upper cap: a cap would make threats
+    on already-risky roads count for less.
 24. Zone membership is measured as distance to the **edge polyline**, not just the midpoint,
     so long hill-road edges are caught. Impacts are precomputed once per threat change
     (an eid → impact map), not on every A* expansion.
@@ -82,11 +83,10 @@
     Location is always resolved offline against OSM street names (prefers bridge segments
     if "bridge" is mentioned; supports "N km north of" offsets and literal "lat, lon").
     Without a key, or on any error, the rule-based parser is used.
-31. `/chat` and `chat.html` still point to the original Toronto assistant
-    (`legacy_toronto/gemini_api.py`). It is not part of the convoy demo.
-32. Added fields to the graph schema: top-level `meta`; per edge `eid`, `risk_prob`,
-    `p_traverse`, `chokepoint`, `travel_time_s`, `bridge`, `tunnel`, `category`, `features`.
-    No existing field was renamed or removed.
+32. Graph schema (`routing_graph.json`): top-level `meta`, `nodes` (`id, lat, lon, weight`),
+    `edges` (`eid, source, target, weight, length_m, street_name, highway_type, risk_prob,
+    p_traverse, chokepoint, travel_time_s, bridge, tunnel, category, features`) and an
+    `adjacency_list` with **string** keys.
 
 ## M9: precise point threats + SITREP resolver
 33. **Windows UTF-8 fix:** every `open` / `read_text` / `write_text` / `to_csv` in `pipeline/`,
@@ -311,8 +311,8 @@
 ### Not done / limits
 * The Gemini path is wired but untested here (no key in the sandbox); the offline parser is tested.
 * No terrain or elevation; constant convoy speed; synthetic data only.
-* In this cloud sandbox Overpass was unreachable, so the J&K PBF extract path was used. On a normal
-  connection Overpass is tried first.
+* In the development sandbox Overpass was unreachable, so the J&K PBF extract path was used. On a
+  normal connection Overpass is tried first.
 
 ### Demo script (about 8 minutes)
 1. `node server.js` → http://localhost:3000. The loading bar fills and the Srinagar ML risk map

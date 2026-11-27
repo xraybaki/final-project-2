@@ -43,8 +43,7 @@ def main():
         scored = train_model.hand_tuned_scores(road_df, incidents, eidx)
 
     export(G, eidx, road_df, scored, region, metrics)           # M4
-    if "FALLBACK" not in region["name"]:
-        build_landmarks(G, _bbox())                             # M9 gazetteer
+    build_landmarks(G, _bbox())                                 # M9 gazetteer
 
     w = scored["weight"].values
     print("-" * 72)

@@ -89,7 +89,7 @@ server.listen(0, async () => {
         assert.strictEqual(r.json().records.length, 0);
         assert.ok(dbValid().records.find(x => x.id === t.id).history.some(h => h.action === 'cleared'), 'kept in history');
 
-        // intel apply activates pending feed records; legacy alias still works
+        // intel apply activates pending feed records; /fetch-live-threats lists them
         r = await req(port, 'POST', '/api/intel/apply');
         assert.strictEqual(r.json().activated, seeded.length);
         r = await req(port, 'GET', '/fetch-live-threats');

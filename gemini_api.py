@@ -11,8 +11,6 @@ Reads JSON {"text": "..."} on stdin and prints one JSON object on stdout:
 2. Otherwise, or on ANY error, rule-based regexes extract the same fields.
 Location is ALWAYS resolved offline by sitrep_resolver.py against OSM roads and landmarks;
 coordinates proposed by the AI are never used.
-
-(The original Toronto news-scraping chat assistant lives in legacy_toronto/gemini_api.py.)
 """
 from __future__ import annotations
 

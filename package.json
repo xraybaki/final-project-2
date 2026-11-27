@@ -1,7 +1,7 @@
 {
   "name": "convoy-route-planner",
   "version": "1.0.0",
-  "description": "AI-based safest route planner for mobile convoys (adapted from SafeSteps_AI)",
+  "description": "AI-based safest route planner for mobile convoys",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

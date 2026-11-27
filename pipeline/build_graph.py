@@ -5,15 +5,13 @@ Downloads the drivable OSM road network around config.CENTER with OSMnx (cached 
 data/cache/graph.graphml), converts it to an undirected simple graph with consecutive
 integer node ids and normalised edge attributes.
 
-Fallback: if the download fails (no internet / Overpass down) the legacy Toronto street
-extract in legacy_toronto/ is used instead so the demo still runs (different city).
+Sources, in order: the Overpass API, then the regional .osm.pbf extract configured in
+config.OSM_EXTRACT_URL (clipped to the operating box). After the first run everything is
+read from the cache, so the pipeline works offline.
 """
 from __future__ import annotations
 
-import json
 import math
-import warnings
-from collections import Counter
 
 import networkx as nx
 
@@ -217,77 +215,18 @@ def _osmnx_to_simple(Gm) -> nx.Graph:
     return H
 
 
-# --------------------------------------------------------------------------- Toronto fallback
-def _toronto_fallback() -> tuple[nx.Graph, dict]:
-    path = C.LEGACY_DIR / "downtown_streets.geojson"
-    print(f"  [M1] !!! WARNING: OSM download failed - FALLING BACK to legacy Toronto streets "
-          f"({path.relative_to(C.ROOT)}). The demo will run on Toronto, not {C.REGION_NAME}.")
-    data = json.loads(path.read_text(encoding="utf-8"))
-    lines = []
-    for f in data["features"]:
-        p = f.get("properties", {})
-        if p.get("highway") not in DRIVABLE or f["geometry"]["type"] != "LineString":
-            continue
-        coords = [(round(x, 7), round(y, 7)) for x, y in f["geometry"]["coordinates"]]
-        if len(coords) >= 2:
-            lines.append((coords, p))
-
-    use = Counter()
-    for coords, _ in lines:
-        use.update(set(coords))
-        use[coords[0]] += 1
-        use[coords[-1]] += 1
-
-    H = nx.Graph()
-    ids: dict = {}
-
-    def nid(c):
-        if c not in ids:
-            ids[c] = len(ids)
-            H.add_node(ids[c], lat=c[1], lon=c[0])
-        return ids[c]
-
-    for coords, p in lines:
-        seg = [coords[0]]
-        for c in coords[1:]:
-            seg.append(c)
-            if use[c] > 1 or c == coords[-1]:
-                u, v = nid(seg[0]), nid(seg[-1])
-                if u != v:
-                    length = sum(haversine_m(a[1], a[0], b[1], b[0]) for a, b in zip(seg, seg[1:]))
-                    if not H.has_edge(u, v) or H.edges[u, v]["length_m"] > length:
-                        speed = _to_float(p.get("maxspeed"), 40.0)
-                        H.add_edge(u, v, length_m=length,
-                                   highway_type=p.get("highway", "unclassified"),
-                                   street_name=p.get("name") or "Unnamed road",
-                                   lanes=_to_float(p.get("lanes"), None),
-                                   maxspeed=_to_float(p.get("maxspeed"), None),
-                                   speed_kph=speed, travel_time_s=length / (speed / 3.6),
-                                   bridge=_to_bool(p.get("bridge")),
-                                   tunnel=_to_bool(p.get("tunnel")),
-                                   surface=p.get("surface") or "unknown",
-                                   geometry=list(seg))
-                seg = [c]
-    lats = [d["lat"] for _, d in H.nodes(data=True)]
-    lons = [d["lon"] for _, d in H.nodes(data=True)]
-    region = {"name": "Toronto (FALLBACK - OSM download failed)",
-              "center": [sum(lats) / len(lats), sum(lons) / len(lons)],
-              "radius_m": 5000, "source": "legacy_toronto/downtown_streets.geojson"}
-    return H, region
-
-
 # --------------------------------------------------------------------------- public API
 def build_graph() -> tuple[nx.Graph, dict]:
     """Return (G, region) where G is an undirected nx.Graph with int nodes 0..N-1."""
     try:
         Gm = _download_osm()
-        H = _osmnx_to_simple(Gm)
-        region = {"name": C.REGION_NAME, "center": list(C.CENTER), "radius_m": C.RADIUS_M,
-                  "source": Gm.graph.get("source", "OpenStreetMap via OSMnx")}
-    except Exception as exc:  # noqa: BLE001 - any download failure -> fallback
-        warnings.warn(f"OSM download failed: {exc!r}")
-        print(f"  [M1] OSM download failed: {type(exc).__name__}: {str(exc)[:200]}")
-        H, region = _toronto_fallback()
+    except Exception as exc:  # noqa: BLE001
+        raise SystemExit(
+            f"  [M1] Could not get the OSM road network for {C.REGION_NAME}: {type(exc).__name__}: {str(exc)[:200]}\n"
+            f"       Check the internet connection, or download {C.OSM_EXTRACT_URL} manually into {C.CACHE_DIR}.")
+    H = _osmnx_to_simple(Gm)
+    region = {"name": C.REGION_NAME, "center": list(C.CENTER), "radius_m": C.RADIUS_M,
+              "source": Gm.graph.get("source", "OpenStreetMap via OSMnx")}
 
     # keep largest connected component so every pair of nodes is routable
     largest = max(nx.connected_components(H), key=len)

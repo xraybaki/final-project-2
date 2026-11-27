@@ -49,7 +49,6 @@ DATA_DIR = ROOT / "data"
 CACHE_DIR = DATA_DIR / "cache"
 MODELS_DIR = ROOT / "models"
 REPORTS_DIR = ROOT / "reports"
-LEGACY_DIR = ROOT / "legacy_toronto"
 
 GRAPHML_CACHE = CACHE_DIR / "graph.graphml"
 INCIDENTS_CSV = DATA_DIR / "incidents.csv"
