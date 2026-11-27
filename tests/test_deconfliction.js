@@ -1,4 +1,4 @@
-// Multi-convoy deconfliction (M14): `node tests/test_deconfliction.js`
+// Multi-convoy deconfliction: `node tests/test_deconfliction.js`
 const assert = require('assert');
 const D = require('../js/deconflict.js');
 

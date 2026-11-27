@@ -1,4 +1,4 @@
-// Threat geometry checks (M9): `node tests/test_threat_geometry.js`
+// Threat geometry checks: `node tests/test_threat_geometry.js`
 const assert = require('assert');
 const G = require('../js/threat-geo.js');
 

@@ -1,10 +1,10 @@
 // SANCHAR server (Smart AI Navigation for Convoy Hazard Avoidance & Rerouting) - Node built-ins only (http, fs, path, child_process).
 //
 //  static files            GET  /...
-//  threat database (M11)   GET/POST /api/threats, PATCH/DELETE /api/threats/:id,
+//  threat database   GET/POST /api/threats, PATCH/DELETE /api/threats/:id,
 //                          GET /api/threats/export.csv, POST /api/intel/apply
-//  live updates (M11)      GET  /api/stream   (Server-Sent Events)
-//  event log (M13)         GET/POST /api/events
+//  live updates      GET  /api/stream   (Server-Sent Events)
+//  event log         GET/POST /api/events
 //  SITREP parsing          POST /parse-sitrep (spawns gemini_api.py)
 //  intel feed (simple)     GET  /fetch-live-threats
 //  health check            GET  /healthz
@@ -279,7 +279,7 @@ function handleEvents(req, res, url) {
     return false;
 }
 
-// ------------------------------------------------------------------ live (M13): scenarios + external position feed
+// ------------------------------------------------------------------ live tracking: scenarios + external position feed
 const positions = {};   // convoy id -> last reported position
 function handleLive(req, res, url) {
     if (url === '/api/scenarios' && req.method === 'GET') {
@@ -309,7 +309,7 @@ function handleLive(req, res, url) {
     return false;
 }
 
-// ------------------------------------------------------------------ convoys (M14)
+// ------------------------------------------------------------------ convoys (multi-convoy planner)
 const CONVOYS_FILE = process.env.CONVOYS_DB || path.join(ROOT, 'data', 'convoys.json');
 const convoysDb = new JsonStore(CONVOYS_FILE, () => []);
 const PROFILES = ['fastest', 'balanced', 'safest'];
@@ -375,7 +375,7 @@ function handleConvoys(req, res, url) {
 const server = http.createServer((req, res) => {
     const u = new URL(req.url, 'http://localhost');
     const url = u.pathname;
-    if (!url.startsWith('/api/stream')) console.log(`${req.method} ${url}`);
+    if (url.startsWith('/api/') && url !== '/api/stream') console.log(`${req.method} ${url}`);
 
     if (url === '/api/stream' && req.method === 'GET') {
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
@@ -392,7 +392,6 @@ const server = http.createServer((req, res) => {
     }
     if ((url === '/api/scenarios' || url.startsWith('/api/convoys/')) && handleLive(req, res, url) !== false) return;
     if (url.startsWith('/api/convoys') && handleConvoys(req, res, url) !== false) return;
-    if (typeof extraRoutes === 'function' && extraRoutes(req, res, url, u.searchParams) !== false) return;
     if (url.startsWith('/api/')) return sendJSON(res, 404, { error: 'unknown API route' });
 
     // intel-feed records from the database in a compact format
@@ -510,13 +509,6 @@ function warmGzip() {
         });
     }
 }
-
-let extraRoutes = null;   // set by later milestones (convoys, positions)
-server.setExtraRoutes = (fn) => { extraRoutes = fn; };
-server.db = db;
-server.broadcast = broadcast;
-server.sendJSON = sendJSON;
-server.readJSONBody = readJSONBody;
 
 if (require.main === module) {
     server.listen(PORT, HOST, () => {

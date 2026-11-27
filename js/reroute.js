@@ -1,5 +1,5 @@
 /**
- * Live rerouting decisions (M13) - pure functions, no DOM. Used by js/live.js and tests.
+ * Live rerouting decisions - pure functions, no DOM. Used by js/live.js and tests.
  *
  * Rules
  *  1. MANDATORY: an edge of the remaining route is hard-blocked (weight = Infinity).

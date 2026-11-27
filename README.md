@@ -265,14 +265,14 @@ flowchart LR
     DB --> DC[deconfliction<br/>deconflict.js]
 ```
 
-### 8.1 Road network (M1)
+### 8.1 Road network
 `ox.graph_from_point(CENTER, dist=12 km, network_type="drive")`, or the same "drive" filter
 applied to the clipped regional extract, with OSMnx speeds and travel times added. The graph is converted to undirected (keeping the shortest parallel
 edge), restricted to the largest connected component, and relabelled `0..N-1`. Each edge
 keeps its length, road class, name, lanes, maxspeed, bridge/tunnel flags, surface and
 geometry.
 
-### 8.2 Synthetic incidents (M2)
+### 8.2 Synthetic incidents
 `data/incidents.csv` holds a seeded (reproducible) 24-month history of
 `IED / ambush / stone_pelting / road_blockade / landslide / accident` incidents, all placed
 on real road edges:
@@ -283,7 +283,7 @@ on real road edges:
 * Hostile types are concentrated at night (20:00–05:00) and landslides in the monsoon (Jul–Sep).
 * `data/live_threats.json` holds 5 "current" intel reports with fictional descriptions.
 
-### 8.3 Features and ML risk model (M3)
+### 8.3 Features and ML risk model
 **Temporal split to avoid leakage.** Features use incidents from months 1–18. The label is
 whether any incident from months 19–24 falls within 150 m of the edge.
 
@@ -301,7 +301,7 @@ The final model is refit on all labelled data and scores the latest 18-month win
 Edge risk = `p_incident × expected-severity factor`, scaled to the 0–100 `weight` used by
 the map colours. The raw probability is stored as `risk_prob`.
 
-### 8.4 Routing (M5)
+### 8.4 Routing
 A* with a binary heap and a cost where both terms are on the same scale:
 
 ```
@@ -350,7 +350,7 @@ and threat-zone segments.
 | POST | `/api/intel/apply` | activate pending intel-feed records |
 | GET / POST | `/api/events` | live event log (reroutes, arrivals…) |
 | GET | `/api/stream` | Server-Sent Events: `threat_created/updated/cleared`, `event_logged`, `convoy_position`, `convoys_changed` |
-| GET / POST / PATCH / DELETE | `/api/convoys[/:id]` | convoy definitions (M14) |
+| GET / POST / PATCH / DELETE | `/api/convoys[/:id]` | convoy definitions |
 | POST | `/api/convoys/:id/position` | external position feed `{lat, lon, speed_kmph, heading, ts}` |
 | GET | `/api/scenarios` | scenario list |
 | POST | `/parse-sitrep` | `{text}` → `ok` / `needs_pin` / `error` |

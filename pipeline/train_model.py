@@ -1,5 +1,5 @@
 """
-M3 (part 2) - ML risk model. This is the "AI" in the project title.
+ML risk model. This is the "AI" in the project title.
 
 Temporal split (no leakage):
     features  <- incidents in months 1-18   (+ static road / network factors)
@@ -39,7 +39,7 @@ def make_model(choice: str = C.MODEL_CHOICE, pos_weight: float = 1.0):
                                  eval_metric="logloss", random_state=C.RANDOM_SEED, n_jobs=4,
                                  tree_method="hist"), "XGBoost"
         except Exception as exc:  # noqa: BLE001
-            print(f"  [M3] xgboost unavailable ({exc!r}) -> falling back to scikit-learn")
+            print(f"  [model] xgboost unavailable ({exc!r}) -> falling back to scikit-learn")
             choice = "gbm"
     if choice == "gbm":
         from sklearn.ensemble import HistGradientBoostingClassifier
@@ -117,7 +117,7 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
     F, T = C.FEATURE_MONTHS, C.HISTORY_MONTHS
     X = build_feature_matrix(G, eidx, incidents, (0, F), road_df)
     y = make_labels(eidx, incidents, (F, T))
-    print(f"  [M3] labelled edges: {len(y):,}  positives: {y.sum():,} ({y.mean():.1%})")
+    print(f"  [model] labelled edges: {len(y):,}  positives: {y.sum():,} ({y.mean():.1%})")
 
     X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.25, stratify=y,
                                                 random_state=C.RANDOM_SEED)
@@ -147,7 +147,7 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
     metrics["spatial_block_cv"] = _spatial_cv(eidx, X, y)
     metrics["feature_importance"] = _plots(model, name, y_val, s_val, b_val)
     m, b = metrics["model_metrics"], metrics["baseline_metrics"]
-    print(f"  [M3] {name}: ROC-AUC={m['roc_auc']:.3f} PR-AUC={m['pr_auc']:.3f} "
+    print(f"  [model] {name}: ROC-AUC={m['roc_auc']:.3f} PR-AUC={m['pr_auc']:.3f} "
           f"P={m['precision']:.2f} R={m['recall']:.2f} | baseline ROC-AUC={b['roc_auc']:.3f} "
           f"PR-AUC={b['pr_auc']:.3f}")
 
@@ -183,7 +183,7 @@ def train_and_score(G, eidx, road_df, incidents) -> tuple[pd.DataFrame, dict]:
                           "incident_active_hours": INCIDENT_ACTIVE_HOURS,
                           "pct_high_risk_ge60": float((weight >= C.HIGH_RISK_WEIGHT).mean())}
     (C.REPORTS_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-    print(f"  [M3] model -> models/risk_model.joblib ; metrics -> reports/metrics.json")
+    print(f"  [model] model -> models/risk_model.joblib ; metrics -> reports/metrics.json")
     return scored, metrics
 
 
@@ -204,7 +204,7 @@ def _spatial_cv(eidx, X, y, cell_m: float = 1500.0, folds: int = 5) -> dict:
     out = {"cell_m": cell_m, "folds": len(m_auc),
            "model_roc_auc_mean": float(np.mean(m_auc)), "model_roc_auc_std": float(np.std(m_auc)),
            "baseline_roc_auc_mean": float(np.mean(b_auc))}
-    print(f"  [M3] spatial-block CV ({cell_m:.0f} m cells): model ROC-AUC {out['model_roc_auc_mean']:.3f}"
+    print(f"  [model] spatial-block CV ({cell_m:.0f} m cells): model ROC-AUC {out['model_roc_auc_mean']:.3f}"
           f" ± {out['model_roc_auc_std']:.3f}  vs baseline {out['baseline_roc_auc_mean']:.3f}")
     return out
 

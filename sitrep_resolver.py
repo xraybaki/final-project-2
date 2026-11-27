@@ -1,5 +1,5 @@
 """
-SITREP location resolver (M9): free text -> precise threat point, or an explicit request to pin.
+SITREP location resolver: free text -> precise threat point, or an explicit request to pin.
 
 Ordered rules; the first one that succeeds wins:
   1. coordinates     decimal "34.0812, 74.7956", DMS 34°05'01"N 74°47'50"E, or MGRS 43S DT 12345 67890

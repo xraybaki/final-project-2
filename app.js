@@ -309,10 +309,6 @@ function buildEdgesLayer() {
     });
 }
 
-window.toggleLayer = function (layerType) {
-    if (layerType === 'edges') toggleNetworkDisplay(!networkDisplayed);
-};
-
 // ------------------------------------------------------------------ routing
 async function loadRoutingGraph() {
     try {
@@ -497,7 +493,7 @@ function showRerouteBanner(html) {
     elx.hidden = false;
 }
 
-// Metric definitions shown as tooltips (M12 adds the full Guide)
+// Metric definitions shown as tooltips (full explanations in the Guide tab)
 const METRIC_TIPS = {
     distance: 'Total road distance of the route.',
     eta: 'Drive time at the convoy speed.',

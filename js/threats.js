@@ -1,5 +1,5 @@
 /**
- * Live threats (M9): precise point + small, editable radius.
+ * Live threats: precise point + small, editable radius.
  *
  *  - one threat model for every source (map click, SITREP, intel feed)
  *  - per-type default impact / radius from threat_types.json (single source of truth)
@@ -132,7 +132,7 @@
         };
     };
 
-    // Persistence (M11): every create / edit / move / clear goes through the server API.
+    // Persistence: every create / edit / move / clear goes through the server API.
     // The UI updates from the API response and from SSE - never optimistically.
     async function api(method, url, body) {
         try {

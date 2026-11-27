@@ -1,5 +1,5 @@
 """
-Landmark gazetteer for SITREP location resolution (M9).
+Landmark gazetteer for SITREP location resolution.
 
 Extracts named OSM features inside the operating box (bridges, chowks / squares, named
 junctions, police stations, hospitals, markets, religious sites, schools, stations,
@@ -147,7 +147,7 @@ def build_landmarks(G, box) -> list[dict]:
             items = _from_overpass(box)
             src = "Overpass"
     except Exception as exc:  # noqa: BLE001 - landmarks are optional; graph bridges still added
-        print(f"  [LM] landmark extraction failed ({type(exc).__name__}: {str(exc)[:120]})")
+        print(f"  [landmarks] landmark extraction failed ({type(exc).__name__}: {str(exc)[:120]})")
         src = "none"
 
     # named bridge segments in the road graph (e.g. 'Nawa Kadal', 'Habba Kadal Bridge')
@@ -165,6 +165,6 @@ def build_landmarks(G, box) -> list[dict]:
     kinds = {}
     for i in items:
         kinds[i["kind"]] = kinds.get(i["kind"], 0) + 1
-    print(f"  [LM] {len(items):,} landmarks ({src} + graph bridges) -> "
+    print(f"  [landmarks] {len(items):,} landmarks ({src} + graph bridges) -> "
           f"{C.LANDMARKS_JSON.relative_to(C.ROOT)} {dict(sorted(kinds.items(), key=lambda t: -t[1]))}")
     return items

@@ -1,5 +1,5 @@
 """
-M4 - Export the weighted routing graph in the schema the frontend expects.
+Export the weighted routing graph in the schema the frontend expects.
 
 routing_graph.json   {meta, nodes, edges, adjacency_list}   (adjacency keys are STRINGS)
 routing_edges.geojson  one LineString per edge, same properties
@@ -93,6 +93,6 @@ def export(G, eidx, road_df: pd.DataFrame, scored: pd.DataFrame, region: dict, m
         w.writeheader()
         for e in edges:
             w.writerow({**{k: e[k] for k in flat_cols}, **e["features"]})
-    print(f"  [M4] wrote routing_graph.json ({C.ROUTING_GRAPH_JSON.stat().st_size / 1e6:.1f} MB), "
+    print(f"  [export] wrote routing_graph.json ({C.ROUTING_GRAPH_JSON.stat().st_size / 1e6:.1f} MB), "
           f"routing_edges.geojson ({C.ROUTING_EDGES_GEOJSON.stat().st_size / 1e6:.1f} MB), routing_edges.csv")
     return graph

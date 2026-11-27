@@ -1,5 +1,5 @@
 """
-M3 (part 1) - Per-edge feature engineering.
+Per-edge feature engineering.
 
 Two groups of features:
   * road / convoy / network factors (static, from OSM)   -> road_features()

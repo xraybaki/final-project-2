@@ -1,5 +1,5 @@
 /**
- * Threat geometry (M9) - pure functions, usable in the browser and in Node tests.
+ * Threat geometry - pure functions, usable in the browser and in Node tests.
  *
  *  - SpatialGrid: 250 m cells -> edge ids, so snapping / zone checks never scan all edges
  *  - nearestOnPolyline / snapToRoad: perpendicular projection onto road geometry
@@ -168,7 +168,7 @@
         return effects;
     }
 
-    /** Risk weight of a segment fully inside a threat of this impact (unchanged M6 formula). */
+    /** Risk weight of a segment fully inside a threat of this impact (base threat formula). */
     function threatWeight(w, impact) {
         return Math.max(w, impact) * (1 + 3 * impact / 100);
     }

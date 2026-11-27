@@ -1,4 +1,4 @@
-// Live rerouting decisions (M13): `node tests/test_reroute.js`
+// Live rerouting decisions: `node tests/test_reroute.js`
 const assert = require('assert');
 const R = require('../js/reroute.js');
 const { astar } = require('../pathfinding.js');

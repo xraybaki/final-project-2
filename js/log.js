@@ -1,8 +1,8 @@
 /**
- * Log tab (M11): the SITREP database as a sortable, filterable table.
+ * Log tab: the SITREP database as a sortable, filterable table.
  * Rows: time, DTG, type, location, radius, impact, source, status + Locate / Edit / Clear.
  * Expanding a row shows its standard SITREP line, the original text and the full history.
- * Also lists live events (reroutes etc., M13) from /api/events.
+ * Also lists live events (reroutes, arrivals) from /api/events.
  */
 (function () {
     'use strict';

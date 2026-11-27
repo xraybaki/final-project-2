@@ -1,4 +1,4 @@
-// Threat API (M11): start the server on a random port with a temp DB; CRUD, validation, SSE.
+// Threat API: start the server on a random port with a temp DB; CRUD, validation, SSE.
 const assert = require('assert');
 const fs = require('fs');
 const os = require('os');

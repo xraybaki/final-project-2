@@ -125,7 +125,7 @@ def ensure_network_metrics(G: nx.Graph) -> None:
     if G.graph.get("_metrics_done"):
         return
     k = min(C.BETWEENNESS_K, G.number_of_nodes())
-    print(f"  [net] edge betweenness (k={k} samples) on {G.number_of_edges():,} edges ...")
+    print(f"  [network] edge betweenness (k={k} samples) on {G.number_of_edges():,} edges ...")
     eb = nx.edge_betweenness_centrality(G, k=k, weight="length_m", normalized=True,
                                         seed=C.RANDOM_SEED)
     vals = np.array([eb.get((u, v), eb.get((v, u), 0.0)) for u, v in G.edges()])

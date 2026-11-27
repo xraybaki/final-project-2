@@ -1,5 +1,5 @@
 /**
- * Live tab (M13): convoy tracking with on-the-move rerouting (Google-Maps style).
+ * Live tab: convoy tracking with on-the-move rerouting (Google-Maps style).
  *
  *  - position sources: simulation (default, sim clock 1x/5x/10x/30x), device GPS, external feed
  *    (POST /api/convoys/:id/position -> SSE)
@@ -9,7 +9,7 @@
  *  - HUD, next hazard ahead, event log (reroutes written to the SITREP database), banner, voice
  *  - "Inject threat ahead" and timed scenario files (data/scenarios/*.json)
  *
- * Several convoys can run at once (M14 "Run all"); the HUD follows the focused one.
+ * Several convoys can run at once (Convoys tab "Run all"); the HUD follows the focused one.
  */
 (function () {
     'use strict';

@@ -1,5 +1,5 @@
 """
-M1 - Road network.
+Road network.
 
 Downloads the drivable OSM road network around config.CENTER with OSMnx (cached to
 data/cache/graph.graphml), converts it to an undirected simple graph with consecutive
@@ -17,11 +17,6 @@ import networkx as nx
 
 from . import config as C
 
-DRIVABLE = {
-    "motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
-    "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified",
-    "residential", "living_street", "service", "road",
-}
 UNPAVED = {"unpaved", "gravel", "dirt", "earth", "ground", "sand", "mud", "grass",
            "compacted", "fine_gravel", "pebblestone", "rock"}
 
@@ -121,7 +116,7 @@ def _extract_to_osm_xml(pbf_path, xml_path):
 
     WritePass().apply_file(str(pbf_path))
     writer.close()
-    print(f"  [M1] clipped extract: {len(keep_ways):,} drivable ways, {len(need_nodes):,} nodes")
+    print(f"  [graph] clipped extract: {len(keep_ways):,} drivable ways, {len(need_nodes):,} nodes")
 
 
 def _graph_from_extract(ox):
@@ -130,7 +125,7 @@ def _graph_from_extract(ox):
     url = C.OSM_EXTRACT_URL
     pbf = C.CACHE_DIR / url.rsplit("/", 1)[-1]
     if not pbf.exists():
-        print(f"  [M1] downloading regional OSM extract {url} ...")
+        print(f"  [graph] downloading regional OSM extract {url} ...")
         tmp = pbf.with_suffix(".part")
         urllib.request.urlretrieve(url, tmp)
         tmp.rename(pbf)
@@ -155,10 +150,10 @@ def _download_osm():
         ox.settings.useful_tags_way = list(ox.settings.useful_tags_way) + ["surface"]
 
     if C.GRAPHML_CACHE.exists():
-        print(f"  [M1] using cached graph {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
+        print(f"  [graph] using cached graph {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
         return ox.load_graphml(C.GRAPHML_CACHE)
 
-    print(f"  [M1] downloading OSM '{C.NETWORK_TYPE}' network: {C.REGION_NAME} "
+    print(f"  [graph] downloading OSM '{C.NETWORK_TYPE}' network: {C.REGION_NAME} "
           f"centre={C.CENTER} r={C.RADIUS_M} m ...")
     try:
         G = ox.graph_from_point(C.CENTER, dist=C.RADIUS_M, network_type=C.NETWORK_TYPE,
@@ -167,12 +162,12 @@ def _download_osm():
     except Exception as exc:  # noqa: BLE001
         if not getattr(C, "OSM_EXTRACT_URL", None):
             raise
-        print(f"  [M1] Overpass failed ({type(exc).__name__}) - trying regional extract instead")
+        print(f"  [graph] Overpass failed ({type(exc).__name__}) - trying regional extract instead")
         G = _graph_from_extract(ox)
     G = ox.add_edge_speeds(G)
     G = ox.add_edge_travel_times(G)
     ox.save_graphml(G, C.GRAPHML_CACHE)
-    print(f"  [M1] cached to {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
+    print(f"  [graph] cached to {C.GRAPHML_CACHE.relative_to(C.ROOT)}")
     return G
 
 
@@ -222,7 +217,7 @@ def build_graph() -> tuple[nx.Graph, dict]:
         Gm = _download_osm()
     except Exception as exc:  # noqa: BLE001
         raise SystemExit(
-            f"  [M1] Could not get the OSM road network for {C.REGION_NAME}: {type(exc).__name__}: {str(exc)[:200]}\n"
+            f"  [graph] Could not get the OSM road network for {C.REGION_NAME}: {type(exc).__name__}: {str(exc)[:200]}\n"
             f"       Check the internet connection, or download {C.OSM_EXTRACT_URL} manually into {C.CACHE_DIR}.")
     H = _osmnx_to_simple(Gm)
     region = {"name": C.REGION_NAME, "center": list(C.CENTER), "radius_m": C.RADIUS_M,
@@ -237,7 +232,7 @@ def build_graph() -> tuple[nx.Graph, dict]:
     lats = [d["lat"] for _, d in H.nodes(data=True)]
     lons = [d["lon"] for _, d in H.nodes(data=True)]
     region["bounds"] = [[min(lats), min(lons)], [max(lats), max(lons)]]
-    print(f"  [M1] graph: {H.number_of_nodes():,} nodes, {H.number_of_edges():,} edges "
+    print(f"  [graph] graph: {H.number_of_nodes():,} nodes, {H.number_of_edges():,} edges "
           f"(dropped {dropped} nodes outside largest component)")
     return H, region
 

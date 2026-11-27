@@ -1,4 +1,4 @@
-"""SITREP location resolver (M9). Requires routing_edges.geojson + data/landmarks.json (run_all)."""
+"""SITREP location resolver. Requires routing_edges.geojson + data/landmarks.json (run_all)."""
 import math
 import sys
 from pathlib import Path

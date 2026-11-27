@@ -1,5 +1,5 @@
 /**
- * Convoys tab (M14): plan several convoys at once so they do not meet head-on on bridges /
+ * Convoys tab: plan several convoys at once so they do not meet head-on on bridges /
  * chokepoints / narrow roads, do not bunch up, and get recommended start-point (SP) times.
  * Logic lives in js/deconflict.js (pure, unit-tested); this file is the UI + map + live glue.
  */

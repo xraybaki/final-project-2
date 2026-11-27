@@ -1,5 +1,5 @@
 """
-M2 - Synthetic threat data (SYNTHETIC - for demonstration only).
+Synthetic threat data (SYNTHETIC - for demonstration only).
 
 Generates a reproducible 24-month incident history on real road edges, biased toward
 convoy risk factors (chokepoints, bridges, narrow/unpaved roads, dense settlements,
@@ -134,7 +134,7 @@ def generate_incidents(G: nx.Graph, eidx: EdgeIndex, road: pd.DataFrame) -> pd.D
     for e in rng.choice(E, size=n_bg, p=pb / pb.sum()):
         add(int(e), TYPES[rng.choice(6, p=_type_weights(road.iloc[e]))], all_months, -1)
 
-    df = pd.DataFrame(recs).sort_values("timestamp").reset_index(drop=True)
+    df = pd.DataFrame(recs).sort_values(["timestamp", "lat", "lon"], kind="stable").reset_index(drop=True)
     df.insert(0, "incident_id", np.arange(len(df)))
     df["data_label"] = C.SYNTHETIC_LABEL
     df.attrs["hotspots"] = [{"edge_index": e, "kind": k} for e, k in zip(hot_edges, kinds)]
@@ -197,6 +197,6 @@ def run(G, eidx, road):
     live = generate_live_threats(G, eidx, road, inc)
     C.LIVE_THREATS_JSON.write_text(json.dumps(live, indent=2), encoding="utf-8")
     counts = inc["type"].value_counts().to_dict()
-    print(f"  [M2] {len(inc):,} SYNTHETIC incidents -> {C.INCIDENTS_CSV.relative_to(C.ROOT)} {counts}")
-    print(f"  [M2] {len(live['events'])} live threats -> {C.LIVE_THREATS_JSON.relative_to(C.ROOT)}")
+    print(f"  [threats] {len(inc):,} SYNTHETIC incidents -> {C.INCIDENTS_CSV.relative_to(C.ROOT)} {counts}")
+    print(f"  [threats] {len(live['events'])} live threats -> {C.LIVE_THREATS_JSON.relative_to(C.ROOT)}")
     return inc, live

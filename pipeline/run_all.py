@@ -3,7 +3,7 @@ One command builds everything:
 
     python -m pipeline.run_all
 
-M1 road network -> M2 synthetic threats -> M3 features + ML risk model -> M4 export.
+road network -> synthetic threats -> features + ML risk model -> export -> landmark gazetteer.
 """
 from __future__ import annotations
 
@@ -27,23 +27,23 @@ def main():
     print(f"SANCHAR pipeline  |  {C.REGION_NAME}  |  {C.SYNTHETIC_LABEL}")
     print("=" * 72)
 
-    G, region = build_graph()                                   # M1
+    G, region = build_graph()                                   # road network
     G.graph["region_name"] = region["name"]
     eidx = EdgeIndex(G, projector_for(G))
     road_df = road_features(G, eidx)
 
-    incidents, live = synthetic_threats.run(G, eidx, road_df)   # M2
+    incidents, live = synthetic_threats.run(G, eidx, road_df)   # synthetic history
 
     metrics = None
-    try:                                                        # M3
+    try:                                                        # ML risk model
         scored, metrics = train_model.train_and_score(G, eidx, road_df, incidents)
     except Exception:  # noqa: BLE001
         traceback.print_exc()
-        print("  [M3] !!! model training failed - using hand-tuned weight formula")
+        print("  [model] !!! model training failed - using hand-tuned weight formula")
         scored = train_model.hand_tuned_scores(road_df, incidents, eidx)
 
-    export(G, eidx, road_df, scored, region, metrics)           # M4
-    build_landmarks(G, _bbox())                                 # M9 gazetteer
+    export(G, eidx, road_df, scored, region, metrics)           # routing graph
+    build_landmarks(G, _bbox())                                 # SITREP gazetteer
 
     w = scored["weight"].values
     print("-" * 72)

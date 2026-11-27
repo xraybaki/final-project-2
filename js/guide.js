@@ -1,5 +1,5 @@
 /**
- * Guide tab + ⓘ tooltips (M12): plain-language meaning of every number in the UI.
+ * Guide tab + ⓘ tooltips: plain-language meaning of every number in the UI.
  * Tables C (multiplier) and D (λ) are COMPUTED from the same formulas the router uses,
  * so the explanation can never drift from the code.
  */

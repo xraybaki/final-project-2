@@ -280,7 +280,7 @@ body.mode-pin #map, body.mode-report #map, body.mode-route #map { cursor: crossh
 .risk-crit { color: var(--risk-crit); } .risk-closed { color: var(--closed); }
 .rp-fastest { color: var(--route-fast); } .rp-balanced { color: var(--route-bal); } .rp-safest { color: var(--route-safe); }
 
-/* ------------------------------------------------------------- M11: log tab */
+/* ------------------------------------------------------------- Log tab */
 .sidebar[data-tab="log"] .panels { width: 860px; }
 @media (max-width: 1279px) { .sidebar[data-tab="log"] .panels { width: 680px; } }
 .log-filters { display: flex; gap: var(--s2); margin-top: var(--s2); flex-wrap: wrap; }
@@ -320,7 +320,7 @@ a.btn { text-decoration: none; }
 .log-detail td { white-space: normal; }
 .log-table { table-layout: auto; }
 
-/* ------------------------------------------------------------- M12: guide + tooltips */
+/* ------------------------------------------------------------- Guide + tooltips */
 .tip { display: inline-flex; vertical-align: middle; color: var(--text-dim); cursor: help; margin-left: 2px; border-radius: 50%; }
 .tip .icon { width: 13px; height: 13px; }
 .tip:hover, .tip:focus-visible { color: var(--info); outline: none; }
@@ -338,7 +338,7 @@ a.btn { text-decoration: none; }
 .guide-table td { padding: 5px 6px; border-bottom: 1px solid rgba(255, 255, 255, .05); vertical-align: top; font-variant-numeric: tabular-nums; }
 .callout { padding: 8px 10px; border-left: 3px solid var(--info); background: rgba(78, 161, 255, .08); border-radius: 4px; }
 
-/* ------------------------------------------------------------- M13: live tab */
+/* ------------------------------------------------------------- Live tab */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--s2); }
 .seg { display: flex; border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; }
 .seg button { flex: 1; padding: 6px 4px; background: var(--bg); border: 0; border-right: 1px solid var(--border); color: var(--text-dim); cursor: pointer; font-size: 11.5px; font-weight: 600; transition: background var(--t), color var(--t); }
@@ -375,7 +375,7 @@ a.btn { text-decoration: none; }
 .ev-departed b, .ev-scenario b { color: var(--info); } .ev-stuck b { color: var(--danger); } .ev-high_risk b, .ev-chokepoint b { color: var(--text-dim); }
 .btn-row select.input { min-width: 0; flex: 1 1 0; text-overflow: ellipsis; }
 
-/* ------------------------------------------------------------- M14: convoys tab */
+/* ------------------------------------------------------------- Convoys tab */
 .sidebar[data-tab="convoys"] .panels { width: 860px; }
 @media (max-width: 1279px) { .sidebar[data-tab="convoys"] .panels { width: 680px; } }
 .settings-row { display: flex; gap: var(--s4); align-items: center; margin-top: var(--s3); font-size: 12px; color: var(--text-dim); flex-wrap: wrap; }

@@ -1,5 +1,5 @@
 /**
- * Multi-convoy deconfliction and timing (M14) - pure functions, no DOM. Browser + Node tests.
+ * Multi-convoy deconfliction and timing - pure functions, no DOM. Browser + Node tests.
  *
  * Occupancy  head enters edge e at t_in; tail leaves at t_out = t_exit_head + column_len / v.
  *            window(e) = [t_in - buffer, t_out + buffer]   (times in MINUTES)

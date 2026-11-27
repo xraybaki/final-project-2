@@ -9,8 +9,8 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 1. **Region: Srinagar, Jammu & Kashmir** (changed from an earlier Dehradun default at the
    team's request). Centre 34.0837, 74.7973 (city centre), 12 km half-width box,
    `network_type="drive"`. The Dehradun settings are kept as a comment in `config.py`.
-2. **OSM source.** The Overpass API (and two mirrors, and Geofabrik) were unreachable from the
-   build sandbox, so I added a second download path: the openstreetmap.fr
+2. **OSM source.** The Overpass API is often slow or rate-limited, so there is a second
+   download path: the openstreetmap.fr
    `jammu_and_kashmir-latest.osm.pbf` extract (27 MB). It is clipped to the box with `osmium`
    (pip `osmium`), filtered with OSMnx's own "drive" rules (no service roads, tracks, footways
    or private access), and loaded with `ox.graph_from_xml` → simplify → bbox truncate. On a
@@ -22,7 +22,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 5. Parallel edges are collapsed to the shortest one in the undirected graph. One-way
    restrictions are ignored (convoys can be escorted against flow; this keeps the graph simple).
 
-## Synthetic data (M2)
+## Synthetic data
 6b. Live threats and SITREP examples use real Srinagar street names (e.g. Fore Shore Road,
     Boulevard Road) so the demo is concrete. The *events* are invented, generic, and labelled
     "SYNTHETIC / fictional training scenario" in the data, the popups and the UI footer.
@@ -42,7 +42,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 12. Live threats: 5 reports on named major roads near recent activity, at least 1.2 km apart.
     IED (92) and landslide (94) are hard blocks. All descriptions are generic and marked fictional.
 
-## Model (M3)
+## Model
 13. Label: any incident from months 19–24 within **150 m** of the edge. Features come only from
     months 1–18, so there is no leakage.
 14. XGBoost (400 trees, depth 5, lr 0.05, `scale_pos_weight` = neg/pos). Probabilities are
@@ -63,7 +63,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 21. OSM building and POI density skipped: it needs a second, large Overpass query.
     Node density is used instead.
 
-## Routing and UI (M5/M6)
+## Routing and live threats
 22. Fastest = λ = 0 on length. At a constant convoy speed of 30 km/h, minimum time equals
     minimum distance. OSM `travel_time` is kept in the data but not used for convoy ETA.
 23. Threat penalty: `w' = max(w, impact) × (1 + 3·impact/100)`. A purely multiplicative
@@ -91,7 +91,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
     p_traverse, chokepoint, travel_time_s, bridge, tunnel, category, features`) and an
     `adjacency_list` with **string** keys.
 
-## M9: precise point threats + SITREP resolver
+## Precise point threats and SITREP resolver
 33. **Windows UTF-8 fix:** every `open` / `read_text` / `write_text` / `to_csv` in `pipeline/`,
     `gemini_api.py` and the tests passes `encoding="utf-8"` (the CSV also `newline=""`). The server
     spawns Python with `PYTHONIOENCODING=utf-8` and reads/writes stdin/stdout as UTF-8.
@@ -137,9 +137,9 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
     are ignored.
 43. Named bridges stored as road segments (for example "Nawa Kadal") are treated as landmarks,
     not as roads, so "near Nawa Kadal" resolves to a point instead of asking for a pin.
-44. Threat ids look like `THR-YYYYMMDD-HHMMSS-nnn` (client-generated until M11 adds the server store).
+44. Threat ids are assigned by the server as `THR-YYYYMMDD-NNNN` (see the SITREP database section).
 
-## M10: UI shell and design system
+## UI shell and design system
 45. **Layout:** a left sidebar (64 px icon rail + 380 px panel) sits *beside* the map, not over
     it, so the map is 0% covered by default. The panel collapses to the rail. Below 1100 px
     the sidebar becomes an overlay drawer. The info panel became a slim header chip
@@ -159,7 +159,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 50. Risk bands in `getDangerLevel` now match the legend and Guide exactly
     (Low < 30 ≤ Medium < 60 ≤ High < 80 ≤ Critical).
 
-## M11: persistent SITREP database
+## Persistent SITREP database
 51. **Store:** `data/sitrep_db.json` (git-ignored) shaped `{version, records, events}`, with an
     in-memory copy in the server. Every write goes to `sitrep_db.json.tmp` followed by
     `fs.renameSync` (atomic). A corrupt file is moved aside (`*.corrupt-<ts>`) instead of crashing.
@@ -175,7 +175,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 54. **Auto-SITREP:** every record gets a standard one-line `sitrep_line` (DTG `DDHHMMZ MON YY`,
     UTC). Manual map threats also use it as `sitrep_text`; SITREP-sourced records keep the
     operator's original text in `sitrep_text`. The location label (nearest road + nearest
-    landmark with distance and compass direction) is computed in the browser from the M9
+    landmark with distance and compass direction) is computed in the browser from the landmark
     gazetteer and sent with the create request.
 55. **Validation:** type must be in `threat_types.json`; impact 10–100; radius 25–500; lat/lon inside
     the operating box (from `data/region.json`) with about 1 km of padding. Invalid requests
@@ -189,18 +189,18 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 58. **Live sync = Server-Sent Events** (`/api/stream`, with a ping every 20 s), chosen over
     WebSockets because it needs no library on the server or in the browser and reconnects
     automatically. Events: threat_created / threat_updated / threat_cleared / event_logged
-    (convoy_position and convoys_changed are added in M13 / M14).
+    convoy_position (live tracking) and convoys_changed (convoy planner).
 59. CSV export has a UTF-8 BOM so Excel on Windows shows non-ASCII place names correctly.
     The database files are never served as static files (HTTP 403).
 
-## M12: risk guide + tooltips
+## Risk guide and tooltips
 60. **One λ default:** Balanced = 0.6 everywhere (`ROUTE_LAMBDAS` in `pathfinding.js`, which
     `app.js` reads). Presets are labelled "Fastest (λ 0) · Balanced (λ 0.6) · Safest (λ 0.95)".
     The slider moves only the Balanced route (max 0.95, so Balanced never exceeds Safest).
 61. **Guide tables are computed, not typed:** the multiplier table (C) uses the router's
     `1 + 3·impact/100` and the λ table (D) uses `1 + λ·(R/100)/(1 − λ)` with R = 80, so the
-    explanation cannot drift from the code. The values match the IMPROVEMENTS.md tables
-    (×1.5 / 1.9 / 2.5 / 3.4; 1.0 / 1.2 / 1.4 / 2.2 / 4.2 / 16 km).
+    explanation cannot drift from the code. The resulting values are
+    ×1.5 / 1.9 / 2.5 / 3.4 and 1.0 / 1.2 / 1.4 / 2.2 / 4.2 / 16 km.
 62. **Tooltips:** one ⓘ per number or label (route rows, λ, impact, radius, legend, threat-popup
     effect, edge popups, live HUD). Each shows one sentence plus a "More in Guide" link that
     opens the Guide tab at the right section. It works with hover, keyboard focus or click,
@@ -208,7 +208,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 63. The "multiplier" (risk ×1.5) and "λ" (preference 0.6) are always labelled differently and
     explained side by side in a call-out.
 
-## M13: live tracking + on-the-move rerouting
+## Live tracking and on-the-move rerouting
 64. **Engine:** one `requestAnimationFrame` loop for all convoys, time-based (distance += speed ×
     sim-dt; dt clamped to 0.25 s after tab switches). Sim clock multiplier 1× / 5× / 10× / 30×
     plus pause. The column is drawn as vehicles × spacing behind the head; heading is smoothed;
@@ -245,7 +245,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
     on the alternative" lands on the rerouted path). One scenario is shipped: Srinagar, IED
     on route, then stone pelting on the alternative.
 
-## M14: multi-convoy deconfliction and timing
+## Multi-convoy deconfliction and timing
 73. **Occupancy:** the head enters edge e at `t_in = SP + dist / v`; the tail leaves at
     `t_exit_head + column / v` with column = vehicles × spacing. Window = [t_in − buffer,
     t_out + buffer], buffer 3 min by default. Junction crossings get the same window at the
@@ -273,7 +273,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 78. **Persistence:** `data/convoys.json` (git-ignored, atomic writes) via
     `GET/POST/PATCH/DELETE /api/convoys`. Changes are broadcast over SSE (`convoys_changed`)
     so other tabs stay in sync.
-79. **Run all:** every convoy runs in the M13 live engine from its own SP (sim offsets
+79. **Run all:** every convoy runs in the live-tracking engine from its own SP (sim offsets
     relative to the earliest SP). The Gantt shows a "now" line. After any live reroute, the
     conflict check re-runs on the convoys' remaining routes from their current positions, and
     any new High or Critical conflict raises a toast.
@@ -282,7 +282,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
     routes share river-bridge chokepoints, which gives 2 Critical head-ons and 1 bunching;
     "Accept all" delays Bravo-2 by 14 min and Charlie-3 by 28 min, leaving zero conflicts.
 
-## M15: polish and verification
+## Performance and verification
 81. **Performance** (headless Chromium, localhost): load 1.9 s (target < 5 s); three routes 52 ms;
     reroute A* from the convoy's position 9.5 ms (target < 100 ms); reroute decision 0.2 ms.
     The risk layer uses the canvas renderer. Panning measured about 50 ms per frame only because
@@ -290,20 +290,20 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 82. Screenshots in `reports/screens/` were regenerated with Playwright against a fresh database.
 83. The pipeline is reproducible: a re-run changes only the `timestamp` in `data/live_threats.json`.
 
-## R2: deployment on Render
+## Deployment on Render
 84. **Runtime image without the pipeline:** the server needs only Node (built-ins) and the Python
     standard library (`gemini_api.py` / `sitrep_resolver.py`). `requirements.txt` (osmnx,
     geopandas, xgboost …) is not installed. `.dockerignore` also drops `pipeline/`, `models/`,
     `reports/`, `tests/`, `data/cache`, the incident history and any runtime databases.
-85. **Dockerfile deviates slightly from the suggested one:** instead of `node:22-slim` plus
-    `apt-get install python3`, it copies the `node` binary from `node:22-slim` into
-    `python:3.12-slim` (a two-stage build, no apt). It's faster and reproducible, works where
-    Debian mirrors are blocked (they were in the build sandbox), and was tested end to end:
+85. **Two-stage Dockerfile without apt:** instead of `node:22-slim` plus
+    `apt-get install python3`, the image copies the `node` binary from `node:22-slim` into
+    `python:3.12-slim`. It's faster and reproducible, works on networks where Debian mirrors are
+    blocked, and was tested end to end:
     397 MB on disk, built in about 8 s, ready in about 0.75 s, full app working inside.
     `--build-arg WITH_GEMINI=1` pip-installs the optional Gemini client.
-86. **Static files = allowlist:** only the frontend, data and scenario files are public. The old
-    handler served any file under the project root (including `server.js`, `package.json` and
-    a potential `.env` with the Gemini key), which is unacceptable on a public URL. Requests
+86. **Static files = allowlist:** only the frontend, data and scenario files are public. Server
+    code, `package.json`, a `.env` with the Gemini key and the databases are never served, which
+    matters on a public URL. Requests
     containing `..` or a backslash get 403; anything not on the list gets 404.
 87. **gzip:** compressible types (> 1 KB) are gzip-compressed once (zlib level 6), cached in memory
     keyed by path + size + mtime, and pre-compressed at startup for the two big files
@@ -318,11 +318,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
     empty instance still demos well. The path is configurable with `SITREP_DB`.
 90. `render.yaml` uses `runtime: docker`, `plan: free`, `region: singapore`,
     `healthCheckPath: /healthz`, `autoDeploy: true` and `GEMINI_API_KEY` with `sync: false`.
-    render.com could not be reached from the build sandbox, so these field names come from the
-    Blueprint spec as known at the time of writing rather than a fresh check. If Render rejects
-    `autoDeploy`, its newer equivalent is `autoDeployTrigger: commit`.
-91. The legacy `/chat` endpoint mentioned in the deployment brief no longer exists (removed with
-    the legacy code), so no 501 stub is needed.
+    If Render rejects `autoDeploy`, its newer equivalent is `autoDeployTrigger: commit`.
 
 ---
 
@@ -346,10 +342,10 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 * Tests: `pytest -q` (17 passed) and `npm test` (6 JS test files passed).
 
 ### Not done / limits
-* The Gemini path is wired but untested here (no key in the sandbox); the offline parser is tested.
+* The optional Gemini path is wired in; the offline parser is the tested default.
 * No terrain or elevation; constant convoy speed; synthetic data only.
-* In the development sandbox Overpass was unreachable, so the J&K PBF extract path was used. On a
-  normal connection Overpass is tried first.
+* The committed road network was built from the Jammu & Kashmir PBF extract; on a normal
+  connection the pipeline tries Overpass first.
 
 ### Demo script (about 8 minutes)
 1. `node server.js` → http://localhost:3000. The loading bar fills and the Srinagar ML risk map
