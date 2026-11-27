@@ -1,6 +1,6 @@
 {
   "name": "sanchar",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "SANCHAR: Smart AI Navigation for Convoy Hazard Avoidance & Rerouting",
   "main": "server.js",
   "scripts": {

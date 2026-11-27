@@ -51,6 +51,17 @@ npm test                            # JS tests (A*, threat geometry, API, rerout
 * Optional: put `GEMINI_API_KEY=...` in `.env` and `pip install google-genai` to let Gemini extract
   SITREP fields. The demo never depends on it; the offline parser is always available.
 
+### Seeing an old version?
+1. **Get the latest code** in your project folder: `git pull`, then check that `git log -1 --oneline`
+   shows the latest commit.
+2. **Stop any old server.** Close every terminal running `node server.js`, or free the port on Windows:
+   `netstat -ano | findstr :3000` and then `taskkill /PID <number> /F`. If another server holds
+   the port, a new one prints *"Port 3000 is already in use"* and exits.
+3. Start `node server.js`. The first line must read **`SANCHAR v2.0.0 · …`**
+   (`http://localhost:3000/healthz` also shows the version).
+4. Reload the page with **Ctrl + F5** (or open a private window) once, so the browser drops old cached files.
+   From v2.0.0 on, every script is versioned, so this should not be needed again.
+
 ### Windows notes
 * `server.js` runs `python` on Windows and `python3` elsewhere (override with `PYTHON=...`).
 * **Python 3.12 is recommended.** If `pip install` fails building geo wheels (`pyproj`, `shapely`,

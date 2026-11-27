@@ -64,7 +64,14 @@ server.listen(0, '127.0.0.1', async () => {
         // index: no-cache; app code is served
         r = await get(port, '/', { 'Accept-Encoding': 'gzip' });
         assert.strictEqual(r.status, 200); assert.strictEqual(r.headers['cache-control'], 'no-cache');
-        assert.ok(zlib.gunzipSync(r.body).toString().includes('SANCHAR'));
+        const html = zlib.gunzipSync(r.body).toString();
+        assert.ok(html.includes('SANCHAR'));
+        // every local script / stylesheet carries the current version, so browsers never reuse stale files
+        const version = require('../package.json').version;
+        const assets = [...html.matchAll(/(?:src|href)="((?:js\/)?[\w.-]+\.(?:js|css|svg))(\?v=[\w.]+)?"/g)];
+        assert.ok(assets.length >= 10);
+        for (const a of assets) assert.strictEqual(a[2], `?v=${version}`, `${a[1]} is not versioned`);
+        assert.strictEqual(JSON.parse((await get(port, '/healthz')).body).version, version);
         for (const p of ['/app.js', '/js/threats.js', '/favicon.svg', '/data/scenarios/srinagar_ied_then_stone_pelting.json']) {
             assert.strictEqual((await get(port, p)).status, 200, p);
         }

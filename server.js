@@ -20,6 +20,7 @@ const SR = require('./lib/sitrep');
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const STARTED = Date.now();
+const VERSION = require('./package.json').version;
 const ROOT = __dirname;
 const PYTHON = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
 const DB_FILE = process.env.SITREP_DB || path.join(ROOT, 'data', 'sitrep_db.json');
@@ -420,7 +421,7 @@ const server = http.createServer((req, res) => {
     }
 
     if (url === '/healthz') {
-        return sendJSON(res, 200, { status: 'ok', name: 'SANCHAR', uptime_s: Math.round((Date.now() - STARTED) / 1000) });
+        return sendJSON(res, 200, { status: 'ok', name: 'SANCHAR', version: VERSION, uptime_s: Math.round((Date.now() - STARTED) / 1000) });
     }
 
     serveStatic(req, res, url);
@@ -511,9 +512,22 @@ function warmGzip() {
 }
 
 if (require.main === module) {
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.error(`\n  Port ${PORT} is already in use - most likely an older SANCHAR / node server is still running,`);
+            console.error('  and your browser is talking to that one (that is why you would see an old version).');
+            console.error('  Fix: close the other terminal (or press Ctrl+C in it), or free the port:');
+            console.error(process.platform === 'win32'
+                ? `    netstat -ano | findstr :${PORT}     then     taskkill /PID <number> /F`
+                : `    lsof -ti :${PORT} | xargs kill`);
+            console.error(`  Or start this one on another port:  ${process.platform === 'win32' ? `set PORT=3001 && node server.js` : `PORT=3001 node server.js`}\n`);
+            process.exit(1);
+        }
+        throw err;
+    });
     server.listen(PORT, HOST, () => {
+        console.log(`SANCHAR v${VERSION} · Smart AI Navigation for Convoy Hazard Avoidance & Rerouting`);
         console.log(`Server running at http://localhost:${PORT}/ (listening on ${HOST})`);
-        console.log('SANCHAR · Smart AI Navigation for Convoy Hazard Avoidance & Rerouting');
         console.log(`SITREP database: ${path.relative(ROOT, DB_FILE)} (${db.records.length} records)`);
         warmGzip();
     });
