@@ -24,7 +24,7 @@ from . import synthetic_threats, train_model
 def main():
     t0 = time.time()
     print("=" * 72)
-    print(f"Convoy Safest-Route pipeline  |  {C.REGION_NAME}  |  {C.SYNTHETIC_LABEL}")
+    print(f"SANCHAR pipeline  |  {C.REGION_NAME}  |  {C.SYNTHETIC_LABEL}")
     print("=" * 72)
 
     G, region = build_graph()                                   # M1

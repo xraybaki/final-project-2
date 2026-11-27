@@ -239,7 +239,7 @@
         const lines = ['call_sign,priority,point,eta,km_from_sp'];
         C.list.forEach(rec => marchRows(rec).forEach(r => lines.push([rec.call_sign, rec.priority, `"${r.point.replace(/"/g, '""')}"`, D.fmtHM(r.eta), r.km.toFixed(2)].join(','))));
         const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
-        const a = el('a', { href: URL.createObjectURL(blob), download: 'march_tables.csv' });
+        const a = el('a', { href: URL.createObjectURL(blob), download: 'sanchar_march_tables.csv' });
         document.body.appendChild(a); a.click(); a.remove();
     };
 

@@ -1,5 +1,5 @@
 /**
- * Convoy Route Planner - map, routing and UI shell glue.
+ * SANCHAR (Smart AI Navigation for Convoy Hazard Avoidance & Rerouting) - map, routing and UI shell glue.
  *
  * Map centre / bounds / convoy parameters come from routing_graph.json "meta"
  * (written by `python -m pipeline.run_all`), so switching region needs no JS change.

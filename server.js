@@ -1,4 +1,4 @@
-// Convoy Route Planner server - Node built-ins only (http, fs, path, child_process).
+// SANCHAR server (Smart AI Navigation for Convoy Hazard Avoidance & Rerouting) - Node built-ins only (http, fs, path, child_process).
 //
 //  static files            GET  /...
 //  threat database (M11)   GET/POST /api/threats, PATCH/DELETE /api/threats/:id,
@@ -161,7 +161,7 @@ function handleThreats(req, res, url, q) {
         return sendJSON(res, 200, { records: recs, count: recs.length, data_label: 'SYNTHETIC - for demonstration only' });
     }
     if (url === '/api/threats/export.csv' && req.method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="sitrep_log.csv"' });
+        res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="sanchar_sitrep_log.csv"' });
         return res.end(SR.toCSV(db.records));
     }
     // create
@@ -443,7 +443,7 @@ server.readJSONBody = readJSONBody;
 if (require.main === module) {
     server.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}/`);
-        console.log('AI-Based Safest Route Planner for Mobile Convoys');
+        console.log('SANCHAR · Smart AI Navigation for Convoy Hazard Avoidance & Rerouting');
         console.log(`SITREP database: ${path.relative(ROOT, DB_FILE)} (${db.records.length} records)`);
     });
 }

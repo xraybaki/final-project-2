@@ -64,7 +64,7 @@
         const counts = ['active', 'pending', 'cleared', 'expired'].map(s => `${Log.records.filter(r => r.status === s).length} ${s}`).join(' · ');
         root.appendChild(el('div', { class: 'card' },
             el('div', { class: 'row-between' }, el('span', { class: 'muted' }, `${Log.records.length} records · ${counts}`),
-                el('a', { class: 'btn btn-secondary btn-sm', href: '/api/threats/export.csv', download: 'sitrep_log.csv',
+                el('a', { class: 'btn btn-secondary btn-sm', href: '/api/threats/export.csv', download: 'sanchar_sitrep_log.csv',
                           html: '<svg class="icon"><use href="#i-download"/></svg><span>Export CSV</span>' })),
             el('div', { class: 'log-filters' }, search,
                 select('log-status', 'statuses', ['active', 'pending', 'cleared', 'expired'], Log.filter.status),
@@ -171,8 +171,8 @@
         });
         const rb = document.getElementById('reported-by');
         if (rb) {
-            try { rb.value = localStorage.getItem('reportedBy') || rb.value; } catch (e) { /* storage blocked */ }
-            rb.addEventListener('change', () => { try { localStorage.setItem('reportedBy', rb.value); } catch (e) { /* ignore */ } });
+            try { rb.value = localStorage.getItem('sanchar.reportedBy') || rb.value; } catch (e) { /* storage blocked */ }
+            rb.addEventListener('change', () => { try { localStorage.setItem('sanchar.reportedBy', rb.value); } catch (e) { /* ignore */ } });
         }
     });
 })();

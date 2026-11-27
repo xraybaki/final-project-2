@@ -1,5 +1,5 @@
 /* =========================================================================
-   Convoy Route Planner - design system (M10)
+   SANCHAR (Smart AI Navigation for Convoy Hazard Avoidance & Rerouting) - design system
    Dark "ops console": one accent green, info blue, warn amber, danger red,
    closed magenta, route colours. 8 px spacing grid, 10-12 px radii.
    ========================================================================= */
@@ -420,3 +420,11 @@ a.btn { text-decoration: none; }
 .cv-table .cs-input { width: 90px; }
 .sitrep-line { overflow-wrap: anywhere; white-space: normal; }
 .log-detail td { max-width: 0; }
+.hc-brand { font-weight: 800; letter-spacing: .12em; color: var(--accent); }
+.loading-brand { font-size: 28px; font-weight: 800; letter-spacing: .2em; color: var(--accent); margin-top: var(--s3); }
+.loading-sub { font-size: 11px; margin-top: 2px; }
+.brand-block { padding: var(--s3) var(--s4) var(--s1); border-bottom: 1px solid var(--border); }
+.brand-name { font-size: 22px; font-weight: 800; letter-spacing: .18em; color: var(--accent); line-height: 1.1; }
+.brand-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
+.hc-full { font-weight: 600; font-size: 12px; margin-bottom: 2px; }
+.hc-tag { font-size: 11px; margin-bottom: 6px; }

@@ -1,9 +1,13 @@
-# AI-Based Safest Route Planner for Mobile Convoys
+# SANCHAR
+
+**Smart AI Navigation for Convoy Hazard Avoidance & Rerouting**
+
+*Sanchar* (संचार) means "movement". SANCHAR is an AI-based safest route planner for military convoys.
 
 > ⚠️ **All incident and threat data in this project is SYNTHETIC, for demonstration only.**
 > It contains no real security data, real units, real people or operational details.
 
-A web app for planning and running road-convoy movements over the real OpenStreetMap road
+SANCHAR is a web app for planning and running road-convoy movements over the real OpenStreetMap road
 network of **Srinagar, Jammu & Kashmir** (24,574 intersections, 29,078 road segments).
 Designed and built by our team with the help of **Claude Code**.
 

@@ -1,7 +1,7 @@
 {
-  "name": "convoy-route-planner",
+  "name": "sanchar",
   "version": "1.0.0",
-  "description": "AI-based safest route planner for mobile convoys",
+  "description": "SANCHAR: Smart AI Navigation for Convoy Hazard Avoidance & Rerouting",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,6 +9,7 @@
     "test": "node tests/run_js_tests.js"
   },
   "keywords": [
+    "sanchar",
     "leaflet",
     "osm",
     "convoy",

@@ -1,8 +1,11 @@
-# DECISIONS.md: assumptions and choices
+# SANCHAR · DECISIONS.md: assumptions and choices
 
-Design decisions for the convoy route planner, built by our team with the help of Claude Code.
+Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidance & Rerouting), built by our team with the help of Claude Code.
 
 ## Environment and data
+0. **Project name: SANCHAR** (Sanchar, संचार = "movement"): **S**mart **A**I **N**avigation for **C**onvoy
+   **H**azard **A**voidance & **R**erouting. Slug `sanchar` for package / service / file names and
+   `sanchar.*` for browser storage keys. Route profile names ("Safest" etc.) are features and keep their names.
 1. **Region: Srinagar, Jammu & Kashmir** (changed from an earlier Dehradun default at the
    team's request). Centre 34.0837, 74.7973 (city centre), 12 km half-width box,
    `network_type="drive"`. The Dehradun settings are kept as a comment in `config.py`.

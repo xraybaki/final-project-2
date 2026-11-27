@@ -1,5 +1,5 @@
 /**
- * A* Pathfinding for Convoy Route Planning
+ * SANCHAR - A* pathfinding for convoy route planning
  * Computes Fastest / Balanced / Safest routes over the ML-weighted road graph
  * and reports convoy metrics for each.
  *
