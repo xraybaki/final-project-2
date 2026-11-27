@@ -148,7 +148,9 @@ const Loading = {
 async function fetchJSONProgress(url, onProgress) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-    const total = Number(res.headers.get('Content-Length')) || 0;
+    // under gzip Content-Length is the compressed size, so prefer the server's uncompressed length
+    const total = Number(res.headers.get('X-Uncompressed-Length')) ||
+        (res.headers.get('Content-Encoding') ? 0 : Number(res.headers.get('Content-Length'))) || 0;
     if (!res.body || !total) return res.json();
     const reader = res.body.getReader();
     const chunks = [];
@@ -158,7 +160,7 @@ async function fetchJSONProgress(url, onProgress) {
         if (done) break;
         chunks.push(value);
         got += value.length;
-        onProgress(got / total, got);
+        onProgress(Math.min(1, got / total), got);
     }
     const buf = new Uint8Array(got);
     let off = 0;

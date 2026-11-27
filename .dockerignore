@@ -1,0 +1,24 @@
+# Not needed at runtime (the pipeline runs offline; its outputs are committed)
+.git
+node_modules
+data/cache
+legacy_toronto
+tests
+test.ipynb
+reports
+pipeline
+models
+requirements.txt
+data/incidents.csv
+**/__pycache__
+.pytest_cache
+.env
+*.pbf
+*.osm
+# runtime databases are created fresh in the container
+data/sitrep_db.json*
+data/convoys.json*
+*.corrupt-*
+Dockerfile
+.dockerignore
+render.yaml

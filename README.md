@@ -61,7 +61,63 @@ npm test                            # JS tests (A*, threat geometry, API, rerout
   with `PYTHONIOENCODING=utf-8`.
 * The CSV exports include a UTF-8 BOM, so Excel shows place names correctly.
 
-## 2. The six tabs (keys 1–6, Esc cancels any click mode)
+## 2. Deploy SANCHAR on Render (free)
+
+SANCHAR ships with a `Dockerfile`, `.dockerignore` and a Render Blueprint (`render.yaml`). The
+data pipeline does **not** run on the server: its outputs are already in the repo, so the image
+contains only Node (the server) and the Python standard library (SITREP parsing). It builds in
+seconds, is about 400 MB, and starts in under a second.
+
+1. **Push the latest code to GitHub.** In a terminal in the project folder:
+   ```bash
+   git add .
+   ```
+   ```bash
+   git commit -m "Update SANCHAR"
+   ```
+   ```bash
+   git push
+   ```
+2. Go to **[render.com](https://render.com)** and **sign up with GitHub**. When asked, allow Render to access this repository.
+3. Click **New + → Blueprint**, choose the repository, and Render reads `render.yaml`. Click **Apply**.
+4. Wait for the first build (a few minutes). The app opens at `https://sanchar.onrender.com`
+   (or `https://sanchar-xxxx.onrender.com` if that name is taken).
+5. Optional: in the service's **Environment** tab, set `GEMINI_API_KEY` to let Gemini extract SITREP
+   fields. Without it the offline parser is used, and everything still works.
+6. From now on, every `git push` to the deployed branch redeploys automatically.
+
+**Known limits of the free tier**
+* The service **sleeps after 15 minutes without visitors**, and the first visit after that takes about a minute.
+  **Open the link 2 minutes before any review or demo.**
+* The filesystem is temporary: threats, SITREPs and convoys saved at runtime **reset** when it sleeps
+  or redeploys. The demo intel reports are re-seeded automatically on every start. (The database
+  path can be changed with the `SITREP_DB` environment variable.)
+* For an always-on version, upgrade the service to a paid instance in the Render settings.
+
+**What makes it fast on a small instance:** the two big data files are served **gzip-compressed**
+(routing graph 21.6 MB → 2.5 MB, road geometry 17.7 MB → 2.2 MB), compressed once and kept in memory,
+with `ETag` / `304 Not Modified` and an hour of browser caching. `GET /healthz` is the health check.
+Only an allowlist of public files is served; server code, `.env` and databases never are.
+
+**Test the container on your own machine** (requires Docker Desktop):
+```bash
+docker build -t sanchar .
+```
+```bash
+docker run --rm -p 3000:10000 sanchar
+```
+Open http://localhost:3000, plan a route, place a threat and parse a SITREP. Check compression and health:
+```bash
+curl -sI -H "Accept-Encoding: gzip" http://localhost:3000/routing_graph.json
+```
+```bash
+curl -s http://localhost:3000/healthz
+```
+
+**Backup for presentations:** run it locally (`node server.js`) and share it for the session with
+`cloudflared tunnel --url http://localhost:3000` or `ngrok http 3000`.
+
+## 3. The six tabs (keys 1–6, Esc cancels any click mode)
 
 | Tab | What it does |
 |---|---|
@@ -72,7 +128,7 @@ npm test                            # JS tests (A*, threat geometry, API, rerout
 | **Log** | The SITREP database: sortable and filterable table with search, CSV export, Locate / Edit / Clear, expandable SITREP line and history, plus live events (reroutes, arrivals). |
 | **Guide** | Plain-language meaning of segment risk, threat impact, multiplier, λ and route metrics. Every number in the UI has an ⓘ tooltip linking here. |
 
-## 3. Threats: point + small radius
+## 4. Threats: point + small radius
 
 * **Model:** every threat, whatever its source, is `{id, lat, lon, radius_m, type, impact,
   location_label, resolution, confidence, source, created_at, expires_at, status, ...}`.
@@ -101,7 +157,7 @@ npm test                            # JS tests (A*, threat geometry, API, rerout
 
 ![Small-radius threat](reports/screens/3_threat_small_radius.png)
 
-## 4. SITREP → threat (never guesses)
+## 5. SITREP → threat (never guesses)
 
 `POST /parse-sitrep` resolves the location **offline** against OSM roads and
 `data/landmarks.json` (1,806 named OSM features: bridges, chowks, police stations, hospitals,
@@ -124,7 +180,7 @@ confidence badge) with a draggable dashed marker: **Confirm**, **Adjust** or **C
 |---|---|
 | ![](reports/screens/4_sitrep_pin_mode.png) | ![](reports/screens/5_sitrep_junction_preview.png) |
 
-## 5. Live tracking and on-the-move rerouting
+## 6. Live tracking and on-the-move rerouting
 
 * **Position sources:** simulation (default), device GPS (`watchPosition`, map-matched to the road,
   outside the operating area → warning and fall back to simulation), or an **external feed**:
@@ -160,7 +216,7 @@ confidence badge) with a draggable dashed marker: **Confirm**, **Adjust** or **C
 
 ![Live reroute](reports/screens/6_live_reroute.png)
 
-## 6. Multi-convoy deconfliction
+## 7. Multi-convoy deconfliction
 
 * **Occupancy:** the head enters an edge at `t_in`; the tail leaves `column / speed` after the head
   exits (column = vehicles × spacing). Window = `[t_in − 3 min, t_out + 3 min]`; junctions likewise.
@@ -189,7 +245,7 @@ confidence badge) with a draggable dashed marker: **Confirm**, **Adjust** or **C
 |---|---|
 | ![](reports/screens/7_convoys_conflicts.png) | ![](reports/screens/8_convoys_gantt_resolved.png) |
 
-## 7. Method
+## 8. Method
 
 ```mermaid
 flowchart LR
@@ -209,14 +265,14 @@ flowchart LR
     DB --> DC[deconfliction<br/>deconflict.js]
 ```
 
-### 7.1 Road network (M1)
+### 8.1 Road network (M1)
 `ox.graph_from_point(CENTER, dist=12 km, network_type="drive")`, or the same "drive" filter
 applied to the clipped regional extract, with OSMnx speeds and travel times added. The graph is converted to undirected (keeping the shortest parallel
 edge), restricted to the largest connected component, and relabelled `0..N-1`. Each edge
 keeps its length, road class, name, lanes, maxspeed, bridge/tunnel flags, surface and
 geometry.
 
-### 7.2 Synthetic incidents (M2)
+### 8.2 Synthetic incidents (M2)
 `data/incidents.csv` holds a seeded (reproducible) 24-month history of
 `IED / ambush / stone_pelting / road_blockade / landslide / accident` incidents, all placed
 on real road edges:
@@ -227,7 +283,7 @@ on real road edges:
 * Hostile types are concentrated at night (20:00–05:00) and landslides in the monsoon (Jul–Sep).
 * `data/live_threats.json` holds 5 "current" intel reports with fictional descriptions.
 
-### 7.3 Features and ML risk model (M3)
+### 8.3 Features and ML risk model (M3)
 **Temporal split to avoid leakage.** Features use incidents from months 1–18. The label is
 whether any incident from months 19–24 falls within 150 m of the edge.
 
@@ -245,7 +301,7 @@ The final model is refit on all labelled data and scores the latest 18-month win
 Edge risk = `p_incident × expected-severity factor`, scaled to the 0–100 `weight` used by
 the map colours. The raw probability is stored as `risk_prob`.
 
-### 7.4 Routing (M5)
+### 8.4 Routing (M5)
 A* with a binary heap and a cost where both terms are on the same scale:
 
 ```
@@ -264,7 +320,7 @@ Other metrics per route: distance, ETA at 30 km/h, mean and max segment risk, nu
 high-risk segments, **exposure time** on segments with weight ≥ 60, chokepoints crossed,
 and threat-zone segments.
 
-### 7.5 Risk scales (see the Guide tab)
+### 8.5 Risk scales (see the Guide tab)
 * **Segment risk 0–100** is *relative* (100 = top 1% of roads), not a probability.
   Bands: Low < 30 ≤ Medium < 60 ≤ High < 80 ≤ Critical.
 * **Threat impact 10–100:** 90+ closes the road.
@@ -272,13 +328,14 @@ and threat-zone segments.
   counts. It is different from **λ**, which is a route preference: to avoid 1 km of risk-R road the
   planner accepts a detour of up to `1 + λ·(R/100)/(1 − λ)` km (λ 0.6 → 2.2 km for R = 80).
 
-## 8. Files and API
+## 9. Files and API
 
 | Layer | Files |
 |---|---|
 | Pipeline (Python) | `pipeline/config.py`, `build_graph.py`, `landmarks.py`, `synthetic_threats.py`, `features.py`, `train_model.py`, `export_graph.py`, `run_all.py` |
 | SITREP | `sitrep_resolver.py` (offline resolver, MGRS / DMS), `gemini_api.py` (entry point, optional Gemini) |
-| Server (Node built-ins) | `server.js`, `lib/store.js` (atomic JSON store), `lib/sitrep.js` (validation, DTG, SITREP line, CSV) |
+| Server (Node built-ins) | `server.js` (allowlisted static files with gzip / ETag, API, SSE), `lib/store.js` (atomic JSON store), `lib/sitrep.js` (validation, DTG, SITREP line, CSV) |
+| Deployment | `Dockerfile`, `.dockerignore`, `render.yaml` |
 | Frontend | `index.html`, `style.css`, `app.js` (map, routing, shell), `pathfinding.js`, `js/threat-geo.js`, `js/threats.js`, `js/reroute.js`, `js/live.js`, `js/deconflict.js`, `js/convoys.js`, `js/log.js`, `js/guide.js`, `js/ui.js` |
 | Shared config | `threat_types.json` |
 | Data | `data/landmarks.json`, `data/live_threats.json`, `data/incidents.csv`, `data/scenarios/`, `data/sitrep_db.json` and `data/convoys.json` (runtime, git-ignored) |
@@ -298,13 +355,14 @@ and threat-zone segments.
 | GET | `/api/scenarios` | scenario list |
 | POST | `/parse-sitrep` | `{text}` → `ok` / `needs_pin` / `error` |
 | GET | `/fetch-live-threats` | intel-feed records in a compact format |
+| GET | `/healthz` | health check `{status, name, uptime_s}` (used by Render) |
 
 Manual threats get an auto-generated SITREP line using the military DTG, for example:
 `SITREP 270145Z NOV 26 | TYPE: IED/SUSPICIOUS OBJECT | LOC: 34.08112N 74.79563E (Nalahmar Rd, ~120 m W of Nawa Kadal) | RADIUS: 100 m | IMPACT: 92 (ROAD CLOSED) | SRC: MANUAL MAP ENTRY | BY: Ops desk | STATUS: ACTIVE | SYNTHETIC`
 
-## 9. Results
+## 10. Results
 
-### 9.1 Risk model (`reports/metrics.json`, Srinagar, 29,078 edges, 16.5% positive)
+### 10.1 Risk model (`reports/metrics.json`, Srinagar, 29,078 edges, 16.5% positive)
 
 | | ROC-AUC | PR-AUC | Precision | Recall |
 |---|---|---|---|---|
@@ -319,7 +377,7 @@ edges on both sides. The model beats the baseline in both settings.
 
 ![ROC/PR](reports/roc_pr.png)
 
-### 9.2 Performance (measured in headless Chromium)
+### 10.2 Performance (measured in headless Chromium)
 
 | Check | Target | Measured |
 |---|---|---|
@@ -328,21 +386,22 @@ edges on both sides. The model beats the baseline in both settings.
 | Reroute from the convoy's position (A* from next node) | < 100 ms | **9.5 ms** (decision logic 0.2 ms) |
 | Pan the 29k-segment risk layer | smooth | canvas renderer; ~50 ms/frame in *software-rendered* headless Chromium at 2× DPR. Expect much faster with a real GPU |
 
-### 9.3 Screens (`reports/screens/`)
+### 10.3 Screens (`reports/screens/`)
 `1_risk_map` · `2_three_route_comparison` · `3_threat_small_radius` · `4_sitrep_pin_mode` ·
 `5_sitrep_junction_preview` · `6_live_reroute` · `7_convoys_conflicts` · `8_convoys_gantt_resolved` ·
 `9_sitrep_log` · `10_risk_guide`
 
-## 10. Tests
+## 11. Tests
 * `pytest -q`: graph schema, string adjacency keys, weights 0–100, no NaN, model > baseline (random and
   spatial), synthetic labels, **SITREP resolver** (road-only → needs_pin, junction, landmark within
   150 m, decimal / DMS / MGRS, offset walked along the road), and it runs the JS suite.
 * `npm test`: A* fixture, **threat geometry** (clip length, `f_in`, hard block, snapping), **threat API**
-  (temp DB: create / list / patch / delete, validation, CSV, SSE), **rerouting** (next node, turn back,
+  (temp DB: create / list / patch / delete, validation, CSV, SSE), **static serving** (gzip, ETag/304,
+  allowlist, traversal, `/healthz`), **rerouting** (next node, turn back,
   thresholds, hysteresis, abandoned routes), **deconfliction** (Critical head-on on a bridge,
   delay removes it, bunching, junction, shared threat, least-bad reroute).
 
-## 11. Limitations
+## 12. Limitations
 * **Synthetic data:** the generator encodes our assumptions about risky roads, so the model partly
   learns them back. Real use needs real incident feeds.
 * Road-only: no off-road movement, terrain, elevation or line-of-sight. Hill roads are approximated
@@ -352,12 +411,12 @@ edges on both sides. The model beats the baseline in both settings.
 * Independent-segment route probability (the Krumm & Horvitz simplification). Deconfliction
   assumes constant convoy speed.
 
-## 12. Future work
+## 13. Future work
 Real incident feeds; DEM / terrain features; line-of-sight exposure; time-of-day and seasonal
 models; k-diverse alternatives; learned threat impact; speed profiles by road class and gradient
 for convoy timing.
 
-## 13. Authors and acknowledgements
+## 14. Authors and acknowledgements
 Designed and built by our team with the help of **Claude Code** (Anthropic's AI coding assistant),
 which we used for implementation, testing and documentation.
 

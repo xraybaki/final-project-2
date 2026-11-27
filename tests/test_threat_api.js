@@ -101,7 +101,7 @@ server.listen(0, async () => {
 
         // database file is never served statically
         r = await req(port, 'GET', '/data/sitrep_db.json');
-        assert.strictEqual(r.status, 403);
+        assert.ok(r.status === 403 || r.status === 404, `db served: ${r.status}`);
 
         await new Promise(res => setTimeout(res, 200));
         assert.ok(events.includes('threat_created') && events.includes('threat_updated') && events.includes('threat_cleared'), events.join(','));

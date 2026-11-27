@@ -1,0 +1,15 @@
+# Render Blueprint for SANCHAR (free web service, Docker runtime)
+services:
+  - type: web
+    name: sanchar
+    runtime: docker
+    plan: free
+    region: singapore          # closest Render region to India
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_API_KEY    # optional; leave empty to use the offline rule-based parser
+        sync: false

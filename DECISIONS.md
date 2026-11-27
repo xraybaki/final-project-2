@@ -290,6 +290,40 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 82. Screenshots in `reports/screens/` were regenerated with Playwright against a fresh database.
 83. The pipeline is reproducible: a re-run changes only the `timestamp` in `data/live_threats.json`.
 
+## R2: deployment on Render
+84. **Runtime image without the pipeline:** the server needs only Node (built-ins) and the Python
+    standard library (`gemini_api.py` / `sitrep_resolver.py`). `requirements.txt` (osmnx,
+    geopandas, xgboost …) is not installed. `.dockerignore` also drops `pipeline/`, `models/`,
+    `reports/`, `tests/`, `data/cache`, the incident history and any runtime databases.
+85. **Dockerfile deviates slightly from the suggested one:** instead of `node:22-slim` plus
+    `apt-get install python3`, it copies the `node` binary from `node:22-slim` into
+    `python:3.12-slim` (a two-stage build, no apt). It's faster and reproducible, works where
+    Debian mirrors are blocked (they were in the build sandbox), and was tested end to end:
+    397 MB on disk, built in about 8 s, ready in about 0.75 s, full app working inside.
+    `--build-arg WITH_GEMINI=1` pip-installs the optional Gemini client.
+86. **Static files = allowlist:** only the frontend, data and scenario files are public. The old
+    handler served any file under the project root (including `server.js`, `package.json` and
+    a potential `.env` with the Gemini key), which is unacceptable on a public URL. Requests
+    containing `..` or a backslash get 403; anything not on the list gets 404.
+87. **gzip:** compressible types (> 1 KB) are gzip-compressed once (zlib level 6), cached in memory
+    keyed by path + size + mtime, and pre-compressed at startup for the two big files
+    (21.6 → 2.5 MB and 17.7 → 2.2 MB, under 0.5 s each). `ETag` is a weak tag from size + mtime;
+    `If-None-Match` → 304. `Cache-Control: public, max-age=3600` for data files, `no-cache`
+    for HTML / JS / CSS (revalidated by ETag, so a redeploy is picked up immediately). The
+    `X-Uncompressed-Length` header keeps the loading bar accurate under gzip.
+88. Listens on `HOST` (default `0.0.0.0`) and `PORT` (Render sets it; the image defaults to 10000).
+    `GET /healthz` returns `{status, name: "SANCHAR", uptime_s}` without touching big files.
+89. **Free-tier persistence:** the filesystem is ephemeral, so the SITREP database resets on sleep
+    or redeploy. The database is re-seeded from `data/live_threats.json` on every start, so an
+    empty instance still demos well. The path is configurable with `SITREP_DB`.
+90. `render.yaml` uses `runtime: docker`, `plan: free`, `region: singapore`,
+    `healthCheckPath: /healthz`, `autoDeploy: true` and `GEMINI_API_KEY` with `sync: false`.
+    render.com could not be reached from the build sandbox, so these field names come from the
+    Blueprint spec as known at the time of writing rather than a fresh check. If Render rejects
+    `autoDeploy`, its newer equivalent is `autoDeployTrigger: commit`.
+91. The legacy `/chat` endpoint mentioned in the deployment brief no longer exists (removed with
+    the legacy code), so no 501 stub is needed.
+
 ---
 
 ## Summary
@@ -309,7 +343,7 @@ Design decisions for **SANCHAR** (Smart AI Navigation for Convoy Hazard Avoidanc
 * **Convoys:** occupancy, conflict detection, prioritised resolution with Accept / Accept all,
   Gantt, march tables, Run all with live re-checks.
 * **Guide** + ⓘ tooltips for every number. A single λ default (0.6).
-* Tests: `pytest -q` (17 passed) and `npm test` (5 JS test files passed).
+* Tests: `pytest -q` (17 passed) and `npm test` (6 JS test files passed).
 
 ### Not done / limits
 * The Gemini path is wired but untested here (no key in the sandbox); the offline parser is tested.

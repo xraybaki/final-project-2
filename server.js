@@ -7,14 +7,19 @@
 //  event log (M13)         GET/POST /api/events
 //  SITREP parsing          POST /parse-sitrep (spawns gemini_api.py)
 //  intel feed (simple)     GET  /fetch-live-threats
+//  health check            GET  /healthz
+// Static files come from an allowlist only, gzip-compressed (cached in memory) with ETag / 304.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const zlib = require('zlib');
 const { spawn } = require('child_process');
 const { JsonStore } = require('./lib/store');
 const SR = require('./lib/sitrep');
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+const STARTED = Date.now();
 const ROOT = __dirname;
 const PYTHON = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
 const DB_FILE = process.env.SITREP_DB || path.join(ROOT, 'data', 'sitrep_db.json');
@@ -415,23 +420,96 @@ const server = http.createServer((req, res) => {
         });
     }
 
-    // static files (no traversal outside ROOT; never serve the databases)
-    let filePath;
-    try { filePath = path.normalize(path.join(ROOT, decodeURIComponent(url === '/' ? '/index.html' : url))); } catch (e) { res.writeHead(400); return res.end(); }
-    if (!filePath.startsWith(ROOT) || /sitrep_db|convoys\.json/.test(filePath)) {
-        res.writeHead(403);
-        return res.end('Forbidden');
+    if (url === '/healthz') {
+        return sendJSON(res, 200, { status: 'ok', name: 'SANCHAR', uptime_s: Math.round((Date.now() - STARTED) / 1000) });
     }
-    const contentType = mimeTypes[path.extname(filePath).toLowerCase()] || 'application/octet-stream';
+
+    serveStatic(req, res, url);
+});
+
+// ------------------------------------------------------------------ static files: allowlist + gzip + ETag
+// Only these files / folders are public. Everything else (server code, .env, databases,
+// pipeline, models, package.json ...) is never served.
+const PUBLIC_FILES = new Set(['/index.html', '/style.css', '/app.js', '/pathfinding.js', '/favicon.svg',
+    '/threat_types.json', '/routing_graph.json', '/routing_edges.geojson', '/routing_edges.csv',
+    '/data/landmarks.json', '/data/live_threats.json', '/data/region.json']);
+const PUBLIC_DIRS = [/^\/js\/[\w.-]+\.js$/, /^\/data\/scenarios\/[\w.-]+\.json$/];
+const COMPRESSIBLE = new Set(['.json', '.geojson', '.js', '.css', '.html', '.csv', '.svg']);
+const DATA_EXT = new Set(['.json', '.geojson', '.csv']);
+const gzCache = new Map();   // path -> {mtimeMs, size, buf, pending}
+
+function isPublic(p) {
+    return PUBLIC_FILES.has(p) || PUBLIC_DIRS.some(re => re.test(p));
+}
+
+function gzipCached(filePath, st) {
+    const hit = gzCache.get(filePath);
+    if (hit && hit.mtimeMs === st.mtimeMs && hit.size === st.size) return hit.buf ? Promise.resolve(hit.buf) : hit.pending;
+    const pending = fs.promises.readFile(filePath).then(raw => new Promise((resolve, reject) =>
+        zlib.gzip(raw, { level: 6 }, (err, buf) => (err ? reject(err) : resolve(buf)))))
+        .then(buf => { gzCache.set(filePath, { mtimeMs: st.mtimeMs, size: st.size, buf }); return buf; })
+        .catch(e => { gzCache.delete(filePath); throw e; });
+    gzCache.set(filePath, { mtimeMs: st.mtimeMs, size: st.size, pending });
+    return pending;
+}
+
+function serveStatic(req, res, url) {
+    if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); return res.end(); }
+    if (req.url.includes('..') || req.url.includes('\\')) { res.writeHead(403); return res.end('Forbidden'); }
+    let rel;
+    try { rel = decodeURIComponent(url === '/' ? '/index.html' : url); } catch (e) { res.writeHead(400); return res.end(); }
+    if (!isPublic(rel)) {
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end('<h1>404 - File Not Found</h1>');
+    }
+    const filePath = path.join(ROOT, rel);
+    if (!filePath.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end('Forbidden'); }
     fs.stat(filePath, (err, st) => {
         if (err || !st.isFile()) {
-            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
             return res.end('<h1>404 - File Not Found</h1>');
         }
-        res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': st.size });
-        fs.createReadStream(filePath).pipe(res);
+        const ext = path.extname(filePath).toLowerCase();
+        const etag = `W/"${st.size.toString(16)}-${Math.floor(st.mtimeMs).toString(16)}"`;
+        const headers = {
+            'Content-Type': mimeTypes[ext] || 'application/octet-stream',
+            'ETag': etag,
+            'Cache-Control': DATA_EXT.has(ext) ? 'public, max-age=3600' : 'no-cache',
+            'Vary': 'Accept-Encoding',
+            'X-Uncompressed-Length': String(st.size),   // lets the loading bar show real progress under gzip
+        };
+        if ((req.headers['if-none-match'] || '').split(/\s*,\s*/).includes(etag)) {
+            res.writeHead(304, headers);
+            return res.end();
+        }
+        const wantsGzip = /\bgzip\b/.test(req.headers['accept-encoding'] || '') && COMPRESSIBLE.has(ext) && st.size > 1024;
+        if (!wantsGzip) {
+            res.writeHead(200, { ...headers, 'Content-Length': st.size });
+            if (req.method === 'HEAD') return res.end();
+            return fs.createReadStream(filePath).pipe(res);
+        }
+        gzipCached(filePath, st).then(buf => {
+            res.writeHead(200, { ...headers, 'Content-Encoding': 'gzip', 'Content-Length': buf.length });
+            res.end(req.method === 'HEAD' ? undefined : buf);
+        }).catch(() => {
+            res.writeHead(200, { ...headers, 'Content-Length': st.size });
+            fs.createReadStream(filePath).pipe(res);
+        });
     });
-});
+}
+
+/** Pre-compress the two big data files so the first visitor does not wait for gzip. */
+function warmGzip() {
+    for (const f of ['routing_graph.json', 'routing_edges.geojson']) {
+        const fp = path.join(ROOT, f);
+        fs.stat(fp, (err, st) => {
+            if (err) return;
+            const t0 = Date.now();
+            gzipCached(fp, st).then(buf => console.log(`${f} ${(st.size / 1e6).toFixed(1)} MB -> ${(buf.length / 1e6).toFixed(1)} MB gzip (${Date.now() - t0} ms)`))
+                .catch(e => console.error(`gzip ${f} failed: ${e.message}`));
+        });
+    }
+}
 
 let extraRoutes = null;   // set by later milestones (convoys, positions)
 server.setExtraRoutes = (fn) => { extraRoutes = fn; };
@@ -441,10 +519,11 @@ server.sendJSON = sendJSON;
 server.readJSONBody = readJSONBody;
 
 if (require.main === module) {
-    server.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}/`);
+    server.listen(PORT, HOST, () => {
+        console.log(`Server running at http://localhost:${PORT}/ (listening on ${HOST})`);
         console.log('SANCHAR · Smart AI Navigation for Convoy Hazard Avoidance & Rerouting');
         console.log(`SITREP database: ${path.relative(ROOT, DB_FILE)} (${db.records.length} records)`);
+        warmGzip();
     });
 }
 
