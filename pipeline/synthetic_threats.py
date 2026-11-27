@@ -188,7 +188,9 @@ def generate_live_threats(G: nx.Graph, eidx: EdgeIndex, road: pd.DataFrame,
         used_names.add(names[e])
     return {"success": True, "events": events, "source": C.SYNTHETIC_LABEL,
             "data_label": C.SYNTHETIC_LABEL,
-            "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            # fixed (end of the synthetic history) so re-running the pipeline does not change the file;
+            # the server stamps the live time when it serves the feed
+            "timestamp": (START + pd.DateOffset(months=C.HISTORY_MONTHS)).isoformat() + "+00:00"}
 
 
 def run(G, eidx, road):
